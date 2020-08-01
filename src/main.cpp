@@ -57,7 +57,14 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-
+	int autonNum = 0;
+	switch (autonNum){
+		case 0: skills(); break;
+		case 1: blueLeft(); break;
+		case 2: blueRight(); break;
+		case 3: redLeft(); break;
+		case 4: redRight(); break;
+	}
 }
 
 /**

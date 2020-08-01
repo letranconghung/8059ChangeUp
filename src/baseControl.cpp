@@ -7,18 +7,7 @@ Motor BR (BRport);
 double targetEncdL=0,targetEncdR=0;
 double kP,kD;
 double targetPowerL=0,targetPowerR=0;
-double cutoff;
-/**
- * forceStraight:
- * when set to true, baseControl would insist the left and right motors/encoders to move/rotate the same distance (setting the same targetEncdL and targetEncdR)
- *
- * However, this does not mean that the robot's path would not be a straight line.
- * The path would have very minute deviations from a line (due to uncertainties etc.) but to the human eyes, it would still be a line.
- */
-bool straightForced = false;
-void forceStraight(bool straight = true){
-  straightForced = straight;
-}
+
 /**
  * generic moving straight function for the robot
  * @param dis distance to be moved
@@ -52,8 +41,8 @@ void baseMove(double x, double y, double kp = DEFAULT_KP, double kd = DEFAULT_KD
   kD = kd;
 }
 
-void baseTurn(double angle, double kp = DEFAULT_TURN_KP, double kd = DEFAULT_TURN_KD){
-	double error = angle*toRad - position.angle;
+void baseTurn(double angleDeg, double kp = DEFAULT_TURN_KP, double kd = DEFAULT_TURN_KD){
+	double error = angleDeg*toRad - position.angle;
 	double diff = error*baseWidth/inPerDeg/2.0;
 	targetEncdL += diff;
 	targetEncdR += -diff;
@@ -61,16 +50,6 @@ void baseTurn(double angle, double kp = DEFAULT_TURN_KP, double kd = DEFAULT_TUR
 	kP = kp;
 	kD = kd;
 }
-
-void baseTurnRelative(double angle, double kp = DEFAULT_TURN_KP, double kd = DEFAULT_TURN_KD){
-  double diff = angle*toRad*baseWidth/inPerDeg/2.0;
-  targetEncdL += diff;
-  targetEncdR += -diff;
-
-  kP = kp;
-  kD = kd;
-}
-
 void baseTurn(double x, double y, bool reverse = false, double kp = DEFAULT_TURN_KP, double kd = DEFAULT_TURN_KD){
 	double targAngle = atan2((x-position.x),(y-position.y));
 	if(reverse) targAngle += PI;
@@ -84,6 +63,80 @@ void baseTurn(double x, double y, bool reverse = false, double kp = DEFAULT_TURN
   kD = kd;
 }
 
+void baseTurnRelative(double angle, double kp = DEFAULT_TURN_KP, double kd = DEFAULT_TURN_KD){
+  double diff = angle*toRad*baseWidth/inPerDeg/2.0;
+  targetEncdL += diff;
+  targetEncdR += -diff;
+
+  kP = kp;
+  kD = kd;
+}
+
+void waitBase(double cutoff){
+	double start = millis();
+	while(fabs(targetEncdL - BL.get_position()) > DISTANCE_LEEWAY && fabs(targetEncdR - BR.get_position()) > DISTANCE_LEEWAY && (millis()-start) < cutoff) delay(20);
+	FL.move(0);
+	BL.move(0);
+	FR.move(0);
+	BR.move(0);
+}
+
+void timerBase(double powL, double powR, double time){
+  double start = millis();
+  pauseBase();
+  FL.move(powL);
+  BL.move(powL);
+  FR.move(powR);
+  BR.move(powR);
+  while(millis() - start < time) delay(20);
+	FL.move(0);
+	BL.move(0);
+	FR.move(0);
+	BR.move(0);
+	pauseBase(false);
+}
+
+//
+bool basePowCapped = false;
+double absPowerCap;
+
+void capBasePow(double pow){
+	basePowCapped = true;
+	absPowerCap = pow;
+}
+void rmBaseCap(){
+	basePowCapped = false;
+}
+//-------------END OF CUSTOM CAP------------//
+bool basePaused = false;
+void pauseBase(bool pause = true){
+  basePaused = pause;
+}
+//--------------------------------pause baseMotorControl---------//
+
+/**
+ * forceStraight:
+ * when set to true, baseControl would insist the left and right motors/encoders to move/rotate the same distance (setting the same targetEncdL and targetEncdR)
+ *
+ * However, this does not mean that the robot's path would not be a straight line.
+ * The path would have very minute deviations from a line (due to uncertainties etc.) but to the human eyes, it would still be a line.
+ */
+bool straightForced = false;
+void forceStraight(bool straight = true){
+  straightForced = straight;
+}
+
+
+void resetCoords(double x, double y, double angleDeg){
+  position.setCoords(x, y, angleDeg);
+  FL.tare_position();
+	FR.tare_position();
+	BL.tare_position();
+	BR.tare_position();
+
+  targetEncdL = 0;
+  targetEncdR = 0;
+}
 
 void baseControl(void * ignore){
   double prevErrorEncdL = 0, prevErrorEncdR = 0;
@@ -115,23 +168,7 @@ void baseControl(void * ignore){
 		Task::delay(20);
   }
 }
-//
-bool basePowCapped = false;
-double absPowerCap;
 
-void capBasePow(double pow){
-	basePowCapped = true;
-	absPowerCap = pow;
-}
-void rmBaseCap(){
-	basePowCapped = false;
-}
-//-------------END OF CUSTOM CAP------------//
-bool basePaused = false;
-void pauseBase(bool pause = true){
-  basePaused = pause;
-}
-//--------------------------------pause baseMotorControl---------//
 void baseMotorControl(void * ignore){
   double powerL=0,powerR=0;
   while(competition::is_autonomous()){
@@ -164,39 +201,4 @@ void baseMotorControl(void * ignore){
 
     Task::delay(20);
   }
-}
-
-void timerBase(double powL, double powR, double time){
-  double start = millis();
-  pauseBase();
-  FL.move(powL);
-  BL.move(powL);
-  FR.move(powR);
-  BR.move(powR);
-  while(millis() - start < time) delay(20);
-	FL.move(0);
-	BL.move(0);
-	FR.move(0);
-	BR.move(0);
-	pauseBase(false);
-}
-
-void waitBase(double cutoff){
-	double start = millis();
-	while(fabs(targetEncdL - BL.get_position()) > DISTANCE_LEEWAY && fabs(targetEncdR - BR.get_position()) > DISTANCE_LEEWAY && (millis()-start) < cutoff) delay(20);
-	FL.move(0);
-	BL.move(0);
-	FR.move(0);
-	BR.move(0);
-}
-
-void resetCoords(double x, double y, double angleDeg){
-  position.setCoords(x, y, angleDeg);
-  FL.tare_position();
-	FR.tare_position();
-	BL.tare_position();
-	BR.tare_position();
-
-  targetEncdL = 0;
-  targetEncdR = 0;
 }
