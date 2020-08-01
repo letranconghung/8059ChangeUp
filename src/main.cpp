@@ -1,21 +1,6 @@
 #include "main.h"
 
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
-
+#define BRAKE_POW 3 //5
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -23,10 +8,23 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	Motor FL (FLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor BL (BLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor FR (FRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor BR (BRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
-	pros::lcd::register_btn1_cb(on_center_button);
+	ADIEncoder encoderL(encdL_port,encdL_port+1,true);
+	ADIEncoder encoderR(encdR_port,encdR_port+1,false);
+
+	// taring all motors and reset encoder counts
+	FL.tare_position();
+	FR.tare_position();
+	BL.tare_position();
+	BR.tare_position();
+	encoderL.reset();
+	encoderR.reset();
+
+	Controller master(E_CONTROLLER_MASTER);
 }
 
 /**
@@ -58,7 +56,9 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -74,19 +74,38 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+	Motor FL (FLport);
+	Motor BL (BLport);
+	Motor FR (FRport);
+	Motor BR (BRport);
+	Controller master(E_CONTROLLER_MASTER);
+	master.clear();
 
+	bool tankDrive = false;
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
 		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+    int right = master.get_analog(ANALOG_RIGHT_Y);
+    FL.move(left);
+    BL.move(left);
+    FR.move(right);
+    BR.move(right);
 
-		left_mtr = left;
-		right_mtr = right;
-		pros::delay(20);
+		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
+		if(tankDrive){
+      int l = master.get_analog(ANALOG_LEFT_Y);
+      int r = master.get_analog(ANALOG_RIGHT_Y);
+      FL.move(l-BRAKE_POW);
+      BL.move(l+BRAKE_POW);
+      FR.move(r-BRAKE_POW);
+      BR.move(r+BRAKE_POW);
+    } else{
+      int y = master.get_analog(ANALOG_LEFT_Y);
+      int x = master.get_analog(ANALOG_RIGHT_X);
+      FL.move(y+x-BRAKE_POW);
+      BL.move(y+x+BRAKE_POW);
+      FR.move(y-x-BRAKE_POW);
+      BR.move(y-x+BRAKE_POW);
+    }
+		pros::delay(5);
 	}
 }
