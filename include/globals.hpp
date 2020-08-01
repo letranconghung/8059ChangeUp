@@ -1,10 +1,6 @@
-/**
- * Robot's global variables:
- * - Motor ports
- * - Sensor ports
- */
-#ifndef _GLOBALS_HPP
-#define _GLOBALS_HPP
+/** Declare the robot's set up variables: Motor and sensor ports */
+#ifndef _GLOBALS_HPP_
+#define _GLOBALS_HPP_
 #define FLport 10
 #define BLport 19
 #define FRport 11

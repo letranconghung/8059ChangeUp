@@ -10,13 +10,12 @@
 /**
  * Essential variables for odometry task and functions
  */
-#define baseWidth 8.267275602939487 //go straight and compare results in program & real life
-#define inPerDeg 0.0241043549920626 //turn at least 2 rotations and compare results in program & real life
-
-#define GET_ENCD_VALS_PROCESSED true
-#define GET_ENCD_VALS_RAW false //use during debugging or testing encoders
+//Tuning: go straight and compare results in program & real life
+#define baseWidth 8.267275602939487
+//Tuning: turn at least 2 rotations and compare results in program & real life
+#define inPerDeg 0.0241043549920626
+// Make Coordinates position a universally accessible object
 extern Coordinates position;
-extern Coordinates target;
 /**
  * refer to baseOdometry.cpp for function documentation
  */

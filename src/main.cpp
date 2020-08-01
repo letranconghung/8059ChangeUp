@@ -1,6 +1,4 @@
 #include "main.h"
-
-#define BRAKE_POW 3 //5
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -8,6 +6,7 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	/** declaration and initialization of motors, encoders and controller */
 	Motor FL (FLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor BL (BLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor FR (FRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
@@ -16,7 +15,9 @@ void initialize() {
 	ADIEncoder encoderL(encdL_port,encdL_port+1,true);
 	ADIEncoder encoderR(encdR_port,encdR_port+1,false);
 
-	// taring all motors and reset encoder counts
+	Controller master(E_CONTROLLER_MASTER);
+
+	/** tare all motors and reset encoder counts */
 	FL.tare_position();
 	FR.tare_position();
 	BL.tare_position();
@@ -24,7 +25,10 @@ void initialize() {
 	encoderL.reset();
 	encoderR.reset();
 
-	Controller master(E_CONTROLLER_MASTER);
+	/** declaration and initialization of asynchronous Tasks */
+	Task baseOdometry(baseOdometry);
+	Task baseControl(baseControl);
+	Task baseMotorControl(baseMotorControl);
 }
 
 /**
@@ -57,6 +61,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
+	/** numerical choice of which autonomous set to run */
 	int autonNum = 0;
 	switch (autonNum){
 		case 0: skills(); break;
@@ -81,6 +86,9 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	/** set the value to a small non-zero value (e.g. 5) to brake (see movement mechanism below)  */
+	double BRAKE_POW = 0;
+
 	Motor FL (FLport);
 	Motor BL (BLport);
 	Motor FR (FRport);
@@ -88,16 +96,12 @@ void opcontrol() {
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 
+	/** boolean flag for whether the driver uses tank drive or not */
 	bool tankDrive = false;
 	while (true) {
-		int left = master.get_analog(ANALOG_LEFT_Y);
-    int right = master.get_analog(ANALOG_RIGHT_Y);
-    FL.move(left);
-    BL.move(left);
-    FR.move(right);
-    BR.move(right);
-
+		/** toggle tank drive */
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
+		/** handle tankDrive */
 		if(tankDrive){
       int l = master.get_analog(ANALOG_LEFT_Y);
       int r = master.get_analog(ANALOG_RIGHT_Y);

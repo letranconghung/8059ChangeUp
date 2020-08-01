@@ -1,11 +1,16 @@
 /**
- * Mathematical functions
+ * Mathematical functions:
+ * - angle bounding functions
+ * - capping function
  */
 #include "main.h"
 /**
- * bound an angle in radians within 0<=angle<twoPI
- * @param  rad angle in radians
- * @return     angle in radians bounded within 0<=angle<twoPI
+ * Bound an angle in radians within 0<=angle<twoPI.
+ * @param  rad
+ * angle in radians
+ *
+ * @return
+ * angle in radians bounded within 0<=angle<twoPI
  */
 double boundRad(double rad){
   double res = fmod(rad, twoPI);
@@ -13,9 +18,12 @@ double boundRad(double rad){
   return res;
 }
 /**
- * bound an angle in radians within 0<=angle<360
- * @param  deg angle in degrees
- * @return     angle in degrees bounded within 0<=angle<360
+ * Bound an angle in radians within 0<=angle<360.
+ * @param  deg
+ * angle in degrees
+ *
+ * @return
+ * angle in degrees bounded within 0<=angle<360
  */
 double boundDeg(double deg){
   double res = fmod(deg, 360);
@@ -24,11 +32,18 @@ double boundDeg(double deg){
 }
 
 /**
- * cap the input |x| <= abscap
+ * Cap the input |x| <= abscap.
  * i.e. within the range -abscap <= x <= abscap
- * @param  x      input
- * @param  abscap absolute (positive) value of the cap
- * @return        capped value of the input
+ * @param  x
+ * input
+ *
+ * @param  abscap
+ * absolute (positive) value of the cap
+ *
+ * @return
+ * capped value of the input
+ *
+ * @note
  * for use when capping the absolute power of motors
  */
 double abscap(double x, double abscap){
