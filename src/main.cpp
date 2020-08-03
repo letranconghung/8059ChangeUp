@@ -26,9 +26,9 @@ void initialize() {
 	encoderR.reset();
 
 	/** declaration and initialization of asynchronous Tasks */
-	Task baseOdometry(baseOdometry);
-	Task baseControl(baseControl);
-	Task baseMotorControl(baseMotorControl);
+	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 }
 
 /**

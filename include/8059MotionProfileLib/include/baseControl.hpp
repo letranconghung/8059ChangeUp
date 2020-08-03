@@ -11,9 +11,9 @@
  * 1: Odometry (print Coordinates position)
  * 2: Encoders (print errorEncdL & errorEncdR)
  * 3: Power (print powerL & powerR)
- *
+ * 4: Raw encoder values (print raw encdL & encdR)
  */
-#define DEBUG_MODE 0
+#define DEBUG_MODE 4
 // Maximum power allowed
 #define MAX_POW 100
 /**

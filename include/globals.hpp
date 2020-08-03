@@ -6,5 +6,5 @@
 #define FRport 11
 #define BRport 20
 #define encdL_port 1
-#define encdR_port 5
+#define encdR_port 7
 #endif
