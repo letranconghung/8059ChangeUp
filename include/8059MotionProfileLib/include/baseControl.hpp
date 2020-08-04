@@ -51,7 +51,6 @@ void waitBase(double cutoff);
 void capBasePow(double cap);
 void rmBaseCap();
 void pauseBase(bool pause);
-void forceStraight(bool straight);
 void timerBase(double powL, double powR, double time);
 void resetCoords(double x, double y, double angleDeg);
 

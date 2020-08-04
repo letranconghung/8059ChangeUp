@@ -303,18 +303,6 @@ void timerBase(double powL, double powR, double time){
 	BR.move(0);
 	pauseBase(false);
 }
-/** boolean flag for whether straight movement is forced */
-bool straightForced = false;
-/**
- * forceStraight:
- * when set to true, baseControl would insist the left and right motors/encoders to move/rotate the same distance (setting the same targetEncdL and targetEncdR)
- *
- * However, when set to false, it does not mean that the robot would not move in a straight line.
- * The path would have very minute deviations from a line (due to uncertainties etc.) but to the human eyes, it would still be a line.
- */
-void forceStraight(bool straight = true){
-  straightForced = straight;
-}
 /**
  * Reset the robot's coordinates and tare all motors.
  * @param x
@@ -346,27 +334,15 @@ void baseControl(void * ignore){
     /** error from current encoder values to target encoder values */
     double errorEncdL = targetEncdL - BL.get_position();
     double errorEncdR = targetEncdR - BR.get_position();
-		if(!straightForced){
-      /** PD loop */
-	    double deltaErrorEncdL = errorEncdL - prevErrorEncdL;
-	    double deltaErrorEncdR = errorEncdR - prevErrorEncdR;
+    /** PD loop */
+    double deltaErrorEncdL = errorEncdL - prevErrorEncdL;
+    double deltaErrorEncdR = errorEncdR - prevErrorEncdR;
 
-	    prevErrorEncdL = errorEncdL;
-	    prevErrorEncdR = errorEncdR;
+    prevErrorEncdL = errorEncdL;
+    prevErrorEncdR = errorEncdR;
 
-	    targetPowerL = kP*errorEncdL+kD*deltaErrorEncdL;
-	    targetPowerR = kP*errorEncdR+kD*deltaErrorEncdR;
-		}
-		else{
-      /** if straight movement is forced, 2 encoders must rotate by the same amount */
-			double combErrorEncdWithkP = (errorEncdL+errorEncdR)/2*kP;
-      /** PD loop */
-			prevErrorEncdL = errorEncdL;
-	    prevErrorEncdR = errorEncdR;
-
-			targetPowerL = errorEncdL>0?combErrorEncdWithkP:-combErrorEncdWithkP;
-	    targetPowerR = errorEncdR>0?combErrorEncdWithkP:-combErrorEncdWithkP;
-		}
+    targetPowerL = kP*errorEncdL+kD*deltaErrorEncdL;
+    targetPowerR = kP*errorEncdR+kD*deltaErrorEncdR;
     /** print to assist debugging */
 		if(DEBUG_MODE == 2) printf("Error: %f %f\n",errorEncdL,errorEncdR);
     /** refresh rate of Task */
