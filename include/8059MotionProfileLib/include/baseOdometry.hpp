@@ -11,7 +11,7 @@
  * Essential variables for odometry task and functions
  */
  //Tuning: turn at least 2 rotations and compare results in program & real life
-#define baseWidth 8.267275602939487
+#define baseWidth 5.195304541495664
 //Tuning: go straight and compare results in program & real life
 #define inPerDeg 0.0241043549920626
 // Make Coordinates position a universally accessible object

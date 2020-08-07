@@ -38,7 +38,8 @@ void baseOdometry(void * ignore){
     encdL = getEncdVals().first;
     encdR = getEncdVals().second;
     /** refer to Odometry Documentation.docx for mathematical proof */
-    position.angle = boundRad((encdL - encdR)/baseWidth);
+    // position.angle = boundRad((encdL - encdR)/baseWidth);
+    position.angle = (encdL - encdR)/baseWidth;
     /** difference of current encoder values from previous encoder values */
     double encdChangeL = (encdL-prevEncdL);
     double encdChangeR = (encdR-prevEncdR);
