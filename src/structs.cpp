@@ -10,7 +10,6 @@ Coordinates::Coordinates(){
   this -> x = 0;
   this -> y = 0;
   this -> angle = 0;
-  this -> angleDeg = 0;
 }
 /**
  * Initialization of an object of class Coordinates given (x, y).
@@ -24,7 +23,6 @@ Coordinates::Coordinates(double x, double y){
   this -> x = x;
   this -> y = y;
   this -> angle = 0;
-  this -> angleDeg = 0;
 }
 /**
  * Initialization of an object of class Coordinates given (x, y, angleDeg).
@@ -41,7 +39,6 @@ Coordinates::Coordinates(double x, double y, double angleDeg){
   this -> x = x;
   this -> y = y;
   this -> angle = boundRad(angleDeg*toRad);
-  this -> angleDeg = boundDeg(angleDeg);
 }
 /**
  * Set the coordinates.
@@ -58,17 +55,16 @@ void Coordinates::setCoords(double x, double y, double angleDeg){
   this -> x = x;
   this -> y = y;
   this -> angle = angleDeg*toRad;
-  this -> angleDeg = angleDeg;
 }
 /**
  * Print Coordinates to the terminal (connected via usb).
  */
 void Coordinates::printCoordsTerminal(){
-  printf("x: %.2f, y: %.2f, angle: %.2f\n",this->x, this->y, this->angleDeg);
+  printf("x: %.2f, y: %.2f, angle: %.2f\n",this->x, this->y, this->angle*toDeg);
 }
 /**
  * Print Coordinates to the master controller.
  */
 void Coordinates::printCoordsMaster(){
-  master.print(2,0,"%2.1f %2.1f %3f",this->x,this->y,this->angleDeg);
+  master.print(2,0,"%2.1f %2.1f %3f",this->x,this->y,this->angle*toDeg);
 }
