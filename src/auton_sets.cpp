@@ -9,8 +9,8 @@
  * @return void
  */
 void skills(){
-  capBasePow(30);
-  baseMove(30);
+  // capBasePow(30);
+  // baseMove(30);
 }
 /**
  * Starting position on the left of the blue alliance spawn.

@@ -11,6 +11,7 @@ void initialize() {
 	Motor BL (BLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor FR (FRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor BR (BRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor FW (FWport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 	ADIEncoder encoderL(encdL_port,encdL_port+1,true);
 	ADIEncoder encoderR(encdR_port,encdR_port+1,false);
@@ -29,6 +30,7 @@ void initialize() {
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task FWControlTask(FWControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 }
 
 /**
@@ -93,6 +95,8 @@ void opcontrol() {
 	Motor BL (BLport);
 	Motor FR (FRport);
 	Motor BR (BRport);
+	Motor FW (FWport);
+
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 
@@ -117,6 +121,8 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
+		if(master.get_digital_new_press(DIGITAL_R2)) FWgate();
+		else FWmove(master.get_digital(DIGITAL_R1)*FW_MAX_POW);
 		pros::delay(5);
 	}
 }

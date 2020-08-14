@@ -7,4 +7,6 @@
 #define BRport 2
 #define encdL_port 3
 #define encdR_port 5
+
+#define FWport 3
 #endif
