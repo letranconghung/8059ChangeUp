@@ -12,7 +12,9 @@ void initialize() {
 	Motor FR (FRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor BR (BRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor FW (FWport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-
+	Motor IDX (IDXport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor ITKL (ITKLport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor ITKR (ITKRport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	ADIEncoder encoderL(encdL_port,encdL_port+1,true);
 	ADIEncoder encoderR(encdR_port,encdR_port+1,false);
 
@@ -31,6 +33,7 @@ void initialize() {
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task FWControlTask(FWControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task ITKControlTask(ITKControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 }
 
 /**
@@ -96,7 +99,9 @@ void opcontrol() {
 	Motor FR (FRport);
 	Motor BR (BRport);
 	Motor FW (FWport);
-
+	Motor IDX (IDXport);
+	Motor ITKL (ITKLport);
+	Motor ITKR (ITKRport);
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 
@@ -121,8 +126,13 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
-		if(master.get_digital_new_press(DIGITAL_R2)) FWgate();
-		else FWmove(master.get_digital(DIGITAL_R1)*FW_MAX_POW);
+		// if(master.get_digital_new_press(DIGITAL_R2)){
+		// 	FWlift();
+		// }
+		if(master.get_digital(DIGITAL_R2)){
+			FWhold();
+		} else FWmove(master.get_digital(DIGITAL_R1)*FW_MAX_POW);
+		ITKmove((master.get_digital(DIGITAL_L1)-master.get_digital(DIGITAL_L2))*127);
 		pros::delay(5);
 	}
 }
