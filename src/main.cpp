@@ -101,7 +101,7 @@ void opcontrol() {
 	Motor FW (FWport);
 	Motor IDX (IDXport);
 	Motor ITKL (ITKLport);
-	Motor ITKR (ITKRport); im a nigger
+	Motor ITKR (ITKRport);
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 
