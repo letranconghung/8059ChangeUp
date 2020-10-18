@@ -7,6 +7,7 @@
  */
 void initialize() {
 	/** declaration and initialization of motors, encoders and controller */
+<<<<<<< HEAD
 	Motor FL (FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor BL (BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
@@ -21,6 +22,18 @@ void initialize() {
 	ADIEncoder encoderR (encdR_port,encdR_port+1,false);
 	ADIDigitalIn limit (limitPort);
 	ADIAnalogIn color (colorPort);
+=======
+	Motor FL (FLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor BL (BLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor FR (FRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor BR (BRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor FW (FWport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor IDX (IDXport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor ITKL (ITKLport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor ITKR (ITKRport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	ADIEncoder encoderL(encdL_port,encdL_port+1,true);
+	ADIEncoder encoderR(encdR_port,encdR_port+1,false);
+>>>>>>> 442b3c5a5d8ded455f8666b6a28ece612de2b970
 
 	Controller master(E_CONTROLLER_MASTER);
 
@@ -36,8 +49,13 @@ void initialize() {
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+<<<<<<< HEAD
 	Task shooterControlTask(shooterControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	// Task shooterMotorControlTask(shooterMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+=======
+	Task FWControlTask(FWControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task ITKControlTask(ITKControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+>>>>>>> 442b3c5a5d8ded455f8666b6a28ece612de2b970
 }
 
 /**
@@ -98,6 +116,7 @@ void opcontrol() {
 	/** set the value to a small non-zero value (e.g. 5) to brake (see movement mechanism below)  */
 	double BRAKE_POW = 0;
 
+<<<<<<< HEAD
 	/** declare reference to motors and controller */
 	Motor FL (FLPort);
 	Motor BL (BLPort);
@@ -107,6 +126,16 @@ void opcontrol() {
 	Motor rRoller (rRollerPort);
 	Motor indexer (indexerPort);
 
+=======
+	Motor FL (FLport);
+	Motor BL (BLport);
+	Motor FR (FRport);
+	Motor BR (BRport);
+	Motor FW (FWport);
+	Motor IDX (IDXport);
+	Motor ITKL (ITKLport);
+	Motor ITKR (ITKRport);
+>>>>>>> 442b3c5a5d8ded455f8666b6a28ece612de2b970
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 
@@ -131,10 +160,20 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
+<<<<<<< HEAD
 		intakeMove((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)) * 127);
 		setDiscard(master.get_digital(DIGITAL_L2));
 		if(master.get_digital(DIGITAL_L1)) cycle();
 		if(master.get_digital(DIGITAL_X)) forceStop();
+=======
+		// if(master.get_digital_new_press(DIGITAL_R2)){
+		// 	FWlift();
+		// }
+		if(master.get_digital(DIGITAL_R2)){
+			FWhold();
+		} else FWmove(master.get_digital(DIGITAL_R1)*FW_MAX_POW);
+		ITKmove((master.get_digital(DIGITAL_L1)-master.get_digital(DIGITAL_L2))*127);
+>>>>>>> 442b3c5a5d8ded455f8666b6a28ece612de2b970
 		pros::delay(5);
 	}
 }
