@@ -7,10 +7,10 @@
  */
 #include "main.h"
 /** declare motors */
-Motor FL (FLport);
-Motor BL (BLport);
-Motor FR (FRport);
-Motor BR (BRport);
+Motor FL (FLPort);
+Motor BL (BLPort);
+Motor FR (FRPort);
+Motor BR (BRPort);
 
 /**
  * targetEncdL & targetEncdR are target values for the 2 side encoders.

@@ -7,13 +7,20 @@
  */
 void initialize() {
 	/** declaration and initialization of motors, encoders and controller */
-	Motor FL (FLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor BL (BLport, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor FR (FRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor BR (BRport, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor FL (FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor BL (BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor BR (BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
-	ADIEncoder encoderL(encdL_port,encdL_port+1,true);
-	ADIEncoder encoderR(encdR_port,encdR_port+1,false);
+	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+
+	ADIEncoder encoderL (encdL_port,encdL_port+1,true);
+	ADIEncoder encoderR (encdR_port,encdR_port+1,false);
+	ADIDigitalIn limit (limitPort);
+	ADIAnalogIn color (colorPort);
 
 	Controller master(E_CONTROLLER_MASTER);
 
@@ -29,6 +36,8 @@ void initialize() {
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task shooterControlTask(shooterControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	// Task shooterMotorControlTask(shooterMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 }
 
 /**
@@ -89,10 +98,15 @@ void opcontrol() {
 	/** set the value to a small non-zero value (e.g. 5) to brake (see movement mechanism below)  */
 	double BRAKE_POW = 0;
 
-	Motor FL (FLport);
-	Motor BL (BLport);
-	Motor FR (FRport);
-	Motor BR (BRport);
+	/** declare reference to motors and controller */
+	Motor FL (FLPort);
+	Motor BL (BLPort);
+	Motor FR (FRPort);
+	Motor BR (BRPort);
+	Motor lRoller (lRollerPort);
+	Motor rRoller (rRollerPort);
+	Motor indexer (indexerPort);
+
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 
@@ -117,6 +131,10 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
+		intakeMove((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)) * 127);
+		setDiscard(master.get_digital(DIGITAL_L2));
+		if(master.get_digital(DIGITAL_L1)) cycle();
+		if(master.get_digital(DIGITAL_X)) forceStop();
 		pros::delay(5);
 	}
 }
