@@ -42,11 +42,7 @@
 //#include "okapi/api.hpp"
 //#include ``"pros/api_legacy.h"
 #include "8059MotionProfileLib/api.hpp"
-<<<<<<< HEAD
 #include "mech_lib.hpp"
-=======
-#include "8059ChangeUp2020/api.hpp"
->>>>>>> 442b3c5a5d8ded455f8666b6a28ece612de2b970
 #include "globals.hpp"
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
