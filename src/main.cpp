@@ -14,11 +14,11 @@ void initialize() {
 
 	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
 
-	ADIEncoder encoderL (encdL_port,encdL_port+1,true);
-	ADIEncoder encoderR (encdR_port,encdR_port+1,false);
+	ADIEncoder encoderL (encdL_port,encdL_port+1,false);
+	ADIEncoder encoderR (encdR_port,encdR_port+1,true);
 	ADIDigitalIn limit (limitPort);
 	ADIAnalogIn color (colorPort);
 
