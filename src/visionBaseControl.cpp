@@ -1,4 +1,18 @@
 #include "main.h"
+#define VISION_COMPETITION_MODE false
+#define VISION_DEBUG_MODE 3
+/**
+ * 0: None
+ * 1: Object Odometry
+ * 2: error, targetPower, power
+ * 3: Selected odometry
+ */
+#define W_LEEWAY 3
+#define X_LEEWAY 3
+
+#define VISION_MAX_POW 120
+#define VISION_RAMPING_POW 8
+
 #define DEFAULT_X_KP 1
 #define DEFAULT_X_KD .1
 #define DEFAULT_W_KP 1.5
@@ -7,7 +21,9 @@ int targSig;
 double visionTargetPowerL = 0, visionTargetPowerR = 0;
 double powerL = 0, powerR = 0;
 double XkP = DEFAULT_X_KP, XkD = DEFAULT_X_KD, WkP = DEFAULT_W_KP, WkD = DEFAULT_W_KD;
-double errorX = 0, errorW = 0;
+// set to be larger than LEEWAYs' values to avoid skipping while loops in visionWaitBase
+// potential cause: visionBaseControlTask takes too long to compute errors so there was 1 loop that ran with initialized values of errors
+double errorX = 2*X_LEEWAY, errorW = 2*W_LEEWAY;
 bool useVision = false;
 void visionBaseMove(int sig, double xkp, double xkd, double wkp, double wkd){
   useVision = true;
@@ -30,8 +46,14 @@ void visionWaitBase(double cutoff){
   Motor BL (BLPort);
   Motor FR (FRPort);
   Motor BR (BRPort);
+  Controller master (E_CONTROLLER_MASTER);
   double start = millis();
-  while((fabs(errorX) > X_LEEWAY || fabs(errorW) > W_LEEWAY) && (millis()-start) < cutoff) delay(20);
+  //delay(50) for objectOdometry to calculate new errors so that while loop doesn't end prematurely
+  delay(50);
+  while((fabs(errorX) > X_LEEWAY || fabs(errorW) > W_LEEWAY) && (millis()-start) < cutoff){
+    printf("I'm here");
+    delay(20);
+  }
   /** stop the motors */
   FL.move(0);
   BL.move(0);
@@ -48,6 +70,7 @@ void visionBaseControl(void * ignore){
   int i = 0;
   double prevErrorX = 0, prevErrorW = 0;
   while(true){
+    master.print(0, 0, "%d", true);
     if(useVision){
       VisionObject v;
       switch(targSig){
@@ -82,7 +105,7 @@ void visionBaseControl(void * ignore){
       FR.move(powerR);
       BR.move(powerR);
       if(VISION_DEBUG_MODE == 2 && (++i % 10 == 0)){
-        master.print(2, 0, "PWR: %3.1f %3.1f",powerL,powerR);
+        master.print(0, 0, "PWR: %3.1f %3.1f",powerL, powerR);
         printf("-----------------------------------------------------------------\n");
         printf("ErrorX: %3.0f \t ErrorW: %3.0f\n",errorX,errorW);
         printf("move: %3.1f \t turn: %3.1f\t", move, turn);

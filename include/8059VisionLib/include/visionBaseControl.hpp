@@ -2,15 +2,15 @@
 #define _8059_VISION_LIB_VISION_BASE_CONTROL_HPP_
 
 #define VISION_COMPETITION_MODE false
-#define VISION_DEBUG_MODE 2
+#define VISION_DEBUG_MODE 3
 /**
  * 0: None
  * 1: Object Odometry
  * 2: error, targetPower, power
  * 3: Selected odometry
  */
-#define W_LEEWAY 5
-#define X_LEEWAY 5
+#define W_LEEWAY 3
+#define X_LEEWAY 3
 #define VISION_MAX_POW 120
 #define VISION_RAMPING_POW 8
 

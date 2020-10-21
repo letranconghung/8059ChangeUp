@@ -13,23 +13,15 @@
  * 3: Power (print powerL & powerR)
  * 4: Raw encoder values (print raw encdL & encdR)
  */
-#define DEBUG_MODE -1
+#define DEBUG_MODE 0
 // Maximum power allowed
-#define MAX_POW 100
+#define MAX_POW 80
 /**
  * Maximum power increment every 20ms (20ms is the refresh rate of Task baseMotorControl)
  * This is to prevent too rapid changes to the motor power
  * Mathematically: |V - V previous| <= RAMPING_POW
  */
-#define RAMPING_POW 8
-/**
- * Default values of the proportional and derivative constants
- * for straight and turning movements.
- */
-#define DEFAULT_KP 0.5
-#define DEFAULT_KD 2
-#define DEFAULT_TURN_KP 0.7
-#define DEFAULT_TURN_KD 0.3
+#define RAMPING_POW 6
 /**
  * DISTANCE_LEEWAY is the distance (in inches) within which from the target
  * the robot would register that it has arrived at the target.
@@ -52,6 +44,7 @@ void capBasePow(double cap);
 void rmBaseCap();
 void pauseBase(bool pause);
 void timerBase(double powL, double powR, double time);
+void powerBase(double powL, double powR);
 void resetCoords(double x, double y, double angleDeg);
 
 void baseControl(void * ignore);

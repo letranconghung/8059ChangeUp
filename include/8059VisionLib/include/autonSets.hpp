@@ -1,5 +1,0 @@
-#ifndef _8059_VISION_LIB_VISION_AUTONSETS_HPP_
-#define _8059_VISION_LIB_VISION_AUTONSETS_HPP_
-
-// void skills();
-#endif

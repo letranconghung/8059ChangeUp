@@ -1,6 +1,6 @@
 #include "main.h"
-const VisionCoordinates TARG_BALL{0, 143, 102, 136,74};
-const VisionCoordinates TARG_FLAG{0,180,53,63,900};
+const VisionCoordinates TARG_BALL{0, 150, 50, 120, 100};
+const VisionCoordinates TARG_FLAG{0,161,52,70,95};
 VisionObject redBall(VisionCoordinates(), TARG_BALL);
 VisionObject blueBall(VisionCoordinates(), TARG_BALL);
 VisionObject greenFlag(VisionCoordinates(), TARG_FLAG);
@@ -20,8 +20,8 @@ void objectOdometry(void * ignore){
       greenFlag.curr.print();
     }
     if(VISION_DEBUG_MODE == 3 && (i % 100 == 0)){
-      redBall.curr.printMaster();
-      redBall.curr.print();
+      greenFlag.curr.printMaster();
+      greenFlag.curr.print();
     }
     Task::delay(10);
   }

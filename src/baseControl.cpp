@@ -7,6 +7,14 @@
  */
 
 #include "main.h"
+/**
+ * Default values of the proportional and derivative constants
+ * for straight and turning movements.
+ */
+#define DEFAULT_KP 0.3
+#define DEFAULT_KD 0.15
+#define DEFAULT_TURN_KP 0.4
+#define DEFAULT_TURN_KD 0.1
 /** declare motors */
 Motor FL (FLPort);
 Motor BL (BLPort);
@@ -239,7 +247,7 @@ void waitBase(double cutoff){
    * or time has not run out:
    * delay 20 ms
    */
-	while(fabs(targetEncdL - BL.get_position()) > DISTANCE_LEEWAY && fabs(targetEncdR - BR.get_position()) > DISTANCE_LEEWAY && (millis()-start) < cutoff) delay(20);
+	while(fabs(targetEncdL - getEncdVals(true).first) > DISTANCE_LEEWAY && fabs(targetEncdR - getEncdVals(true).second) > DISTANCE_LEEWAY && (millis()-start) < cutoff) delay(20);
   /** stop the motors */
 	FL.move(0);
 	BL.move(0);
@@ -304,6 +312,15 @@ void timerBase(double powL, double powR, double time){
 	BR.move(0);
 	pauseBase(false);
 }
+
+void powerBase(double powL, double powR){
+  double start = millis();
+  pauseBase();
+  FL.move(powL);
+  BL.move(powL);
+  FR.move(powR);
+  BR.move(powR);
+}
 /**
  * Reset the robot's coordinates and tare all motors.
  * @param x
@@ -333,8 +350,8 @@ void baseControl(void * ignore){
   double prevErrorEncdL = 0, prevErrorEncdR = 0;
   while(competition::is_autonomous()){
     /** error from current encoder values to target encoder values */
-    double errorEncdL = targetEncdL - BL.get_position();
-    double errorEncdR = targetEncdR - BR.get_position();
+    double errorEncdL = targetEncdL - getEncdVals(true).first;
+    double errorEncdR = targetEncdR - getEncdVals(true).second;
     /** PD loop */
     double deltaErrorEncdL = errorEncdL - prevErrorEncdL;
     double deltaErrorEncdR = errorEncdR - prevErrorEncdR;

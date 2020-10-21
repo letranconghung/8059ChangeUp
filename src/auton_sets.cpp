@@ -9,8 +9,20 @@
  * @return void
  */
 void skills(){
-  // capBasePow(30);
-  // baseMove(30);
+	resetCoords(0, 0, 0);
+
+	// intakeMove(127);
+	// visionBaseMove(SIG_RED_BALL);
+	// visionWaitBase(3000);
+	// pickUp(20);
+	// printf("yo I eneded \n");
+	// delay(1000);
+	// visionBaseMove(SIG_RED_BALL);
+	// visionWaitBase(3000);
+
+	visionBaseMove(SIG_GREEN_FLAG);
+	visionWaitBase(3000);
+	cycle();
 }
 /**
  * Starting position on the left of the blue alliance spawn.

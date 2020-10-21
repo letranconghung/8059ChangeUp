@@ -30,6 +30,21 @@ void forceStop() {
   forceStopTrigger = true;
 }
 
+void waitCycle() {
+  while(!limit.get_value() && !forceStopTrigger) delay(5);
+  while(limit.get_value() && !forceStopTrigger) delay(5);
+}
+
+void pickUp(int power) {
+  intakeMove(127);
+  powerBase(power, power);
+  cycle();
+  waitCycle();
+  powerBase(0, 0);
+  pauseBase(false);
+  // intakeMove(0);
+}
+
 void shooterControl(void * ignore) {
   shooter.set_brake_mode(MOTOR_BRAKE_HOLD);
   while(true) {
