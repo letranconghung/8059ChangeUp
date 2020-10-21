@@ -37,6 +37,8 @@ void initialize() {
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task shooterControlTask(shooterControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task objectOdometryTask(objectOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task visionBaseControlTask(visionBaseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	// Task shooterMotorControlTask(shooterMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 }
 
@@ -115,25 +117,30 @@ void opcontrol() {
 		/** toggle tank drive */
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		/** handle tankDrive */
-		if(tankDrive){
-      int l = master.get_analog(ANALOG_LEFT_Y);
-      int r = master.get_analog(ANALOG_RIGHT_Y);
-      FL.move(l-BRAKE_POW);
-      BL.move(l+BRAKE_POW);
-      FR.move(r-BRAKE_POW);
-      BR.move(r+BRAKE_POW);
-    } else{
-      int y = master.get_analog(ANALOG_LEFT_Y);
-      int x = master.get_analog(ANALOG_RIGHT_X);
-      FL.move(y+x-BRAKE_POW);
-      BL.move(y+x+BRAKE_POW);
-      FR.move(y-x-BRAKE_POW);
-      BR.move(y-x+BRAKE_POW);
-    }
+		// if(tankDrive){
+    //   int l = master.get_analog(ANALOG_LEFT_Y);
+    //   int r = master.get_analog(ANALOG_RIGHT_Y);
+    //   FL.move(l-BRAKE_POW);
+    //   BL.move(l+BRAKE_POW);
+    //   FR.move(r-BRAKE_POW);
+    //   BR.move(r+BRAKE_POW);
+    // } else{
+    //   int y = master.get_analog(ANALOG_LEFT_Y);
+    //   int x = master.get_analog(ANALOG_RIGHT_X);
+    //   FL.move(y+x-BRAKE_POW);
+    //   BL.move(y+x+BRAKE_POW);
+    //   FR.move(y-x-BRAKE_POW);
+    //   BR.move(y-x+BRAKE_POW);
+    // }
 		intakeMove((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)) * 127);
 		setDiscard(master.get_digital(DIGITAL_L2));
 		if(master.get_digital(DIGITAL_L1)) cycle();
 		if(master.get_digital(DIGITAL_X)) forceStop();
+
+		if(master.get_digital_new_press(DIGITAL_A)) visionBaseMove(SIG_RED_BALL);
+		// else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_BLUE_BALL);
+		else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_GREEN_FLAG);
+		
 		pros::delay(5);
 	}
 }

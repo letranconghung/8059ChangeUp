@@ -5,6 +5,7 @@
  * - Power control task
  * - Miscellaneous & supporting functions
  */
+
 #include "main.h"
 /** declare motors */
 Motor FL (FLPort);
@@ -354,30 +355,33 @@ void baseMotorControl(void * ignore){
   /** to-be-set values for left and right motors */
   double powerL=0,powerR=0;
   while(competition::is_autonomous()){
-    /** limit power increments to below RAMPING_POW */
-    double deltaPowerL = targetPowerL - powerL;
-    powerL += abscap(deltaPowerL, RAMPING_POW);
-    double deltaPowerR = targetPowerR - powerR;
-    powerR += abscap(deltaPowerR, RAMPING_POW);
-    /** handle custom speed caps */
-		if(basePowCapped){
-      powerL = abscap(powerL, absPowerCap);
-      powerR = abscap(powerR, absPowerCap);
-		}
-		else{
-			powerL = abscap(powerL, MAX_POW);
-      powerR = abscap(powerR, MAX_POW);
-		}
-    /** if baseMotorControl is not paused */
-		if(!basePaused){
-			FL.move(powerL);
-			BL.move(powerL);
-			FR.move(powerR);
-			BR.move(powerR);
-		}
-    /** print to assist debugging */
-		if(DEBUG_MODE == 3) printf("%4.0f \t %4.0f\n",powerL,powerR);
-    /** refresh rate of Task */
-    Task::delay(20);
+    if(!useVision) {
+
+      /** limit power increments to below RAMPING_POW */
+      double deltaPowerL = targetPowerL - powerL;
+      powerL += abscap(deltaPowerL, RAMPING_POW);
+      double deltaPowerR = targetPowerR - powerR;
+      powerR += abscap(deltaPowerR, RAMPING_POW);
+      /** handle custom speed caps */
+      if(basePowCapped){
+        powerL = abscap(powerL, absPowerCap);
+        powerR = abscap(powerR, absPowerCap);
+      }
+      else{
+        powerL = abscap(powerL, MAX_POW);
+        powerR = abscap(powerR, MAX_POW);
+      }
+      /** if baseMotorControl is not paused */
+      if(!basePaused){
+        FL.move(powerL);
+        BL.move(powerL);
+        FR.move(powerR);
+        BR.move(powerR);
+      }
+      /** print to assist debugging */
+      if(DEBUG_MODE == 3) printf("%4.0f \t %4.0f\n",powerL,powerR);
+      /** refresh rate of Task */
+      Task::delay(20);
+    }
   }
 }

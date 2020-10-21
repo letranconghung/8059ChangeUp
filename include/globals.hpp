@@ -19,5 +19,9 @@
 #define encdR_port 3
 #define limitPort 5
 #define colorPort 6
+#define visBallport 1
+#define visFlagport 2
+
+extern bool useVision;
 
 #endif

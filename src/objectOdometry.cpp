@@ -1,6 +1,6 @@
 #include "main.h"
-const VisionCoordinates TARG_BALL{0, 150, 118, 124, 62};
-const VisionCoordinates TARG_FLAG{0,161,-27,66,54};
+const VisionCoordinates TARG_BALL{0, 143, 102, 136,74};
+const VisionCoordinates TARG_FLAG{0,180,53,63,900};
 VisionObject redBall(VisionCoordinates(), TARG_BALL);
 VisionObject blueBall(VisionCoordinates(), TARG_BALL);
 VisionObject greenFlag(VisionCoordinates(), TARG_FLAG);
