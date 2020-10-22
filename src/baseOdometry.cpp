@@ -64,7 +64,7 @@ void baseOdometry(void * ignore){
 		prevEncdR = encdR;
 		prevAngle = position.angle;
     /** print to assist debugging */
-    // if(!COMPETITION_MODE) position.printCoordsMaster();
+    if(!COMPETITION_MODE) position.printCoordsMaster();
     if((DEBUG_MODE == 1) && (count++ % 10 == 0)) position.printCoordsTerminal();
     if(DEBUG_MODE == 4) printf("Encoder values %4.0f \t %4.0f\n",getEncdVals(true).first,getEncdVals(true).second);
     /** refresh rate of Task */
