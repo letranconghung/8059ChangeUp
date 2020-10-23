@@ -344,6 +344,14 @@ void resetCoords(double x, double y, double angleDeg){
   targetEncdL = 0;
   targetEncdR = 0;
 }
+
+void setTargetsToCurr() {
+  printf("%f - %f, %f - %f\n", targetEncdR, getEncdVals(true).first, targetEncdL, getEncdVals(true).second);
+  targetEncdR = getEncdVals(true).first;
+  targetEncdL = getEncdVals(true).second;
+  while(true) printf("%f - %f, %f - %f\n", targetEncdR, getEncdVals(true).first, targetEncdL, getEncdVals(true).second);
+}
+
 /** Set target motor powers using a PD loop. */
 void baseControl(void * ignore){
   /** previous error in encoder values for D loop */

@@ -13,10 +13,10 @@
 #define VISION_MAX_POW 120
 #define VISION_RAMPING_POW 8
 
-#define DEFAULT_X_KP 1
-#define DEFAULT_X_KD .1
+#define DEFAULT_X_KP 0.5
+#define DEFAULT_X_KD 0.1
 #define DEFAULT_W_KP 1.5
-#define DEFAULT_W_KD .2
+#define DEFAULT_W_KD 0.2
 int targSig;
 double visionTargetPowerL = 0, visionTargetPowerR = 0;
 double powerL = 0, powerR = 0;

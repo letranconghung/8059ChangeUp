@@ -46,6 +46,7 @@ void pauseBase(bool pause);
 void timerBase(double powL, double powR, double time);
 void powerBase(double powL, double powR);
 void resetCoords(double x, double y, double angleDeg);
+void setTargetsToCurr();
 
 void baseControl(void * ignore);
 void baseMotorControl(void * ignore);
