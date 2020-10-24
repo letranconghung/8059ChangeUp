@@ -233,6 +233,10 @@ void baseTurnRelative(double angle, double kp, double kd){
   kP = kp;
   kD = kd;
 }
+
+void baseTurnRelative(double angle) {
+  baseTurnRelative(angle, DEFAULT_TURN_KP, DEFAULT_TURN_KD);
+}
 /**
  * Introduce a cutoff to base movements to interfere with the task when it takes too long
  * to reach a target (e.g. due to too small DISTANCE_LEEWAY or too small kP).
@@ -358,6 +362,10 @@ void baseControl(void * ignore){
   double prevErrorEncdL = 0, prevErrorEncdR = 0;
   while(competition::is_autonomous()){
     /** error from current encoder values to target encoder values */
+    if(useVision) {
+      targetEncdL = getEncdVals(true).first;
+      targetEncdR = getEncdVals(true).second;
+    }
     double errorEncdL = targetEncdL - getEncdVals(true).first;
     double errorEncdR = targetEncdR - getEncdVals(true).second;
     /** PD loop */
@@ -381,7 +389,6 @@ void baseMotorControl(void * ignore){
   double powerL=0,powerR=0;
   while(competition::is_autonomous()){
     if(!useVision) {
-
       /** limit power increments to below RAMPING_POW */
       double deltaPowerL = targetPowerL - powerL;
       powerL += abscap(deltaPowerL, RAMPING_POW);

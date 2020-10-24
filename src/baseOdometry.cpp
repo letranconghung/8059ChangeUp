@@ -6,13 +6,14 @@
 #include "main.h"
 /** to test odometry in opcontrol() when not in competition */
 #define COMPETITION_MODE false
+
 /** declare encoders */
 ADIEncoder encoderL(encdL_port, encdL_port + 1);
 ADIEncoder encoderR(encdR_port, encdR_port + 1);
 /** encdL, encdR = value of respective encoders */
 double encdL = 0, encdR = 0;
 /** position: object of class Coordinates - position of the robot */
-Coordinates position(0, 0, 0);
+Coordinates position;
 /**
  * Retrive encoder values.
  * @param processed
@@ -38,14 +39,12 @@ void baseOdometry(void * ignore){
     encdL = getEncdVals().first;
     encdR = getEncdVals().second;
     /** refer to Odometry Documentation.docx for mathematical proof */
-    // position.angle = boundRad((encdL - encdR)/baseWidth);
-    position.angle = (encdL - encdR)/baseWidth;
-    /** difference of current encoder values from previous encoder values */
     double encdChangeL = (encdL-prevEncdL);
     double encdChangeR = (encdR-prevEncdR);
     /** refer to Odometry Documentation.docx for mathematical proof */
     double sumEncdChange = encdChangeL + encdChangeR;
     double deltaAngle = (encdChangeL - encdChangeR)/baseWidth;
+    position.angle += deltaAngle;
     /** update x- and y-coordinates */
     if(deltaAngle == 0) {
       /** handle 0 as the formula involves division by deltaAngle */
@@ -65,7 +64,10 @@ void baseOdometry(void * ignore){
 		prevAngle = position.angle;
     /** print to assist debugging */
     if(!COMPETITION_MODE) position.printCoordsMaster();
-    if((DEBUG_MODE == 1) && (count++ % 10 == 0)) position.printCoordsTerminal();
+    if((DEBUG_MODE == 1) && (count++ % 100 == 0)){
+      // position.printCoordsTerminal();
+      printf("Encds: %.2f %.2f targetEncds: %.2f %.2f \n", encdL, encdR, targetEncdL, targetEncdR);
+    }
     if(DEBUG_MODE == 4) printf("Encoder values %4.0f \t %4.0f\n",getEncdVals(true).first,getEncdVals(true).second);
     /** refresh rate of Task */
     Task::delay(5);

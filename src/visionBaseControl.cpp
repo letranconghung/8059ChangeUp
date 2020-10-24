@@ -1,12 +1,6 @@
 #include "main.h"
 #define VISION_COMPETITION_MODE false
-#define VISION_DEBUG_MODE 3
-/**
- * 0: None
- * 1: Object Odometry
- * 2: error, targetPower, power
- * 3: Selected odometry
- */
+
 #define W_LEEWAY 3
 #define X_LEEWAY 3
 

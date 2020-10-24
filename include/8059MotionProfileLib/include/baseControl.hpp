@@ -13,7 +13,7 @@
  * 3: Power (print powerL & powerR)
  * 4: Raw encoder values (print raw encdL & encdR)
  */
-#define DEBUG_MODE 0
+#define DEBUG_MODE 1
 // Maximum power allowed
 #define MAX_POW 80
 /**
@@ -38,6 +38,7 @@ void baseTurn(double angleDeg, double kp, double kd);
 void baseTurn(double angleDeg);
 void baseTurn(double x, double y, double kp, double kd, bool reverse);
 void baseTurnRelative(double angle, double kp, double kd);
+void baseTurnRelative(double angle);
 
 void waitBase(double cutoff);
 void capBasePow(double cap);
@@ -48,6 +49,7 @@ void powerBase(double powL, double powR);
 void resetCoords(double x, double y, double angleDeg);
 void setTargetsToCurr();
 
+extern double targetEncdL, targetEncdR;
 void baseControl(void * ignore);
 void baseMotorControl(void * ignore);
 
