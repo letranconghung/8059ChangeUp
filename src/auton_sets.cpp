@@ -8,57 +8,59 @@
  * Programming skills run
  * @return void
  */
+int stdDelay = 200;
+int pickUpDelay = 1000;
+int poleDelay = 1500;
 void skills(){
 	resetCoords(0, 0, -58);
-	delay(500);
+	delay(stdDelay);
 	baseMove(-4);
 	waitBase(500);
-	delay(300);
+	delay(stdDelay);
 	baseTurn(115);
 	waitBase(1000);
-	delay(300);
+	delay(stdDelay);
 	baseMove(4);
 	waitBase(500);
 	intakeMove(127);
-	delay(1000);
+	delay(stdDelay);
 	pickUp(40);
-	delay(2000);
+	delay(pickUpDelay);
 	intakeMove(0);
-
 
 	baseTurn(100);
 	waitBase(1000);
-	delay(500);
+	delay(stdDelay);
 	baseMove(44);
 	waitBase(3000);
-	delay(500);
+	delay(stdDelay);
 
 //2nd pole
 	baseTurn(0);
 	waitBase(1200);
-	delay(500);
+	delay(stdDelay);
 	visionBaseMove(SIG_GREEN_FLAG);
 	visionWaitBase(2000);
 	cycle();
 	pauseBase(true);
-	delay(2000);
+	delay(poleDelay);
 	pauseBase(false);
 
 	//center pole
 	baseMove(-10);
 	waitBase(700);
-	delay(500);
+	delay(stdDelay);
 	baseTurn(180,0.35,0.15);
 	waitBase(3000);
-	delay(500);
+	delay(stdDelay);
 	visionBaseMove(SIG_RED_BALL);
 	visionWaitBase(1500);
-	delay(500);
+	delay(stdDelay);
 	pickUp(40);
-	delay(1000);
+	delay(pickUpDelay);
 	baseTurn(170);
 	waitBase(1000);
-	delay(500);
+	delay(stdDelay);
 	intakeMove(0);
 	baseMove(33);
 	waitBase(1000);
@@ -69,148 +71,148 @@ void skills(){
 	delay(1000);
 	cycle();
 	pauseBase(true);
-	delay(500);
+	delay(poleDelay);
 	pauseBase(false);
 
 	baseMove(-15);
 	waitBase(2000);
-	delay(500);
+	delay(stdDelay);
 
 	//fourth pole
 	baseTurn(45);
 	waitBase(2000);
-	delay(500);
+	delay(stdDelay);
 
 	visionBaseMove(SIG_RED_BALL);
 	visionWaitBase(3000);
-	delay(500);
+	delay(stdDelay);
 	pickUp(40);
-	delay(500);
+	delay(pickUpDelay);
 	intakeMove(0);
 	visionBaseMove(SIG_GREEN_FLAG);
 	visionWaitBase(2000);
 	cycle();
 	pauseBase(true);
-	delay(2000);
+	delay(poleDelay);
 	pauseBase(false);
 
 	baseMove(-10);
 	waitBase(1000);
-	delay(500);
+	delay(stdDelay);
 
 	//fifth pole
 	baseTurn(180);
 	waitBase(2000);
-	delay(500);
+	delay(stdDelay);
 
 	visionBaseMove(SIG_RED_BALL);
 	visionWaitBase(3000);
-	delay(500);
+	delay(stdDelay);
 	pickUp(40);
-	delay(500);
+	delay(pickUpDelay);
 	intakeMove(0);
 
 	baseMove(13);
 	waitBase(1500);
-	delay(500);
+	delay(stdDelay);
 
 	baseTurn(90);
 	waitBase(1000);
-	delay(500);
+	delay(stdDelay);
 
 	visionBaseMove(SIG_GREEN_FLAG);
 	visionWaitBase(1000);
-	delay(500);
+	delay(stdDelay);
 	cycle();
 	pauseBase(true);
-	delay(2000);
+	delay(poleDelay);
 	pauseBase(false);
 
 	//sixth pole
 	baseMove(-15);
 	waitBase(1000);
-	delay(500);
+	delay(stdDelay);
 
 	baseTurn(195);
 	waitBase(2000);
-	delay(500);
+	delay(stdDelay);
 
 	visionBaseMove(SIG_RED_BALL);
 	visionWaitBase(2000);
-	delay(500);
+	delay(stdDelay);
 	pickUp(40);
-	delay(500);
+	delay(pickUpDelay);
 	intakeMove(0);
 
 	baseTurn(140);
 	waitBase(1000);
-	delay(500);
+	delay(stdDelay);
 	visionBaseMove(SIG_GREEN_FLAG);
 	visionWaitBase(1500);
-	delay(500);
+	delay(stdDelay);
 	cycle();
 	pauseBase(true);
-	delay(2000);
+	delay(poleDelay);
 	pauseBase(false);
 
-	//7th
-	baseMove(-10);
-	waitBase(1000);
-	delay(500);
-	baseTurn(-60);
-	waitBase(1000);
-	delay(500);
+	// //7th
+	// baseMove(-10);
+	// waitBase(1000);
+	// delay(stdDelay);
+	// baseTurn(-60);
+	// waitBase(1000);
+	// delay(stdDelay);
+	//
+	// visionBaseMove(SIG_RED_BALL);
+	// visionWaitBase(2000);
+	// delay(stdDelay);
+	// pickUp(40);
+	// delay(pickUpDelay);
+	// intakeMove(0);
+	//
+	// baseTurn(190);
+	// waitBase(1000);
+	// delay(stdDelay);
+	// visionBaseMove(SIG_GREEN_FLAG);
+	// visionWaitBase(2000);
+	// delay(stdDelay);
+	// cycle();
+	// pauseBase(true);
+	// delay(2000);
+	// pauseBase(false);
+	//
+	// //8th pole
+	// baseMove(-10);
+	// waitBase(1000);
+	// delay(stdDelay);
+	// baseTurn(-90);
+	// waitBase(1000);
+	// delay(stdDelay);
+	//
+	// visionBaseMove(SIG_RED_BALL);
+	// visionWaitBase(2000);
+	// delay(stdDelay);
+	// pickUp(40);
+	// delay(pickUpDelay);
+	// intakeMove(0);
+	//
+	// baseTurn(-105);
+	// waitBase(800);
+	// delay(stdDelay);
+	//
+	// visionBaseMove(SIG_GREEN_FLAG);
+	// visionWaitBase(2000);
+	// delay(stdDelay);
+	// cycle();
+	// pauseBase(true);
+	// delay(2000);
+	// pauseBase(false);
 
-	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(2000);
-	delay(500);
-	pickUp(40);
-	delay(500);
-	intakeMove(0);
-
-	baseTurn(190);
-	waitBase(1000);
-	delay(500);
-	visionBaseMove(SIG_GREEN_FLAG);
-	visionWaitBase(2000);
-	delay(500);
-	cycle();
-	pauseBase(true);
-	delay(2000);
-	pauseBase(false);
-
-	//8th pole
-	baseMove(-10);
-	waitBase(1000);
-	delay(500);
-	baseTurn(-90);
-	waitBase(1000);
-	delay(500);
-
-	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(2000);
-	delay(500);
-	pickUp(40);
-	delay(500);
-	intakeMove(0);
-
-	baseTurn(-105);
-	waitBase(800);
-	delay(500);
-
-	visionBaseMove(SIG_GREEN_FLAG);
-	visionWaitBase(2000);
-	delay(500);
-	cycle();
-	pauseBase(true);
-	delay(2000);
-	pauseBase(false);
-
-
+	// END OF 8TH BALL RUN
 
 	// baseMove(45);
 	// waitBase(1500);
-	// delay(500);
+	// delay(stdDelay);
 	// baseTurn(58);
 	// waitBase(1000);
 	// delay(300);
@@ -241,7 +243,7 @@ void skills(){
 	//
 	// baseTurn(195);
 	// waitBase(1200);
-	// delay(500);
+	// delay(stdDelay);
 	// baseMove(25);
 	// waitBase(1000);
 	// delay(300);
