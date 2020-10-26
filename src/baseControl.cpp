@@ -350,10 +350,10 @@ void resetCoords(double x, double y, double angleDeg){
 }
 
 void setTargetsToCurr() {
-  printf("%f - %f, %f - %f\n", targetEncdR, getEncdVals(true).first, targetEncdL, getEncdVals(true).second);
+  // printf("%f - %f, %f - %f\n", targetEncdR, getEncdVals(true).first, targetEncdL, getEncdVals(true).second);
   targetEncdR = getEncdVals(true).first;
   targetEncdL = getEncdVals(true).second;
-  while(true) printf("%f - %f, %f - %f\n", targetEncdR, getEncdVals(true).first, targetEncdL, getEncdVals(true).second);
+  // while(true) printf("%f - %f, %f - %f\n", targetEncdR, getEncdVals(true).first, targetEncdL, getEncdVals(true).second);
 }
 
 /** Set target motor powers using a PD loop. */

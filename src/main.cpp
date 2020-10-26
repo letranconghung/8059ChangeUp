@@ -8,18 +8,18 @@
 void initialize() {
 	/** declaration and initialization of motors, encoders and controller */
 	Motor FL (FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor BL (BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor BL (BLPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor BR (BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor BR (BRPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
-	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 
-	ADIEncoder encoderL (encdL_port,encdL_port+1,false);
-	ADIEncoder encoderR (encdR_port,encdR_port+1,true);
-	ADIDigitalIn limit (limitPort);
+	ADIEncoder encoderL (encdL_port,encdL_port+1,true);
+	ADIEncoder encoderR (encdR_port,encdR_port+1,false);
+	ADIEncoder encoderLat (encdLat_port, encdLat_port +1, true);
 	ADIAnalogIn color (colorPort);
 
 	Controller master(E_CONTROLLER_MASTER);
@@ -118,28 +118,27 @@ void opcontrol() {
 		/** toggle tank drive */
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		/** handle tankDrive */
-		if(tankDrive){
-      int l = master.get_analog(ANALOG_LEFT_Y);
-      int r = master.get_analog(ANALOG_RIGHT_Y);
-      FL.move(l-BRAKE_POW);
-      BL.move(l+BRAKE_POW);
-      FR.move(r-BRAKE_POW);
-      BR.move(r+BRAKE_POW);
-    } else{
-      int y = master.get_analog(ANALOG_LEFT_Y);
-      int x = master.get_analog(ANALOG_RIGHT_X);
-      FL.move(y+x-BRAKE_POW);
-      BL.move(y+x+BRAKE_POW);
-      FR.move(y-x-BRAKE_POW);
-      BR.move(y-x+BRAKE_POW);
-    }
+		// if(tankDrive){
+    //   int l = master.get_analog(ANALOG_LEFT_Y);
+    //   int r = master.get_analog(ANALOG_RIGHT_Y);
+    //   FL.move(l-BRAKE_POW);
+    //   BL.move(l+BRAKE_POW);
+    //   FR.move(r-BRAKE_POW);
+    //   BR.move(r+BRAKE_POW);
+    // } else{
+    //   int y = master.get_analog(ANALOG_LEFT_Y);
+    //   int x = master.get_analog(ANALOG_RIGHT_X);
+    //   FL.move(y+x-BRAKE_POW);
+    //   BL.move(y+x+BRAKE_POW);
+    //   FR.move(y-x-BRAKE_POW);
+    //   BR.move(y-x+BRAKE_POW);
+    // }
 		intakeMove((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)) * 127);
 		setDiscard(master.get_digital(DIGITAL_L2));
 		if(master.get_digital(DIGITAL_L1)) cycle();
-		if(master.get_digital(DIGITAL_X)) forceStop();
 
-		// if(master.get_digital_new_press(DIGITAL_A)) visionBaseMove(SIG_RED_BALL);
-		// // else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_BLUE_BALL);
+		if(master.get_digital_new_press(DIGITAL_A)) visionBaseMove(SIG_RED_BALL);
+		else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_BLUE_BALL);
 		// else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_GREEN_FLAG);
 
 		pros::delay(5);

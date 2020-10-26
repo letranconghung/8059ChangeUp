@@ -26,7 +26,7 @@ void VisionCoordinates::print(){
 
 void VisionCoordinates::printMaster(){
     Controller master(E_CONTROLLER_MASTER);
-    master.print(2,0,"%d %d %d %d", this->x, this->y, this->w, this->h);
+    master.print(1,0,"%d %d %d %d", this->x, this->y, this->w, this->h);
 }
 
 VisionObject::VisionObject(){

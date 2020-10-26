@@ -1,14 +1,14 @@
 #include "main.h"
 #include "mech_lib.hpp"
+
 Motor lRoller (lRollerPort);
 Motor rRoller (rRollerPort);
 Motor indexer (indexerPort);
 Motor shooter (shooterPort);
-ADIDigitalIn limit (limitPort);
 ADIAnalogIn color (colorPort);
 
-double cycleSpeed = 127;
-bool cycleTrigger = false, isDiscard = false, forceStopTrigger = false, limitOccupied = false;
+double cycleSpeed = 127, colorThreshold = 2900;
+bool cycleTrigger = false, isDiscard = false, limitOccupied = false;
 // double targetIndexerPower = 0, targetShooterPower = 0;
 // double indexerKP = 1, shooterKP = 1;
 
@@ -23,16 +23,10 @@ void cycle() {
 
 void setDiscard(bool value) {
   isDiscard = value;
-  forceStopTrigger = value;
-}
-
-void forceStop() {
-  forceStopTrigger = true;
 }
 
 void waitCycle() {
-  while(!limit.get_value() && !forceStopTrigger) delay(5);
-  while(limit.get_value() && !forceStopTrigger) delay(5);
+  while(color.get_value() > colorThreshold) delay(5);
 }
 
 void pickUp(int power) {
@@ -46,20 +40,20 @@ void pickUp(int power) {
 }
 
 void shooterControl(void * ignore) {
+  // while(true) {
+  //   printf("color value: %d\n", color.get_value());
+  //   delay(500);
+  // }
   shooter.set_brake_mode(MOTOR_BRAKE_HOLD);
   while(true) {
     shooter.move(0);
     if (isDiscard) {
-      indexer.move(cycleSpeed / 2);
+      indexer.move(cycleSpeed);
       shooter.move(-cycleSpeed);
     }else if(cycleTrigger) {
-      forceStopTrigger = false;
       indexer.move(cycleSpeed);
       shooter.move(cycleSpeed);
-
-      while(!limit.get_value() && !forceStopTrigger) delay(5);
-      while(limit.get_value() && !forceStopTrigger) delay(5);
-
+      waitCycle();
       cycleTrigger = false;
     }else {
       indexer.move(0);

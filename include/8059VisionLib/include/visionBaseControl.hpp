@@ -2,7 +2,7 @@
 #define _8059_VISION_LIB_VISION_BASE_CONTROL_HPP_
 
 #define VISION_COMPETITION_MODE false
-#define VISION_DEBUG_MODE 0
+#define VISION_DEBUG_MODE 3
 /**
  * 0: None
  * 1: Object Odometry

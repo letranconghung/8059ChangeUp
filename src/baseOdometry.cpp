@@ -6,10 +6,15 @@
 #include "main.h"
 /** to test odometry in opcontrol() when not in competition */
 #define COMPETITION_MODE false
+#define USING_LATERAL_ENCD true
 
 /** declare encoders */
 ADIEncoder encoderL(encdL_port, encdL_port + 1);
 ADIEncoder encoderR(encdR_port, encdR_port + 1);
+ADIEncoder encoderLat(encdLat_port, encdLat_port + 1);
+
+#define inPerDegLat 0.0241043549920626 //determine empirically
+
 /** encdL, encdR = value of respective encoders */
 double encdL = 0, encdR = 0;
 /** position: object of class Coordinates - position of the robot */
@@ -31,6 +36,7 @@ void baseOdometry(void * ignore){
   /** previous encoder values; to be used in calculations */
   double prevEncdL = 0;
   double prevEncdR = 0;
+  double prevEncdLat = 0;
   double prevAngle = 0;
   /** indexer */
   int count = 0;
@@ -44,6 +50,7 @@ void baseOdometry(void * ignore){
     /** refer to Odometry Documentation.docx for mathematical proof */
     double sumEncdChange = encdChangeL + encdChangeR;
     double deltaAngle = (encdChangeL - encdChangeR)/baseWidth;
+    double halfDeltaAngle = deltaAngle/2;
     position.angle += deltaAngle;
     /** update x- and y-coordinates */
     if(deltaAngle == 0) {
@@ -54,10 +61,24 @@ void baseOdometry(void * ignore){
 		}
 		else {
       /** refer to Odometry Documentation.docx for mathematical proof */
-			double halfDeltaAngle = deltaAngle/2;
 			position.x += (sumEncdChange/deltaAngle)*sin(halfDeltaAngle)*sin(prevAngle+halfDeltaAngle);
 			position.y += (sumEncdChange/deltaAngle)*sin(halfDeltaAngle)*cos(prevAngle+halfDeltaAngle);
 		}
+
+    #if USING_LATERAL_ENCD
+			double encdLat = (double)encoderLat.get_value()*inPerDegLat;
+			double encdChangeLat = encdLat - prevEncdLat;
+			double latShift = encdChangeLat;
+			if(deltaAngle) latShift = (encdChangeLat/deltaAngle)*sin(halfDeltaAngle)*2.0;
+
+			double xShift = latShift * cos(prevAngle+halfDeltaAngle);
+			double yShift = latShift * -sin(prevAngle+halfDeltaAngle);
+			position.x += xShift;
+			position.y += yShift;
+
+			prevEncdLat = encdLat;
+		#endif
+
     /** Update prev variables */
 		prevEncdL = encdL;
 		prevEncdR = encdR;
@@ -65,8 +86,8 @@ void baseOdometry(void * ignore){
     /** print to assist debugging */
     if(!COMPETITION_MODE) position.printCoordsMaster();
     if((DEBUG_MODE == 1) && (count++ % 100 == 0)){
-      // position.printCoordsTerminal();
-      printf("Encds: %.2f %.2f targetEncds: %.2f %.2f \n", encdL, encdR, targetEncdL, targetEncdR);
+      position.printCoordsTerminal();
+      // printf("Encds: %.2f %.2f targetEncds: %.2f %.2f \n", encdL, encdR, targetEncdL, targetEncdR);
     }
     if(DEBUG_MODE == 4) printf("Encoder values %4.0f \t %4.0f\n",getEncdVals(true).first,getEncdVals(true).second);
     /** refresh rate of Task */

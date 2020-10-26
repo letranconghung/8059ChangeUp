@@ -70,7 +70,6 @@ void visionBaseControl(void * ignore){
       switch(targSig){
         case 1: v = redBall; break;
         case 2: v = blueBall; break;
-        case 3: v = greenFlag; break;
         // default: printf("Invalid move in visionBaseControl\n");
       }
       errorX = v.targ.x - v.curr.x;
