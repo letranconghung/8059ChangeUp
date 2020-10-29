@@ -73,8 +73,7 @@ void competition_initialize() {}
  */
 void autonomous() {
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 0;
-	// printf("Hi");
+	int autonNum = 1;
 	switch (autonNum){
 		case 0: skills(); break;
 		case 1: blueLeft(); break;
@@ -136,7 +135,7 @@ void opcontrol() {
 		intakeMove((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)) * 127);
 		setDiscard(master.get_digital(DIGITAL_L2));
 		if(master.get_digital(DIGITAL_L1)) cycle();
-		if(master.get_digital(DIGITAL_X)) forceStop();
+		if(master.get_digital(DIGITAL_X)) shoot(127,500);
 
 		// if(master.get_digital_new_press(DIGITAL_A)) visionBaseMove(SIG_RED_BALL);
 		// // else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_BLUE_BALL);

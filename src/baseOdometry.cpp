@@ -38,27 +38,27 @@ void baseOdometry(void * ignore){
     /** retrieve & update encoder values */
     encdL = getEncdVals().first;
     encdR = getEncdVals().second;
-    /** refer to Odometry Documentation.docx for mathematical proof */
+    /** refer to Odometry Documentation for mathematical proof */
     double encdChangeL = (encdL-prevEncdL);
     double encdChangeR = (encdR-prevEncdR);
-    /** refer to Odometry Documentation.docx for mathematical proof */
+    /** refer to Odometry Documentation for mathematical proof */
     double sumEncdChange = encdChangeL + encdChangeR;
     double deltaAngle = (encdChangeL - encdChangeR)/baseWidth;
     position.angle += deltaAngle;
     /** update x- and y-coordinates */
     if(deltaAngle == 0) {
       /** handle 0 as the formula involves division by deltaAngle */
-      /** refer to Odometry Documentation.docx for mathematical proof */
+      /** refer to Odometry Documentation for mathematical proof */
 			position.x += sumEncdChange/2*sin(position.angle);
 			position.y += sumEncdChange/2*cos(position.angle);
 		}
 		else {
-      /** refer to Odometry Documentation.docx for mathematical proof */
+      /** refer to Odometry Documentation for mathematical proof */
 			double halfDeltaAngle = deltaAngle/2;
 			position.x += (sumEncdChange/deltaAngle)*sin(halfDeltaAngle)*sin(prevAngle+halfDeltaAngle);
 			position.y += (sumEncdChange/deltaAngle)*sin(halfDeltaAngle)*cos(prevAngle+halfDeltaAngle);
 		}
-    /** Update prev variables */
+    /** update prev variables */
 		prevEncdL = encdL;
 		prevEncdR = encdR;
 		prevAngle = position.angle;

@@ -4,16 +4,21 @@
  * - 15s auton runs for each spawn
  */
 #include "main.h"
-/**
- * Programming skills run
- * @return void
- */
-int stdDelay = 200;
-int pickUpDelay = 1000;
-int poleDelay = 1500;
+/** programming skills run */
 void skills(){
-	resetCoords(0, 0, -58);
+	/** situational delay constants for flexible global adjustments */
+	int stdDelay = 350;
+	int pickUpDelay = 1000;
+	int poleDelay = 1000;
+	int shootDelay = 800;
+	/** flip out */
+	cycle();
+	delay(700);
+	shoot(127,1000);
+	/** sets initial position */
+	resetCoords(0, 0, -60);
 	delay(stdDelay);
+	/** pick up red ball */
 	baseMove(-4);
 	waitBase(500);
 	delay(stdDelay);
@@ -25,283 +30,131 @@ void skills(){
 	intakeMove(127);
 	delay(stdDelay);
 	pickUp(40);
-	delay(pickUpDelay);
 	intakeMove(0);
-
+	delay(pickUpDelay);
+	/** score 2nd goal */
 	baseTurn(100);
 	waitBase(1000);
 	delay(stdDelay);
 	baseMove(44);
-	waitBase(3000);
+	waitBase(2000);
 	delay(stdDelay);
-
-//2nd pole
 	baseTurn(0);
 	waitBase(1200);
 	delay(stdDelay);
 	visionBaseMove(SIG_GREEN_FLAG);
-	visionWaitBase(2000);
-	cycle();
-	pauseBase(true);
+	visionWaitBase(1000);
+	shoot(127,shootDelay);
 	delay(poleDelay);
-	pauseBase(false);
-
-	//center pole
-	baseMove(-10);
-	waitBase(700);
-	delay(stdDelay);
-	baseTurn(180,0.35,0.15);
-	waitBase(3000);
-	delay(stdDelay);
-	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(1500);
-	delay(stdDelay);
-	pickUp(40);
-	delay(pickUpDelay);
-	baseTurn(170);
+	/** turns to red ball */
+	baseMove(-8);
 	waitBase(1000);
 	delay(stdDelay);
+	baseTurn(180,0.3,0.15);
+	waitBase(800);
+	delay(stdDelay);
+	/** picks up red ball */
+	visionBaseMove(SIG_RED_BALL);
+	visionWaitBase(1000);
+	delay(stdDelay);
+	pickUp(40);
 	intakeMove(0);
+	delay(pickUpDelay);
+	/** score 3rd goal */
+	baseTurn(166);
+	waitBase(1000);
+	delay(stdDelay);
 	baseMove(33);
+	waitBase(1500);
+	timerBase(100,0,500);
 	waitBase(1000);
-	powerBase(100, 0);
-	delay(1000);
-	pauseBase(false);
-	waitBase(1000);
-	delay(1000);
-	cycle();
-	pauseBase(true);
-	delay(poleDelay);
-	pauseBase(false);
-
+	delay(300);
+	shoot(127,shootDelay);
+	delay(800);
+	/** turn to red ball */
 	baseMove(-15);
-	waitBase(2000);
+	waitBase(1000);
 	delay(stdDelay);
-
-	//fourth pole
-	baseTurn(45);
-	waitBase(2000);
+	baseTurn(89.2,-5.8,0.4,0.1,false);
+	waitBase(1000);
 	delay(stdDelay);
-
+	/** pick up red ball */
 	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(3000);
+	visionWaitBase(1750);
 	delay(stdDelay);
 	pickUp(40);
 	delay(pickUpDelay);
 	intakeMove(0);
+	/** score 4th goal */
 	visionBaseMove(SIG_GREEN_FLAG);
-	visionWaitBase(2000);
-	cycle();
-	pauseBase(true);
+	visionWaitBase(3000);
+	shoot(127,shootDelay);
 	delay(poleDelay);
-	pauseBase(false);
-
+	/** turn to red ball */
 	baseMove(-10);
 	waitBase(1000);
 	delay(stdDelay);
-
-	//fifth pole
-	baseTurn(180);
-	waitBase(2000);
+	baseTurn(98.4,-51,0.4,0.1,false);
+	waitBase(900);
 	delay(stdDelay);
-
+	/** pick up red ball */
 	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(3000);
+	visionWaitBase(1700);
 	delay(stdDelay);
 	pickUp(40);
-	delay(pickUpDelay);
 	intakeMove(0);
-
-	baseMove(13);
+	delay(pickUpDelay);
+	/** scores 5th goal */
+	baseMove(18);
 	waitBase(1500);
 	delay(stdDelay);
-
 	baseTurn(90);
 	waitBase(1000);
 	delay(stdDelay);
-
 	visionBaseMove(SIG_GREEN_FLAG);
 	visionWaitBase(1000);
 	delay(stdDelay);
-	cycle();
-	pauseBase(true);
+	shoot(127,shootDelay);
 	delay(poleDelay);
-	pauseBase(false);
-
-	//sixth pole
-	baseMove(-15);
+	/** turns to red ball */
+	baseMove(-13);
 	waitBase(1000);
 	delay(stdDelay);
-
-	baseTurn(195);
-	waitBase(2000);
+	baseTurn(180);
+	waitBase(1000);
 	delay(stdDelay);
-
+	/** picks up red ball */
 	visionBaseMove(SIG_RED_BALL);
 	visionWaitBase(2000);
 	delay(stdDelay);
 	pickUp(40);
-	delay(pickUpDelay);
 	intakeMove(0);
-
+	delay(pickUpDelay);
+	/** score 6th goal */
 	baseTurn(140);
-	waitBase(1000);
+	waitBase(700);
 	delay(stdDelay);
 	visionBaseMove(SIG_GREEN_FLAG);
 	visionWaitBase(1500);
 	delay(stdDelay);
-	cycle();
-	pauseBase(true);
+	baseMove(3);
+	waitBase(500);
+	shoot(127,shootDelay);
 	delay(poleDelay);
-	pauseBase(false);
-
-	// //7th
-	// baseMove(-10);
-	// waitBase(1000);
-	// delay(stdDelay);
-	// baseTurn(-60);
-	// waitBase(1000);
-	// delay(stdDelay);
-	//
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(2000);
-	// delay(stdDelay);
-	// pickUp(40);
-	// delay(pickUpDelay);
-	// intakeMove(0);
-	//
-	// baseTurn(190);
-	// waitBase(1000);
-	// delay(stdDelay);
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(2000);
-	// delay(stdDelay);
-	// cycle();
-	// pauseBase(true);
-	// delay(2000);
-	// pauseBase(false);
-	//
-	// //8th pole
-	// baseMove(-10);
-	// waitBase(1000);
-	// delay(stdDelay);
-	// baseTurn(-90);
-	// waitBase(1000);
-	// delay(stdDelay);
-	//
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(2000);
-	// delay(stdDelay);
-	// pickUp(40);
-	// delay(pickUpDelay);
-	// intakeMove(0);
-	//
-	// baseTurn(-105);
-	// waitBase(800);
-	// delay(stdDelay);
-	//
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(2000);
-	// delay(stdDelay);
-	// cycle();
-	// pauseBase(true);
-	// delay(2000);
-	// pauseBase(false);
-
-	// END OF 8TH BALL RUN
-
-	// baseMove(45);
-	// waitBase(1500);
-	// delay(stdDelay);
-	// baseTurn(58);
-	// waitBase(1000);
-	// delay(300);
-	//
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(1500);
-	// pauseBase(true);
-	// cycle();
-	// delay(1000);
-	// pauseBase(false);
-	// delay(2000);
-	//
-	// baseTurn(125);
-	// waitBase(1000);
-	//
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(1200);
-	// pickUp(40);
-	// intakeMove(0);
-	//
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(1500);
-	// pauseBase(true);
-	// cycle();
-	// delay(1000);
-	// pauseBase(false);
-	// delay(3000);
-	//
-	// baseTurn(195);
-	// waitBase(1200);
-	// delay(stdDelay);
-	// baseMove(25);
-	// waitBase(1000);
-	// delay(300);
-	//
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(1200);
-	// pickUp(40);
-	// intakeMove(0);
-	//
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(1500);
-	// pauseBase(true);
-	// cycle();
-	// delay(1000);
-	// pauseBase(false);
-	// delay(3000);
-
-
-	// pauseBase(true);
-	// setTargetsToCurr();
-	// delay(3000);
-	// pauseBase(false);
-
-	// intakeMove(127);
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(3000);
-	// pickUp(20);
-	// printf("yo I eneded \n");
-	// delay(1000);
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(3000);
-
 }
-/**
- * Starting position on the left of the blue alliance spawn.
- * @return void
- */
+/** Autonomous routine for blue left spawn. */
 void blueLeft(){
 
 }
-/**
- * Starting position on the right of the blue alliance spawn.
- * @return void
- */
+/** Autonomous routine for blue right spawn. */
 void blueRight(){
 
 }
-/**
- * Starting position on the left of the red alliance spawn.
- * @return void
- */
+/** Autonomous routine for red left spawn. */
 void redLeft(){
 
 }
-/**
- * Starting position on the right of the prevEncdR alliance spawn.
- * @return void
- */
+/** Autonomous routine for red right spawn. */
 void redRight(){
 
 }

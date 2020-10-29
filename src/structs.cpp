@@ -1,11 +1,7 @@
-/**
- * Coordinates functions
- */
+/** Coordinates functions */
 #include "main.h"
-/**
- * Default initialization of an object of Coordinates class.
- */
 Controller master(E_CONTROLLER_MASTER);
+/** Default initialization of an object of class Coordinates. */
 Coordinates::Coordinates(){
   this -> x = 0;
   this -> y = 0;
@@ -41,7 +37,7 @@ Coordinates::Coordinates(double x, double y, double angleDeg){
   this -> angle = boundRad(angleDeg*toRad);
 }
 /**
- * Set the coordinates.
+ * Set Coordinates.
  * @param x
  * to-be-set x-coordinate
  *
@@ -56,15 +52,11 @@ void Coordinates::setCoords(double x, double y, double angleDeg){
   this -> y = y;
   this -> angle = angleDeg*toRad;
 }
-/**
- * Print Coordinates to the terminal (connected via usb).
- */
+/** Print Coordinates to the terminal. */
 void Coordinates::printCoordsTerminal(){
   printf("x: %.2f, y: %.2f, angle: %.2f\n",this->x, this->y, this->angle*toDeg);
 }
-/**
- * Print Coordinates to the master controller.
- */
+/** Print Coordinates to the master controller. */
 void Coordinates::printCoordsMaster(){
   master.print(2,0,"%2.1f %2.1f %3f",this->x,this->y,this->angle*toDeg);
 }

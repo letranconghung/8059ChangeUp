@@ -1,40 +1,66 @@
+/**
+ * Other mechanical functions:
+ * - Sensors
+ * - Rollers
+ * - Shooter
+ */
 #include "main.h"
 #include "mech_lib.hpp"
+/** declare motors and sensors */
 Motor lRoller (lRollerPort);
 Motor rRoller (rRollerPort);
 Motor indexer (indexerPort);
 Motor shooter (shooterPort);
 ADIDigitalIn limit (limitPort);
 ADIAnalogIn color (colorPort);
-
-double cycleSpeed = 127;
-bool cycleTrigger = false, isDiscard = false, forceStopTrigger = false, limitOccupied = false;
-// double targetIndexerPower = 0, targetShooterPower = 0;
-// double indexerKP = 1, shooterKP = 1;
-
+double cycleSpeed = 110;
+double shootSpeed, shootTime;
+/** boolean flags for shooter Task */
+bool cycleTrigger = false, isDiscard = false, shootTrigger = false;
+/**
+ * Control power of intake rollers.
+ * @param speed
+ * speed of intake rollers
+ */
 void intakeMove(int speed) {
   lRoller.move(speed);
   rRoller.move(speed);
 }
-
+/** Cycle ball by flipping boolean flag cycleTrigger. */
 void cycle() {
   cycleTrigger = true;
 }
-
+/**
+ * Shoot ball.
+ * @param speed
+ * shooter speed
+ *
+ * @param time
+ * shooting duration
+ */
+void shoot(double speed, double time){
+  shootTrigger = true;
+  shootSpeed = speed;
+  shootTime = time;
+}
+/**
+ * Discard ball.
+ * @param value
+ * boolean flag value for isDiscard
+ */
 void setDiscard(bool value) {
   isDiscard = value;
-  forceStopTrigger = value;
 }
-
-void forceStop() {
-  forceStopTrigger = true;
-}
-
+/** Delay function for cycle() to finish: limit switch is triggered and de-triggered. */
 void waitCycle() {
-  while(!limit.get_value() && !forceStopTrigger) delay(5);
-  while(limit.get_value() && !forceStopTrigger) delay(5);
+  while(!limit.get_value()) delay(5); //wait till limit is pressed
+  while(limit.get_value()) delay(5); // wait till limit is released
 }
-
+/**
+ * Ball pick-up function: move forward until ball is successfully cycled.
+ * @param power
+ * pickup base powers
+ */
 void pickUp(int power) {
   intakeMove(127);
   powerBase(power, power);
@@ -44,7 +70,7 @@ void pickUp(int power) {
   pauseBase(false);
   // intakeMove(0);
 }
-
+/** Async Task that control all functions related to shooter. */
 void shooterControl(void * ignore) {
   shooter.set_brake_mode(MOTOR_BRAKE_HOLD);
   while(true) {
@@ -53,15 +79,18 @@ void shooterControl(void * ignore) {
       indexer.move(cycleSpeed / 2);
       shooter.move(-cycleSpeed);
     }else if(cycleTrigger) {
-      forceStopTrigger = false;
       indexer.move(cycleSpeed);
       shooter.move(cycleSpeed);
-
-      while(!limit.get_value() && !forceStopTrigger) delay(5);
-      while(limit.get_value() && !forceStopTrigger) delay(5);
-
+      waitCycle();
       cycleTrigger = false;
-    }else {
+    }else if(shootTrigger){
+      indexer.move(shootSpeed);
+      shooter.move(shootSpeed);
+      delay(shootTime);
+      indexer.move(0);
+      shooter.move(0);
+      shootTrigger = false;
+    }else{
       indexer.move(0);
       shooter.move(0);
     }

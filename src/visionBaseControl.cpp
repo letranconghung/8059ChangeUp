@@ -1,12 +1,9 @@
+/**
+ * Functions and tasks that handle base movements using the vision library
+ */
 #include "main.h"
 #define VISION_COMPETITION_MODE false
-
-#define W_LEEWAY 3
-#define X_LEEWAY 3
-
-#define VISION_MAX_POW 120
-#define VISION_RAMPING_POW 8
-
+/** default values of kP and kD */
 #define DEFAULT_X_KP 0.5
 #define DEFAULT_X_KD 0.1
 #define DEFAULT_W_KP 1.5
@@ -15,10 +12,27 @@ int targSig;
 double visionTargetPowerL = 0, visionTargetPowerR = 0;
 double powerL = 0, powerR = 0;
 double XkP = DEFAULT_X_KP, XkD = DEFAULT_X_KD, WkP = DEFAULT_W_KP, WkD = DEFAULT_W_KD;
-// set to be larger than LEEWAYs' values to avoid skipping while loops in visionWaitBase
-// potential cause: visionBaseControlTask takes too long to compute errors so there was 1 loop that ran with initialized values of errors
+/** set to be larger than LEEWAYs' values to avoid skipping while loops in visionWaitBase */
+/** potential cause: visionBaseControlTask takes too long to compute errors so there was 1 loop that ran with initialized values of errors, and therefore exited visionWaitBase prematurely */
 double errorX = 2*X_LEEWAY, errorW = 2*W_LEEWAY;
 bool useVision = false;
+/**
+ * Base movement using vision.
+ * @param sig
+ * signature of desired object
+ *
+ * @param xkp
+ * kP for x
+ *
+ * @param xkd
+ * kD for x
+ *
+ * @param wkp
+ * kP for w
+ *
+ * @param wkd
+ * kD for w
+ */
 void visionBaseMove(int sig, double xkp, double xkd, double wkp, double wkd){
   useVision = true;
   targSig = sig;
@@ -27,6 +41,11 @@ void visionBaseMove(int sig, double xkp, double xkd, double wkp, double wkd){
   WkP = wkp;
   WkD = wkd;
 }
+/**
+ * Base movement using vision using default kP & kD values.
+ * @param sig
+ * signature of desired object
+ */
 void visionBaseMove(int sig){
   useVision = true;
   targSig = sig;
@@ -35,6 +54,11 @@ void visionBaseMove(int sig){
   WkP = DEFAULT_W_KP;
   WkD = DEFAULT_W_KD;
 }
+/**
+ * Delay function for vision base movements.
+ * @param cutoff
+ * cutoff time for the movement
+ */
 void visionWaitBase(double cutoff){
   Motor FL (FLPort);
   Motor BL (BLPort);
@@ -42,10 +66,10 @@ void visionWaitBase(double cutoff){
   Motor BR (BRPort);
   Controller master (E_CONTROLLER_MASTER);
   double start = millis();
-  //delay(50) for objectOdometry to calculate new errors so that while loop doesn't end prematurely
+  /** delay(50) for objectOdometry to calculate new errors so that while loop doesn't end prematurely */
   delay(50);
+  /** while errors are still not within predeteremined LEEWAYs, or time runs out */
   while((fabs(errorX) > X_LEEWAY || fabs(errorW) > W_LEEWAY) && (millis()-start) < cutoff){
-    printf("I'm here");
     delay(20);
   }
   /** stop the motors */
@@ -55,6 +79,7 @@ void visionWaitBase(double cutoff){
   BR.move(0);
   useVision = false;
 }
+/** Task that controls base movements that use vision. */
 void visionBaseControl(void * ignore){
   Motor FL (FLPort);
   Motor BL (BLPort);
@@ -67,12 +92,13 @@ void visionBaseControl(void * ignore){
     master.print(0, 0, "%d", true);
     if(useVision){
       VisionObject v;
+      /** get the desired object */
       switch(targSig){
         case 1: v = redBall; break;
         case 2: v = blueBall; break;
         case 3: v = greenFlag; break;
-        // default: printf("Invalid move in visionBaseControl\n");
       }
+      /** PD loop */
       errorX = v.targ.x - v.curr.x;
       errorW = v.targ.w - v.curr.w;
       double deltaErrorX = errorX - prevErrorX;
@@ -80,24 +106,27 @@ void visionBaseControl(void * ignore){
 
       prevErrorX = errorX;
       prevErrorW = errorW;
-
+      /** w values contribute to the move component, while x values contribute to the turn component. */
       double move = WkP*errorW + WkD*prevErrorW;
       double turn = XkP*errorX + XkD*prevErrorX;
-
+      /** set left and right powers based on move and turn components */
       visionTargetPowerL = move - turn;
       visionTargetPowerR = move + turn;
 
+      /** motor ramping */
       double deltaPowerL = visionTargetPowerL - powerL;
       powerL += abscap(deltaPowerL, VISION_RAMPING_POW);
       double deltaPowerR = visionTargetPowerR - powerR;
       powerR += abscap(deltaPowerR, VISION_RAMPING_POW);
 
+      /** motor capping */
       powerL = abscap(powerL, VISION_MAX_POW);
       powerR = abscap(powerR, VISION_MAX_POW);
       FL.move(powerL);
       BL.move(powerL);
       FR.move(powerR);
       BR.move(powerR);
+      /** debugging */
       if(VISION_DEBUG_MODE == 2 && (++i % 10 == 0)){
         master.print(0, 0, "PWR: %3.1f %3.1f",powerL, powerR);
         printf("-----------------------------------------------------------------\n");
@@ -110,23 +139,3 @@ void visionBaseControl(void * ignore){
     }
   }
 }
-
-// void visionBaseMotorControl(void * ignore){
-//   double powerL = 0, powerR = 0;
-//   while(competition::is_autonomous() || !VISION_COMPETITION_MODE){
-//     double deltaPowerL = visionTargetPowerL - powerL;
-//     powerL += abscap(deltaPowerL, VISION_RAMPING_POW);
-//     double deltaPowerR = visionTargetPowerR - powerR;
-//     powerR += abscap(deltaPowerR, VISION_RAMPING_POW);
-//
-//     powerL = abscap(powerL, VISION_MAX_POW);
-//     powerR = abscap(powerR, VISION_MAX_POW);
-//
-//     // FL.move(powerL);
-//     // BL.move(powerL);
-//     // FR.move(powerR);
-//     // BR.move(powerR);
-//     if(VISION_DEBUG_MODE == 2) printf("%3.0f \t %3.0f\n",powerL,powerR);
-//     Task::delay(10);
-//   }
-// }

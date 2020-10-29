@@ -1,6 +1,6 @@
 /**
- * Overall API header file for the 8059MotionProfileLib
- * Includes header files for: baseControl, baseOdometry, mathUtils, structs, auton_sets
+ * Overall API header file for the 8059MotionProfileLib.
+ * Includes header files for: baseControl, baseOdometry, mathUtils, structs, auton_sets.
  */
 #ifndef _8059_MOTION_PROFILE_LIB_API_HPP_
 #define _8059_MOTION_PROFILE_LIB_API_HPP_
