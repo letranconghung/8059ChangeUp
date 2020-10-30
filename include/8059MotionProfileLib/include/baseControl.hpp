@@ -13,7 +13,7 @@
  * 3: Power (print powerL & powerR)
  * 4: Raw encoder values (print raw encdL & encdR)
  */
-#define DEBUG_MODE 0
+#define DEBUG_MODE 2
 // Maximum power allowed
 #define MAX_POW 80
 /**

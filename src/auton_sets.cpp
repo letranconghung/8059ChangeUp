@@ -4,15 +4,28 @@
  * - 15s auton runs for each spawn
  */
 #include "main.h"
+
 /**
  * Programming skills run
  * @return void
  */
 int stdDelay = 200;
-int pickUpDelay = 1000;
-int poleDelay = 1500;
+int pickUpDelay = 1500;
+int poleDelay = 1000;
+int stdRedWait = 2000;
+int stdBlueWait = 2000;
 void skills(){
+	Controller master (E_CONTROLLER_MASTER);
+	double start = millis();
 	resetCoords(0, 0, -58);
+	for(int i = 0; i < 80; i++) {
+		cycle();
+		delay(10);
+	}
+	waitCycle();
+	setDiscard(true);
+	delay(800);
+	setDiscard(false);
 	delay(stdDelay);
 	baseMove(-4);
 	waitBase(500);
@@ -28,254 +41,148 @@ void skills(){
 	delay(pickUpDelay);
 	intakeMove(0);
 
-	baseTurn(100);
+	baseTurn(103,0.5,0.15);
 	waitBase(1000);
 	delay(stdDelay);
 	baseMove(44);
 	waitBase(3000);
 	delay(stdDelay);
 
-//2nd pole
+	//2nd pole
 	baseTurn(0);
-	waitBase(1200);
+	waitBase(2000);
 	delay(stdDelay);
-	visionBaseMove(SIG_GREEN_FLAG);
-	visionWaitBase(2000);
-	cycle();
+	visionBaseMove(SIG_BLUE_BALL);
+	visionWaitBase(stdBlueWait);
+	delay(stdDelay);
+	baseMove(9);
+	waitBase(1000);
+	delay(stdDelay);
+	setDiscard(true);
 	pauseBase(true);
 	delay(poleDelay);
+	setDiscard(false);
 	pauseBase(false);
 
-	//center pole
+	//3rd center pole
 	baseMove(-10);
-	waitBase(700);
+	waitBase(1000);
 	delay(stdDelay);
-	baseTurn(180,0.35,0.15);
+	baseTurn(180);
 	waitBase(3000);
 	delay(stdDelay);
 	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(1500);
+	visionWaitBase(stdRedWait);
 	delay(stdDelay);
 	pickUp(40);
 	delay(pickUpDelay);
-	baseTurn(170);
-	waitBase(1000);
+
+	visionBaseMove(SIG_BLUE_BALL);
+	visionWaitBase(stdBlueWait);
 	delay(stdDelay);
-	intakeMove(0);
-	baseMove(33);
-	waitBase(1000);
-	powerBase(100, 0);
-	delay(1000);
-	pauseBase(false);
-	waitBase(1000);
-	delay(1000);
-	cycle();
+
+	timerBase(100, 50, 300);
+	timerBase(0, 100, 300);
+	setDiscard(true);
 	pauseBase(true);
 	delay(poleDelay);
+	setDiscard(false);
 	pauseBase(false);
-
-	baseMove(-15);
-	waitBase(2000);
+	delay(1000);
+	intakeMove(0);
+	//4th pole
 	delay(stdDelay);
-
-	//fourth pole
-	baseTurn(45);
+	baseTurn(55);
 	waitBase(2000);
 	delay(stdDelay);
 
 	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(3000);
+	visionWaitBase(stdRedWait);
 	delay(stdDelay);
 	pickUp(40);
 	delay(pickUpDelay);
 	intakeMove(0);
-	visionBaseMove(SIG_GREEN_FLAG);
-	visionWaitBase(2000);
-	cycle();
+	visionBaseMove(SIG_BLUE_BALL);
+	visionWaitBase(stdBlueWait);
+	delay(stdDelay);
+	baseMove(14);
+	waitBase(1000);
+	delay(stdDelay);
+	setDiscard(true);
 	pauseBase(true);
 	delay(poleDelay);
+	setDiscard(false);
 	pauseBase(false);
 
 	baseMove(-10);
 	waitBase(1000);
 	delay(stdDelay);
 
-	//fifth pole
-	baseTurn(180);
+	//5th pole
+	baseTurn(175);
 	waitBase(2000);
 	delay(stdDelay);
 
 	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(3000);
+	visionWaitBase(stdRedWait);
 	delay(stdDelay);
 	pickUp(40);
 	delay(pickUpDelay);
 	intakeMove(0);
 
-	baseMove(13);
+	baseMove(19);
 	waitBase(1500);
 	delay(stdDelay);
 
-	baseTurn(90);
+	baseTurn(85);
 	waitBase(1000);
 	delay(stdDelay);
 
-	visionBaseMove(SIG_GREEN_FLAG);
-	visionWaitBase(1000);
+	// visionBaseMove(SIG_BLUE_BALL);
+	// visionWaitBase(stdBlueWait);
 	delay(stdDelay);
-	cycle();
+	baseMove(6);
+	waitBase(1000);
+	delay(stdDelay);
+	setDiscard(true);
 	pauseBase(true);
 	delay(poleDelay);
+	setDiscard(false);
 	pauseBase(false);
 
-	//sixth pole
+	//6th pole
 	baseMove(-15);
 	waitBase(1000);
 	delay(stdDelay);
 
-	baseTurn(195);
+	baseTurn(200);
 	waitBase(2000);
 	delay(stdDelay);
 
 	visionBaseMove(SIG_RED_BALL);
-	visionWaitBase(2000);
+	visionWaitBase(stdRedWait);
 	delay(stdDelay);
 	pickUp(40);
 	delay(pickUpDelay);
 	intakeMove(0);
 
-	baseTurn(140);
+	baseTurn(130);
 	waitBase(1000);
 	delay(stdDelay);
-	visionBaseMove(SIG_GREEN_FLAG);
-	visionWaitBase(1500);
+	visionBaseMove(SIG_BLUE_BALL);
+	visionWaitBase(stdBlueWait);
 	delay(stdDelay);
-	cycle();
+	baseMove(14);
+	waitBase(1000);
+	delay(stdDelay);
+	setDiscard(true);
 	pauseBase(true);
 	delay(poleDelay);
+	setDiscard(false);
 	pauseBase(false);
-
-	// //7th
-	// baseMove(-10);
-	// waitBase(1000);
-	// delay(stdDelay);
-	// baseTurn(-60);
-	// waitBase(1000);
-	// delay(stdDelay);
-	//
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(2000);
-	// delay(stdDelay);
-	// pickUp(40);
-	// delay(pickUpDelay);
-	// intakeMove(0);
-	//
-	// baseTurn(190);
-	// waitBase(1000);
-	// delay(stdDelay);
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(2000);
-	// delay(stdDelay);
-	// cycle();
-	// pauseBase(true);
-	// delay(2000);
-	// pauseBase(false);
-	//
-	// //8th pole
-	// baseMove(-10);
-	// waitBase(1000);
-	// delay(stdDelay);
-	// baseTurn(-90);
-	// waitBase(1000);
-	// delay(stdDelay);
-	//
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(2000);
-	// delay(stdDelay);
-	// pickUp(40);
-	// delay(pickUpDelay);
-	// intakeMove(0);
-	//
-	// baseTurn(-105);
-	// waitBase(800);
-	// delay(stdDelay);
-	//
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(2000);
-	// delay(stdDelay);
-	// cycle();
-	// pauseBase(true);
-	// delay(2000);
-	// pauseBase(false);
-
-	// END OF 8TH BALL RUN
-
-	// baseMove(45);
-	// waitBase(1500);
-	// delay(stdDelay);
-	// baseTurn(58);
-	// waitBase(1000);
-	// delay(300);
-	//
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(1500);
-	// pauseBase(true);
-	// cycle();
-	// delay(1000);
-	// pauseBase(false);
-	// delay(2000);
-	//
-	// baseTurn(125);
-	// waitBase(1000);
-	//
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(1200);
-	// pickUp(40);
-	// intakeMove(0);
-	//
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(1500);
-	// pauseBase(true);
-	// cycle();
-	// delay(1000);
-	// pauseBase(false);
-	// delay(3000);
-	//
-	// baseTurn(195);
-	// waitBase(1200);
-	// delay(stdDelay);
-	// baseMove(25);
-	// waitBase(1000);
-	// delay(300);
-	//
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(1200);
-	// pickUp(40);
-	// intakeMove(0);
-	//
-	// visionBaseMove(SIG_GREEN_FLAG);
-	// visionWaitBase(1500);
-	// pauseBase(true);
-	// cycle();
-	// delay(1000);
-	// pauseBase(false);
-	// delay(3000);
-
-
-	// pauseBase(true);
-	// setTargetsToCurr();
-	// delay(3000);
-	// pauseBase(false);
-
-	// intakeMove(127);
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(3000);
-	// pickUp(20);
-	// printf("yo I eneded \n");
-	// delay(1000);
-	// visionBaseMove(SIG_RED_BALL);
-	// visionWaitBase(3000);
-
+	double time = millis() - start;
+	while(true) master.print(1, 0, "%f", time);
+	delay(2000);
 }
 /**
  * Starting position on the left of the blue alliance spawn.

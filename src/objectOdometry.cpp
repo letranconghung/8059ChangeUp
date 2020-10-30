@@ -1,6 +1,6 @@
 #include "main.h"
-const VisionCoordinates TARG_RED_BALL{0, 168, 44, 96, 891};
-const VisionCoordinates TARG_BLUE_BALL{0, 146, 127, 102, 49};
+const VisionCoordinates TARG_RED_BALL{0, 168, 44, 114, 891};
+const VisionCoordinates TARG_BLUE_BALL{0, 146, 127, 92, 49};
 VisionObject redBall(VisionCoordinates(), TARG_RED_BALL);
 VisionObject blueBall(VisionCoordinates(), TARG_BLUE_BALL);
 // Vision visFlag(visFlagport); //give reading every 10ms (think so empirical)

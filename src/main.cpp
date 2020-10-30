@@ -139,7 +139,7 @@ void opcontrol() {
 
 		if(master.get_digital_new_press(DIGITAL_A)) visionBaseMove(SIG_RED_BALL);
 		else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_BLUE_BALL);
-		// else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_GREEN_FLAG);
+		else if(master.get_digital_new_press(DIGITAL_X)) pickUp(30);
 
 		pros::delay(5);
 	}

@@ -1,13 +1,8 @@
 #include "main.h"
 #define VISION_COMPETITION_MODE false
 
-#define W_LEEWAY 3
-#define X_LEEWAY 3
-
-#define VISION_MAX_POW 120
-#define VISION_RAMPING_POW 8
-
-#define DEFAULT_X_KP 0.5
+// #define DEFAULT_X_KP 0.8
+#define DEFAULT_X_KP 0.8
 #define DEFAULT_X_KD 0.1
 #define DEFAULT_W_KP 1.5
 #define DEFAULT_W_KD 0.2

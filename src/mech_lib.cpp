@@ -36,7 +36,7 @@ void pickUp(int power) {
   waitCycle();
   powerBase(0, 0);
   pauseBase(false);
-  // intakeMove(0);
+  intakeMove(0);
 }
 
 void shooterControl(void * ignore) {

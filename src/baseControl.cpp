@@ -11,10 +11,10 @@
  * Default values of the proportional and derivative constants
  * for straight and turning movements.
  */
-#define DEFAULT_KP 0.3
-#define DEFAULT_KD 0.15
-#define DEFAULT_TURN_KP 0.4
-#define DEFAULT_TURN_KD 0.1
+#define DEFAULT_KP 0.28
+#define DEFAULT_KD 0.1
+#define DEFAULT_TURN_KP 0.265
+#define DEFAULT_TURN_KD 0.1  
 /** declare motors */
 Motor FL (FLPort);
 Motor BL (BLPort);
@@ -366,6 +366,8 @@ void baseControl(void * ignore){
       targetEncdL = getEncdVals(true).first;
       targetEncdR = getEncdVals(true).second;
     }
+    // printf("Encd Targs: %f, %f\n", targetEncdL, targetEncdR);
+
     double errorEncdL = targetEncdL - getEncdVals(true).first;
     double errorEncdR = targetEncdR - getEncdVals(true).second;
     /** PD loop */

@@ -3,6 +3,7 @@
 
 void intakeMove(int speed);
 
+void waitCycle();
 void cycle();
 void setDiscard(bool value);
 void forceStop();
