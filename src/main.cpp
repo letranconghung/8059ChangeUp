@@ -11,19 +11,15 @@ void initialize() {
 	Motor BL (BLPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor BR (BRPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-
 	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
-
 	ADIEncoder encoderL (encdL_port,encdL_port+1,true);
 	ADIEncoder encoderR (encdR_port,encdR_port+1,false);
 	ADIEncoder encoderLat (encdLat_port, encdLat_port +1, true);
 	ADIAnalogIn color (colorPort);
-
 	Controller master(E_CONTROLLER_MASTER);
-
 	/** tare all motors and reset encoder counts */
 	FL.tare_position();
 	FR.tare_position();
@@ -31,7 +27,6 @@ void initialize() {
 	BR.tare_position();
 	encoderL.reset();
 	encoderR.reset();
-
 	/** declaration and initialization of asynchronous Tasks */
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
@@ -39,16 +34,13 @@ void initialize() {
 	Task shooterControlTask(shooterControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task objectOdometryTask(objectOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task visionBaseControlTask(visionBaseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	// Task shooterMotorControlTask(shooterMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 }
-
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
 void disabled() {}
-
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
  * Management System or the VEX Competition Switch. This is intended for
@@ -59,7 +51,6 @@ void disabled() {}
  * starts.
  */
 void competition_initialize() {}
-
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -73,8 +64,7 @@ void competition_initialize() {}
  */
 void autonomous() {
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 0;
-	// printf("Hi");
+	int autonNum = 1;
 	switch (autonNum){
 		case 0: skills(); break;
 		case 1: blueLeft(); break;
@@ -83,7 +73,6 @@ void autonomous() {
 		case 4: redRight(); break;
 	}
 }
-
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -98,10 +87,9 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	/** set the value to a small non-zero value (e.g. 5) to brake (see movement mechanism below)  */
+	/** braking */
 	double BRAKE_POW = 0;
-
-	/** declare reference to motors and controller */
+	/** declare references to motors and controller */
 	Motor FL (FLPort);
 	Motor BL (BLPort);
 	Motor FR (FRPort);
@@ -111,36 +99,30 @@ void opcontrol() {
 	Motor indexer (indexerPort);
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
-
 	/** boolean flag for whether the driver uses tank drive or not */
 	bool tankDrive = false;
 	while (true) {
 		/** toggle tank drive */
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		/** handle tankDrive */
-		// if(tankDrive){
-    //   int l = master.get_analog(ANALOG_LEFT_Y);
-    //   int r = master.get_analog(ANALOG_RIGHT_Y);
-    //   FL.move(l-BRAKE_POW);
-    //   BL.move(l+BRAKE_POW);
-    //   FR.move(r-BRAKE_POW);
-    //   BR.move(r+BRAKE_POW);
-    // } else{
-    //   int y = master.get_analog(ANALOG_LEFT_Y);
-    //   int x = master.get_analog(ANALOG_RIGHT_X);
-    //   FL.move(y+x-BRAKE_POW);
-    //   BL.move(y+x+BRAKE_POW);
-    //   FR.move(y-x-BRAKE_POW);
-    //   BR.move(y-x+BRAKE_POW);
-    // }
+		if(tankDrive){
+      int l = master.get_analog(ANALOG_LEFT_Y);
+      int r = master.get_analog(ANALOG_RIGHT_Y);
+      FL.move(l-BRAKE_POW);
+      BL.move(l+BRAKE_POW);
+      FR.move(r-BRAKE_POW);
+      BR.move(r+BRAKE_POW);
+    } else{
+      int y = master.get_analog(ANALOG_LEFT_Y);
+      int x = master.get_analog(ANALOG_RIGHT_X);
+      FL.move(y+x-BRAKE_POW);
+      BL.move(y+x+BRAKE_POW);
+      FR.move(y-x-BRAKE_POW);
+      BR.move(y-x+BRAKE_POW);
+    }
 		intakeMove((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)) * 127);
 		setDiscard(master.get_digital(DIGITAL_L2));
 		if(master.get_digital(DIGITAL_L1)) cycle();
-
-		if(master.get_digital_new_press(DIGITAL_A)) visionBaseMove(SIG_RED_BALL);
-		else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_BLUE_BALL);
-		else if(master.get_digital_new_press(DIGITAL_X)) pickUp(30);
-
 		pros::delay(5);
 	}
 }

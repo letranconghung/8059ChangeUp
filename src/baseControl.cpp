@@ -1,26 +1,15 @@
-/**
- * Functions and tasks that deal with the movements of the base:
- * - Movement functions
- * - Target power task
- * - Power control task
- * - Miscellaneous & supporting functions
- */
-
+/** Base movement tasks and functions */
 #include "main.h"
-/**
- * Default values of the proportional and derivative constants
- * for straight and turning movements.
- */
+/** default values of kP and kD */
 #define DEFAULT_KP 0.28
 #define DEFAULT_KD 0.1
 #define DEFAULT_TURN_KP 0.265
-#define DEFAULT_TURN_KD 0.1  
+#define DEFAULT_TURN_KD 0.1
 /** declare motors */
 Motor FL (FLPort);
 Motor BL (BLPort);
 Motor FR (FRPort);
 Motor BR (BRPort);
-
 /**
  * targetEncdL & targetEncdR are target values for the 2 side encoders.
  * They are used to link movement functions to baseControl task.
@@ -33,10 +22,7 @@ double targetEncdL=0,targetEncdR=0;
  * Note that these values are only target and not final values, and subjected to calibration, capping and bounding by baseMotorControl
  */
 double targetPowerL=0,targetPowerR=0;
-/**
- * Proportional and derivative constants for use in baseControl task.
- * Form the PD loop.
- */
+/** PD loop constants */
 double kP,kD;
 /**
  * Move straight.
@@ -44,10 +30,10 @@ double kP,kD;
  * distance in inches
  *
  * @param kp
- * proportional constant
+ * kP
  *
  * @param kd
- * derivative constant
+ * kD
  */
 void baseMove(double dis, double kp, double kd){
   /** convert dis in inches to encoder degrees */
@@ -77,11 +63,7 @@ void baseMove(double dis){
  * propotional constant
  *
  * @param kd
- * derivative constant
- *
- * @note
- * There must be a baseTurn(x, y) before baseMove(x, y).
- *
+ * kD
  */
 void baseMove(double x, double y, double kp, double kd){
 	double errorX = x-position.x;
@@ -92,17 +74,12 @@ void baseMove(double x, double y, double kp, double kd){
    * Refer to this link for visual aid: https://en.wikipedia.org/wiki/Atan2
    * In words, atan2(y, x) would return the angle wrt the x-axis.
    * Thus in this case, we use atan2(x, y) to return the angle wrt to the y-axis, which is the bearing.
-   * The calculation of targAngle here solely serves the purpose of
-   * determining whether the robot should reverse or not,
-   * which will be implemented in the next code portion.
+   * The calculation of targAngle here solely serves the purpose of determining whether the robot should reverse or not, which will be implemented in the next code portion.
    */
 	double targAngle = atan2(errorX,errorY);
   /**
-   * In reality, |targAngle| should be approximately equal to |position.angle| already,
-   * since we would  have already done a baseTurn to (x, y).
-   * halfPI is just a value not too small nor too big to differentiate whether
-   * targAngle & position.angle are opposites of each other or not.
-   *
+   * In reality, |targAngle| should be approximately equal to |position.angle| already, since we would have already done a baseTurn to (x, y).
+   * halfPI is just a value not too small nor too big to differentiate whether targAngle & position.angle are opposites of each other or not.
    * If reverse = 1, the robot should move forward, else reverse.
    */
 	int reverse = 1;
@@ -131,10 +108,10 @@ void baseMove(double x, double y){
  * bearing (absolute angle) in degrees
  *
  * @param kp
- * proportional constant
+ * kP
  *
  * @param kd
- * derivative constant
+ * kD
  */
 void baseTurn(double angleDeg, double kp, double kd){
 	double error = angleDeg*toRad - position.angle;
@@ -163,35 +140,24 @@ void baseTurn(double angleDeg){
  * y-coordinate of the target
  *
  * @param kp
- * proportional constant
+ * kP
  *
  * @param kd
- * derivative constant
+ * kD
  *
- * @param reverse (optional. default = false)
+ * @param reverse
  * true: backward movement
  * false: forward movement
- *
- * @note
- * Use baseTurn(x, y) before baseMove(x, y).
  */
 void baseTurn(double x, double y, double kp, double kd, bool reverse = false){
-  /** same concept as above in baseMove(x, y, kp, kd). */
+  /** same concept as above in baseMove(x, y, kp, kd) */
 	double targAngle = atan2((x-position.x),(y-position.y));
-  /**
-   * If backward movement:
-   * The back faces targAngle so the front should face (targAngle + PI)
-   */
 	if(reverse) targAngle += PI;
-  /**
-   * Prevent turns that span over PI rad (which we can just turn the other way)
-   * Mathematically: handle cases in which |targAngle - position.angle| >= PI
-   */
+  /** prevent turns that span over PI rad (which we can just turn the other way) */
 	if(targAngle-position.angle > PI) targAngle -= twoPI;
 	if(targAngle-position.angle < -PI) targAngle += twoPI;
-  /** refer to Odometry Documentation.docx for mathematical proof */
+  /** refer to Odometry Documentation for mathematical proof */
   double diff = (targAngle - position.angle)*baseWidth/inPerDeg;
-	//printf("%f, %f\n", targAngle, diff);
   targetEncdL += diff/2;
   targetEncdR += -diff/2;
   /** assign custom values for kP and kD */
@@ -206,7 +172,7 @@ void baseTurn(double x, double y, double kp, double kd, bool reverse = false){
  * @param y
  * y-coordinate of the target
  *
- * @param reverse (optional. default = false)
+ * @param reverse
  * true: backward movement
  * false: forward movement
  */
@@ -219,13 +185,13 @@ void baseTurn(double x, double y, bool reverse = false){
  * relative angle in degrees
  *
  * @param kp
- * proportional constant
+ * kP
  *
  * @param kd
- * derivative constant
+ * kD
  */
 void baseTurnRelative(double angle, double kp, double kd){
-  /** refer to Odometry Documentation.docx for mathematical proof */
+  /** refer to Odometry Documentation for mathematical proof */
   double diff = angle*toRad*baseWidth/inPerDeg;
   targetEncdL += diff/2;
   targetEncdR += -diff/2;
@@ -233,24 +199,18 @@ void baseTurnRelative(double angle, double kp, double kd){
   kP = kp;
   kD = kd;
 }
-
 void baseTurnRelative(double angle) {
   baseTurnRelative(angle, DEFAULT_TURN_KP, DEFAULT_TURN_KD);
 }
 /**
- * Introduce a cutoff to base movements to interfere with the task when it takes too long
- * to reach a target (e.g. due to too small DISTANCE_LEEWAY or too small kP).
+ * Introduce a cutoff to base movements to interfere with the task when it takes too long to reach a target (e.g. due to too small DISTANCE_LEEWAY or too small kP).
  * @param cutoff
  * cutoff duration in milliseconds
  */
 void waitBase(double cutoff){
   /** start the timer */
 	double start = millis();
-  /**
-   * while the encoder values are not within DISTANCE_LEEWAY from the target encoder values yet,
-   * or time has not run out:
-   * delay 20 ms
-   */
+  /** while the encoder values are not within DISTANCE_LEEWAY from the target encoder values yet, or time has not run out */
 	while(fabs(targetEncdL - getEncdVals(true).first) > DISTANCE_LEEWAY && fabs(targetEncdR - getEncdVals(true).second) > DISTANCE_LEEWAY && (millis()-start) < cutoff) delay(20);
   /** stop the motors */
 	FL.move(0);
@@ -271,10 +231,7 @@ void capBasePow(double cap){
 	basePowCapped = true;
 	absPowerCap = cap;
 }
-/**
- * Remove the base motor power cap.
- * Set the boolean flag basePowCapped to false.
- */
+/** Remove the base motor power cap. */
 void rmBaseCap(){
 	basePowCapped = false;
 }
@@ -291,16 +248,13 @@ void pauseBase(bool pause = true){
 /**
  * Movement by raw power and timing.
  * @param powL
- * power for BL & FL
+ * left power
  *
  * @param powR
- * power for BR & FR
+ * right power
  *
  * @param time
  * movement duration in ms
- *
- * @note
- * Obsolete. Do not use unless in desperate times.
  */
 void timerBase(double powL, double powR, double time){
   double start = millis();
@@ -316,7 +270,14 @@ void timerBase(double powL, double powR, double time){
 	BR.move(0);
 	pauseBase(false);
 }
-
+/**
+ * Set power to the left and right motors separately.
+ * @param powL
+ * left power
+ *
+ * @param powR
+ * right power
+ */
 void powerBase(double powL, double powR){
   double start = millis();
   pauseBase();
@@ -348,38 +309,26 @@ void resetCoords(double x, double y, double angleDeg){
   targetEncdL = 0;
   targetEncdR = 0;
 }
-
-void setTargetsToCurr() {
-  // printf("%f - %f, %f - %f\n", targetEncdR, getEncdVals(true).first, targetEncdL, getEncdVals(true).second);
-  targetEncdR = getEncdVals(true).first;
-  targetEncdL = getEncdVals(true).second;
-  // while(true) printf("%f - %f, %f - %f\n", targetEncdR, getEncdVals(true).first, targetEncdL, getEncdVals(true).second);
-}
-
-/** Set target motor powers using a PD loop. */
+/** calculate target motor powers using a PD loop */
 void baseControl(void * ignore){
-  /** previous error in encoder values for D loop */
+  /** D loop variables */
   double prevErrorEncdL = 0, prevErrorEncdR = 0;
   while(competition::is_autonomous()){
-    /** error from current encoder values to target encoder values */
+    /** whether vision library is in use */
     if(useVision) {
       targetEncdL = getEncdVals(true).first;
       targetEncdR = getEncdVals(true).second;
     }
-    // printf("Encd Targs: %f, %f\n", targetEncdL, targetEncdR);
-
     double errorEncdL = targetEncdL - getEncdVals(true).first;
     double errorEncdR = targetEncdR - getEncdVals(true).second;
     /** PD loop */
     double deltaErrorEncdL = errorEncdL - prevErrorEncdL;
     double deltaErrorEncdR = errorEncdR - prevErrorEncdR;
-
     prevErrorEncdL = errorEncdL;
     prevErrorEncdR = errorEncdR;
-
     targetPowerL = kP*errorEncdL+kD*deltaErrorEncdL;
     targetPowerR = kP*errorEncdR+kD*deltaErrorEncdR;
-    /** print to assist debugging */
+    /** debugging */
 		if(DEBUG_MODE == 2) printf("Error: %f %f\n",errorEncdL,errorEncdR);
     /** refresh rate of Task */
 		Task::delay(20);
@@ -391,7 +340,7 @@ void baseMotorControl(void * ignore){
   double powerL=0,powerR=0;
   while(competition::is_autonomous()){
     if(!useVision) {
-      /** limit power increments to below RAMPING_POW */
+      /** limit consecutive power increments to below RAMPING_POW */
       double deltaPowerL = targetPowerL - powerL;
       powerL += abscap(deltaPowerL, RAMPING_POW);
       double deltaPowerR = targetPowerR - powerR;
@@ -412,7 +361,7 @@ void baseMotorControl(void * ignore){
         FR.move(powerR);
         BR.move(powerR);
       }
-      /** print to assist debugging */
+      /** debugging */
       if(DEBUG_MODE == 3) printf("%4.0f \t %4.0f\n",powerL,powerR);
       /** refresh rate of Task */
       Task::delay(20);
