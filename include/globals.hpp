@@ -1,4 +1,4 @@
-/** Declares the robot's setup variables: Motor and sensor ports. */
+/** Robot's setup variables: Motor and sensor ports */
 #ifndef _GLOBALS_HPP_
 #define _GLOBALS_HPP_
 /** base motor ports */
@@ -18,7 +18,5 @@
 #define colorPort 6
 #define visBallport 1
 #define visFlagport 2
-
 extern bool useVision;
-
 #endif

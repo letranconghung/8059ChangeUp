@@ -1,12 +1,8 @@
-/**
- * VisionObject and VisionCoordinates functions
- */
+/** VisionObject and VisionCoordinates functions */
 #include "main.h"
 /** support printing */
 const std::vector<std::string> sigIdToString = {"No object", "Red ball", "Blue ball", "Green flag"};
-/**
- * Default initialization of an object of class VisionCoordinates.
- */
+/** Default initialization of an object of class VisionCoordinates. */
 VisionCoordinates::VisionCoordinates(){
   this -> setVisionCoords(0, 0, 0, 0, 0);
 }
@@ -60,7 +56,7 @@ void VisionCoordinates::setVisionCoords(int sig, int x, int y, int w, int h){
  * vision object (output from the vision sensor)
  */
 void VisionCoordinates::getFromObject(pros::vision_object_s_t visObj){
-  /** handle invalid objects */
+  /** handle invalid meaningless objects */
   if(visObj.signature <= 7){
     this->setVisionCoords(visObj.signature, visObj.x_middle_coord, visObj.y_middle_coord, visObj.width, visObj.height);
   }else{

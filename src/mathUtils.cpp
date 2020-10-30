@@ -1,8 +1,4 @@
-/**
- * Mathematical functions:
- * - angle bounding functions
- * - capping function
- */
+/** Mathematical functions. */
 #include "main.h"
 /**
  * Bound an angle in radians within 0<=angle<twoPI.
@@ -30,7 +26,6 @@ double boundDeg(double deg){
   if(res < 0) res += 360;
   return res;
 }
-
 /**
  * Cap the input |x| <= abscap.
  * i.e. within the range -abscap <= x <= abscap
@@ -42,9 +37,6 @@ double boundDeg(double deg){
  *
  * @return
  * capped value of the input
- *
- * @note
- * for use when capping the absolute power of motors
  */
 double abscap(double x, double abscap){
   if(x > abscap) return abscap;

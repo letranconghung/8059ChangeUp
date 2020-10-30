@@ -1,9 +1,4 @@
-/**
- * Other mechanical functions:
- * - Sensors
- * - Rollers
- * - Shooter
- */
+/** Other mechanical functions. */
 #include "main.h"
 #include "mech_lib.hpp"
 /** declare motors and sensors */
@@ -68,7 +63,6 @@ void pickUp(int power) {
   waitCycle();
   powerBase(0, 0);
   pauseBase(false);
-  // intakeMove(0);
 }
 /** Async Task that control all functions related to shooter. */
 void shooterControl(void * ignore) {

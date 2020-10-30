@@ -11,19 +11,15 @@ void initialize() {
 	Motor BL (BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor BR (BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-
 	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
-
 	ADIEncoder encoderL (encdL_port,encdL_port+1,false);
 	ADIEncoder encoderR (encdR_port,encdR_port+1,true);
 	ADIDigitalIn limit (limitPort);
 	ADIAnalogIn color (colorPort);
-
 	Controller master(E_CONTROLLER_MASTER);
-
 	/** tare all motors and reset encoder counts */
 	FL.tare_position();
 	FR.tare_position();
@@ -31,7 +27,6 @@ void initialize() {
 	BR.tare_position();
 	encoderL.reset();
 	encoderR.reset();
-
 	/** declaration and initialization of asynchronous Tasks */
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
@@ -39,16 +34,13 @@ void initialize() {
 	Task shooterControlTask(shooterControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task objectOdometryTask(objectOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task visionBaseControlTask(visionBaseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	// Task shooterMotorControlTask(shooterMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 }
-
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
 void disabled() {}
-
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
  * Management System or the VEX Competition Switch. This is intended for
@@ -59,7 +51,6 @@ void disabled() {}
  * starts.
  */
 void competition_initialize() {}
-
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -82,7 +73,6 @@ void autonomous() {
 		case 4: redRight(); break;
 	}
 }
-
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -97,10 +87,9 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	/** set the value to a small non-zero value (e.g. 5) to brake (see movement mechanism below)  */
+	/** braking */
 	double BRAKE_POW = 0;
-
-	/** declare reference to motors and controller */
+	/** declare references to motors and controller */
 	Motor FL (FLPort);
 	Motor BL (BLPort);
 	Motor FR (FRPort);
@@ -110,7 +99,6 @@ void opcontrol() {
 	Motor indexer (indexerPort);
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
-
 	/** boolean flag for whether the driver uses tank drive or not */
 	bool tankDrive = false;
 	while (true) {
@@ -136,11 +124,6 @@ void opcontrol() {
 		setDiscard(master.get_digital(DIGITAL_L2));
 		if(master.get_digital(DIGITAL_L1)) cycle();
 		if(master.get_digital(DIGITAL_X)) shoot(127,500);
-
-		// if(master.get_digital_new_press(DIGITAL_A)) visionBaseMove(SIG_RED_BALL);
-		// // else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_BLUE_BALL);
-		// else if(master.get_digital_new_press(DIGITAL_B)) visionBaseMove(SIG_GREEN_FLAG);
-
 		pros::delay(5);
 	}
 }

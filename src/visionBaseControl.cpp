@@ -1,6 +1,4 @@
-/**
- * Functions and tasks that handle base movements using the vision library
- */
+/** Vision base movement Task and functions */
 #include "main.h"
 #define VISION_COMPETITION_MODE false
 /** default values of kP and kD */
@@ -12,8 +10,10 @@ int targSig;
 double visionTargetPowerL = 0, visionTargetPowerR = 0;
 double powerL = 0, powerR = 0;
 double XkP = DEFAULT_X_KP, XkD = DEFAULT_X_KD, WkP = DEFAULT_W_KP, WkD = DEFAULT_W_KD;
-/** set to be larger than LEEWAYs' values to avoid skipping while loops in visionWaitBase */
-/** potential cause: visionBaseControlTask takes too long to compute errors so there was 1 loop that ran with initialized values of errors, and therefore exited visionWaitBase prematurely */
+/**
+ * Set to be larger than LEEWAYs' values to avoid skipping while loops in visionWaitBase.
+ * Potential cause: visionBaseControlTask takes too long to compute errors so there was 1 loop that ran with initialized values of errors, and therefore exited visionWaitBase prematurely.
+ */
 double errorX = 2*X_LEEWAY, errorW = 2*W_LEEWAY;
 bool useVision = false;
 /**
@@ -72,14 +72,13 @@ void visionWaitBase(double cutoff){
   while((fabs(errorX) > X_LEEWAY || fabs(errorW) > W_LEEWAY) && (millis()-start) < cutoff){
     delay(20);
   }
-  /** stop the motors */
   FL.move(0);
   BL.move(0);
   FR.move(0);
   BR.move(0);
   useVision = false;
 }
-/** Task that controls base movements that use vision. */
+/** Vision base movement Task. */
 void visionBaseControl(void * ignore){
   Motor FL (FLPort);
   Motor BL (BLPort);
@@ -103,7 +102,6 @@ void visionBaseControl(void * ignore){
       errorW = v.targ.w - v.curr.w;
       double deltaErrorX = errorX - prevErrorX;
       double deltaErrorW = errorW - prevErrorW;
-
       prevErrorX = errorX;
       prevErrorW = errorW;
       /** w values contribute to the move component, while x values contribute to the turn component. */
@@ -112,13 +110,11 @@ void visionBaseControl(void * ignore){
       /** set left and right powers based on move and turn components */
       visionTargetPowerL = move - turn;
       visionTargetPowerR = move + turn;
-
       /** motor ramping */
       double deltaPowerL = visionTargetPowerL - powerL;
       powerL += abscap(deltaPowerL, VISION_RAMPING_POW);
       double deltaPowerR = visionTargetPowerR - powerR;
       powerR += abscap(deltaPowerR, VISION_RAMPING_POW);
-
       /** motor capping */
       powerL = abscap(powerL, VISION_MAX_POW);
       powerR = abscap(powerR, VISION_MAX_POW);

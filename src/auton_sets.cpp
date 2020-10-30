@@ -1,8 +1,4 @@
-/**
- * Autonomous routines:
- * - Skills run
- * - 15s auton runs for each spawn
- */
+/** Autonomous routines */
 #include "main.h"
 /** programming skills run */
 void skills(){
@@ -15,7 +11,7 @@ void skills(){
 	cycle();
 	delay(700);
 	shoot(127,1000);
-	/** sets initial position */
+	/** set initial position */
 	resetCoords(0, 0, -60);
 	delay(stdDelay);
 	/** pick up red ball */
@@ -104,7 +100,7 @@ void skills(){
 	pickUp(40);
 	intakeMove(0);
 	delay(pickUpDelay);
-	/** scores 5th goal */
+	/** score 5th goal */
 	baseMove(18);
 	waitBase(1500);
 	delay(stdDelay);
@@ -116,14 +112,14 @@ void skills(){
 	delay(stdDelay);
 	shoot(127,shootDelay);
 	delay(poleDelay);
-	/** turns to red ball */
+	/** turn to red ball */
 	baseMove(-13);
 	waitBase(1000);
 	delay(stdDelay);
 	baseTurn(180);
 	waitBase(1000);
 	delay(stdDelay);
-	/** picks up red ball */
+	/** pick up red ball */
 	visionBaseMove(SIG_RED_BALL);
 	visionWaitBase(2000);
 	delay(stdDelay);
@@ -144,17 +140,13 @@ void skills(){
 }
 /** Autonomous routine for blue left spawn. */
 void blueLeft(){
-
 }
 /** Autonomous routine for blue right spawn. */
 void blueRight(){
-
 }
 /** Autonomous routine for red left spawn. */
 void redLeft(){
-
 }
 /** Autonomous routine for red right spawn. */
 void redRight(){
-
 }

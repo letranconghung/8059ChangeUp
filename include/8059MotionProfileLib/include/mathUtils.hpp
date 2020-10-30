@@ -16,5 +16,4 @@
 double boundRad(double rad);
 double boundDeg(double deg);
 double abscap(double x, double abscap);
-
 #endif

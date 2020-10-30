@@ -4,7 +4,6 @@
 #include "8059MotionProfileLib/include/structs.hpp"
 #include "main.h"
 /** Essential variables for odometry task and functions */
-
 /** Tuning: turn at least 2 rotations and compare results in program & real life */
 #define baseWidth 10.83798252962012
 /** Tuning: go straight and compare results in program & real life */
@@ -15,5 +14,4 @@ extern Coordinates position;
 std::pair<double, double> getEncdVals(bool rawData);
 void baseOdometry(void * ignore);
 void setCoords(double x, double y, double angle);
-
 #endif

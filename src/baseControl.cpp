@@ -1,10 +1,4 @@
-/**
- * Functions and tasks that deal with the movements of the base:
- * - Movement functions
- * - Target power task
- * - Power control task
- * - Miscellaneous & supporting functions
- */
+/** Base movement tasks and functions */
 #include "main.h"
 /** default values of kP and kD */
 #define DEFAULT_KP 0.3
@@ -28,10 +22,7 @@ double targetEncdL=0,targetEncdR=0;
  * Note that these values are only target and not final values, and subjected to calibration, capping and bounding by baseMotorControl
  */
 double targetPowerL=0,targetPowerR=0;
-/**
- * Proportional and derivative constants for use in baseControl task.
- * Form the PD loop.
- */
+/** PD loop constants */
 double kP,kD;
 /**
  * Move straight.
@@ -39,10 +30,10 @@ double kP,kD;
  * distance in inches
  *
  * @param kp
- * proportional constant
+ * kP
  *
  * @param kd
- * derivative constant
+ * kD
  */
 void baseMove(double dis, double kp, double kd){
   /** convert dis in inches to encoder degrees */
@@ -72,7 +63,7 @@ void baseMove(double dis){
  * propotional constant
  *
  * @param kd
- * derivative constant
+ * kD
  */
 void baseMove(double x, double y, double kp, double kd){
 	double errorX = x-position.x;
@@ -117,10 +108,10 @@ void baseMove(double x, double y){
  * bearing (absolute angle) in degrees
  *
  * @param kp
- * proportional constant
+ * kP
  *
  * @param kd
- * derivative constant
+ * kD
  */
 void baseTurn(double angleDeg, double kp, double kd){
 	double error = angleDeg*toRad - position.angle;
@@ -149,10 +140,10 @@ void baseTurn(double angleDeg){
  * y-coordinate of the target
  *
  * @param kp
- * proportional constant
+ * kP
  *
  * @param kd
- * derivative constant
+ * kD
  *
  * @param reverse
  * true: backward movement
@@ -194,10 +185,10 @@ void baseTurn(double x, double y, bool reverse = false){
  * relative angle in degrees
  *
  * @param kp
- * proportional constant
+ * kP
  *
  * @param kd
- * derivative constant
+ * kD
  */
 void baseTurnRelative(double angle, double kp, double kd){
   /** refer to Odometry Documentation for mathematical proof */
@@ -257,10 +248,10 @@ void pauseBase(bool pause = true){
 /**
  * Movement by raw power and timing.
  * @param powL
- * power for BL & FL
+ * left power
  *
  * @param powR
- * power for BR & FR
+ * right power
  *
  * @param time
  * movement duration in ms
@@ -280,12 +271,12 @@ void timerBase(double powL, double powR, double time){
 	pauseBase(false);
 }
 /**
- * Set power to the left and right motors separately
+ * Set power to the left and right motors separately.
  * @param powL
- * power for BL & FL
+ * left power
  *
  * @param powR
- * power for BR & FR
+ * right power
  */
 void powerBase(double powL, double powR){
   double start = millis();
@@ -318,12 +309,12 @@ void resetCoords(double x, double y, double angleDeg){
   targetEncdL = 0;
   targetEncdR = 0;
 }
-/** set target motor powers using a PD loop */
+/** calculate target motor powers using a PD loop */
 void baseControl(void * ignore){
-  /** Previous error in encoder values for D loop */
+  /** D loop variables */
   double prevErrorEncdL = 0, prevErrorEncdR = 0;
   while(competition::is_autonomous()){
-    /** error from current encoder values to target encoder values */
+    /** whether vision library is in use */
     if(useVision) {
       targetEncdL = getEncdVals(true).first;
       targetEncdR = getEncdVals(true).second;
@@ -337,7 +328,7 @@ void baseControl(void * ignore){
     prevErrorEncdR = errorEncdR;
     targetPowerL = kP*errorEncdL+kD*deltaErrorEncdL;
     targetPowerR = kP*errorEncdR+kD*deltaErrorEncdR;
-    /** print to assist debugging */
+    /** debugging */
 		if(DEBUG_MODE == 2) printf("Error: %f %f\n",errorEncdL,errorEncdR);
     /** refresh rate of Task */
 		Task::delay(20);
@@ -349,7 +340,7 @@ void baseMotorControl(void * ignore){
   double powerL=0,powerR=0;
   while(competition::is_autonomous()){
     if(!useVision) {
-      /** limit power increments to below RAMPING_POW */
+      /** limit consecutive power increments to below RAMPING_POW */
       double deltaPowerL = targetPowerL - powerL;
       powerL += abscap(deltaPowerL, RAMPING_POW);
       double deltaPowerR = targetPowerR - powerR;
@@ -370,7 +361,7 @@ void baseMotorControl(void * ignore){
         FR.move(powerR);
         BR.move(powerR);
       }
-      /** print to assist debugging */
+      /** debugging */
       if(DEBUG_MODE == 3) printf("%4.0f \t %4.0f\n",powerL,powerR);
       /** refresh rate of Task */
       Task::delay(20);

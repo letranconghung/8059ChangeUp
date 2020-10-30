@@ -21,5 +21,4 @@ public:
   void printCoordsTerminal();
   void printCoordsMaster();
 };
-
 #endif
