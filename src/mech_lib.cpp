@@ -4,90 +4,94 @@
 /** declare motors and sensors */
 Motor lRoller (lRollerPort);
 Motor rRoller (rRollerPort);
-Motor indexer (indexerPort);
 Motor shooter (shooterPort);
-ADIDigitalIn limit (limitPort);
-ADIAnalogIn color (colorPort);
-double cycleSpeed = 110;
-double shootSpeed, shootTime;
-/** boolean flags for shooter Task */
-bool cycleTrigger = false, isDiscard = false, shootTrigger = false;
-/**
- * Control power of intake rollers.
- * @param speed
- * speed of intake rollers
- */
-void intakeMove(int speed) {
-  lRoller.move(speed);
-  rRoller.move(speed);
-}
-/** Cycle ball by flipping boolean flag cycleTrigger. */
-void cycle() {
-  cycleTrigger = true;
-}
-/**
- * Shoot ball.
- * @param speed
- * shooter speed
- *
- * @param time
- * shooting duration
- */
-void shoot(double speed, double time){
-  shootTrigger = true;
-  shootSpeed = speed;
-  shootTime = time;
-}
-/**
- * Discard ball.
- * @param value
- * boolean flag value for isDiscard
- */
-void setDiscard(bool value) {
-  isDiscard = value;
-}
-/** Delay function for cycle() to finish: limit switch is triggered and de-triggered. */
-void waitCycle() {
-  while(!limit.get_value()) delay(5); //wait till limit is pressed
-  while(limit.get_value()) delay(5); // wait till limit is released
-}
-/**
- * Ball pick-up function: move forward until ball is successfully cycled.
- * @param power
- * pickup base powers
- */
-void pickUp(int power) {
-  intakeMove(127);
-  powerBase(power, power);
-  cycle();
-  waitCycle();
-  powerBase(0, 0);
-  pauseBase(false);
-}
-/** Async Task that control all functions related to shooter. */
-void shooterControl(void * ignore) {
-  shooter.set_brake_mode(MOTOR_BRAKE_HOLD);
-  while(true) {
-    shooter.move(0);
-    if (isDiscard) {
-      indexer.move(cycleSpeed / 2);
-      shooter.move(-cycleSpeed);
-    }else if(cycleTrigger) {
-      indexer.move(cycleSpeed);
-      shooter.move(cycleSpeed);
-      waitCycle();
-      cycleTrigger = false;
-    }else if(shootTrigger){
-      indexer.move(shootSpeed);
-      shooter.move(shootSpeed);
-      delay(shootTime);
-      indexer.move(0);
-      shooter.move(0);
-      shootTrigger = false;
-    }else{
-      indexer.move(0);
-      shooter.move(0);
+Motor indexer (indexerPort);
+int intakeColorThreshold = 2700;
+int shootColorThreshold = 2400;
+int indexerMode = 0;
+void indexerControl(void * ignore){
+  ADIAnalogIn shootColor(shootColorPort);
+  ADIAnalogIn intakeColor(intakeColorPort);
+  while(true){
+    printf("current color value: %d\n", shootColor.get_value());
+    switch(indexerMode){
+      case 1: {
+        while(intakeColor.get_value()>intakeColorThreshold){
+          lRoller.move(127);
+          rRoller.move(127);
+          indexer.move(127);
+          pros::delay(5);
+        }
+        lRoller.move(0);
+        rRoller.move(0);
+        indexer.move(0);
+        indexerMode = 0;
+        break;
+      }
+      case 2: {
+        printf("initial color value: %d\n", intakeColor.get_value());
+        while(intakeColor.get_value()>intakeColorThreshold){
+          indexer.move(127);
+          pros::delay(5);
+        }
+        indexer.move(0);
+        indexerMode = 0;
+        break;
+      }
+      case 3: {
+        while(shootColor.get_value()>shootColorThreshold){
+          indexer.move(127);
+          pros::delay(5);
+        }
+        indexer.move(0);
+        indexerMode = 0;
+        break;
+      }
+      case 4: {
+        indexer.move(127);
+        delay(300);
+        indexer.move(0);
+        indexerMode = 0;
+        break;
+      }
+      case 5: {
+        indexer.move(127);
+        delay(600);
+        indexer.move(0);
+        indexerMode = 0;
+        break;
+      }
     }
-    delay(5);
+    Task::delay(10);
   }
+}
+void frontIntake(){
+  indexerMode = 1;
+}
+void backIntake(){
+  printf("entered back intake\n");
+  indexerMode = 2;
+}
+void load(){
+  indexerMode = 3;
+}
+int shooterMode = 0;
+void shooterControl(void * ignore){
+  while(true){
+    if(shooterMode == 1){
+      shooter.move(127);
+      delay(1000);
+      shooter.move(0);
+      shooterMode = 0;
+    }
+    Task::delay(10);
+  }
+}
+void loadshoot(){
+  indexerMode = 5;
+  shooterMode = 1;
+}
+void shoot(){
+  indexerMode = 4;
+  shooterMode = 1;
 }

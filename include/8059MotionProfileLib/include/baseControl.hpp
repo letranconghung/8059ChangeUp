@@ -9,14 +9,14 @@
  * 3: Power (print powerL & powerR)
  * 4: Raw encoder values (print raw encdL & encdR)
  */
-#define DEBUG_MODE 0
+#define DEBUG_MODE 1
 /** maximum allowed power */
-#define MAX_POW 90
+#define MAX_POW 120
 /**
  * maximum power increment step
  * mathematically: |V - V previous| <= RAMPING_POW
  */
-#define RAMPING_POW 6
+#define RAMPING_POW 8
 /**
  * DISTANCE_LEEWAY is the distance (in inches) within which from the target the robot would register that it has arrived at the target.
  */

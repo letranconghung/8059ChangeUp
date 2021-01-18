@@ -1,10 +1,10 @@
 /** Base movement tasks and functions */
 #include "main.h"
 /** default values of kP and kD */
-#define DEFAULT_KP 0.3
-#define DEFAULT_KD 0.15
-#define DEFAULT_TURN_KP 0.4
-#define DEFAULT_TURN_KD 0.1
+#define DEFAULT_KP 0.35
+#define DEFAULT_KD 0.07
+#define DEFAULT_TURN_KP 0.45
+#define DEFAULT_TURN_KD 0
 /** declare motors */
 Motor FL (FLPort);
 Motor BL (BLPort);

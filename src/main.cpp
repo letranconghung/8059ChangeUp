@@ -11,29 +11,32 @@ void initialize() {
 	Motor BL (BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor BR (BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
 	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
-	ADIEncoder encoderL (encdL_port,encdL_port+1,false);
-	ADIEncoder encoderR (encdR_port,encdR_port+1,true);
-	ADIDigitalIn limit (limitPort);
-	ADIAnalogIn color (colorPort);
+	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Controller master(E_CONTROLLER_MASTER);
+	Imu imu(imuPort);
+	ADIDigitalIn intakeColor(intakeColorPort);
+	ADIDigitalIn shootColor(shootColorPort);
+	// ADIEncoder encoderL (encdL_port,encdL_port+1,false);
+	// ADIEncoder encoderR (encdR_port,encdR_port+1,true);
 	/** tare all motors and reset encoder counts */
 	FL.tare_position();
 	FR.tare_position();
 	BL.tare_position();
 	BR.tare_position();
-	encoderL.reset();
-	encoderR.reset();
-	/** declaration and initialization of asynchronous Tasks */
+	imu.reset();
+	// encoderL.reset();
+	// encoderR.reset();
+	/** declaratixon and initialization of asynchronous Tasks */
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task shooterControlTask(shooterControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task objectOdometryTask(objectOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task visionBaseControlTask(visionBaseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	// Task objectOdometryTask(objectOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	// Task visionBaseControlTask(visionBaseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task indexerControlTask(indexerControl);
+	Task shooterControlTask(shooterControl);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -63,8 +66,9 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
+	delay(3000);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 1;
+	int autonNum = 0;
 	switch (autonNum){
 		case 0: skills(); break;
 		case 1: blueLeft(); break;
@@ -97,12 +101,16 @@ void opcontrol() {
 	Motor lRoller (lRollerPort);
 	Motor rRoller (rRollerPort);
 	Motor indexer (indexerPort);
+	Motor shooter (shooterPort);
+	ADIAnalogIn intakeColor (intakeColorPort);
+	ADIAnalogIn shootColor (shootColorPort);
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 	/** boolean flag for whether the driver uses tank drive or not */
 	bool tankDrive = false;
 	while (true) {
 		/** toggle tank drive */
+		// printf("intakecolor: %d, shootColor: %d\n", intakeColor.get_value(), shootColor.get_value());
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		/** handle tankDrive */
 		if(tankDrive){
@@ -120,10 +128,10 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
-		intakeMove((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)) * 127);
-		setDiscard(master.get_digital(DIGITAL_L2));
-		if(master.get_digital(DIGITAL_L1)) cycle();
-		if(master.get_digital(DIGITAL_X)) shoot(127,500);
+		if(master.get_digital_new_press(DIGITAL_LEFT)) frontIntake();
+		if(master.get_digital_new_press(DIGITAL_RIGHT)) backIntake();
+		if(master.get_digital_new_press(DIGITAL_UP)) shoot();
+		if(master.get_digital_new_press(DIGITAL_DOWN)) load();
 		pros::delay(5);
 	}
 }

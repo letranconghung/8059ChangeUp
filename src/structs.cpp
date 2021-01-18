@@ -58,5 +58,5 @@ void Coordinates::printCoordsTerminal(){
 }
 /** Print Coordinates to the master controller. */
 void Coordinates::printCoordsMaster(){
-  master.print(2,0,"%2.1f %2.1f %3f",this->x,this->y,this->angle*toDeg);
+  master.print(2,0,"%2.1f %2.1f %3.1f",this->x,this->y,this->angle*toDeg);
 }

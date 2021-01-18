@@ -2,21 +2,22 @@
 #ifndef _GLOBALS_HPP_
 #define _GLOBALS_HPP_
 /** base motor ports */
-#define FLPort 11
-#define BLPort 12
+#define FLPort 12
 #define FRPort 19
-#define BRPort 18
+#define BLPort 11
+#define BRPort 20
 /** other mechanical motor ports */
-#define rRollerPort 16
-#define lRollerPort 15
-#define indexerPort 6
-#define shooterPort 5
+#define lRollerPort 13
+#define rRollerPort 18
+#define shooterPort 15
+#define indexerPort 16
 /** sensor ports */
 #define encdL_port 1
-#define encdR_port 3
-#define limitPort 5
-#define colorPort 6
-#define visBallport 1
-#define visFlagport 2
+#define encdR_port 4
+#define intakeColorPort 6
+#define shootColorPort 7
+#define imuPort 17
+#define visBallport 2
+#define visFlagport 3
 extern bool useVision;
 #endif
