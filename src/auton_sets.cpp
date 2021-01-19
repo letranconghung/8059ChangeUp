@@ -2,21 +2,28 @@
 #include "main.h"
 /** programming skills run */
 void skills(){
-  loadshoot();
+  cycle(500);
+  suck(700);
+  timerBase(80, 80, 500);
+  waitIndexer();
   delay(1000);
-  backIntake();
-  baseMove(-30);
+  baseMove(-10);
+  frontOuttake(700);
   waitBase(1000);
-  baseTurn(-25);
-  waitBase(500);
+  delay(500);
+  baseMove(-15);
+  backIntake();
+  waitBase(1000);
+  baseTurn(-33);
+  waitBase(1000);
   load();
-  baseMove(-32);
+  baseMove(-35);
   waitBase(2000);
   baseTurn(70);
   waitBase(1000);
   baseMove(5);
-  waitBase(500);
-  shoot();
+  waitBase(1000);
+  shoot(700);
 }
 /** Autonomous routine for blue left spawn. */
 void blueLeft(){

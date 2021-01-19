@@ -9,11 +9,18 @@ Motor indexer (indexerPort);
 int intakeColorThreshold = 2700;
 int shootColorThreshold = 2400;
 int indexerMode = 0;
+int indexerDuration = 0;
+std::queue<int> indexerOrders;
 void indexerControl(void * ignore){
   ADIAnalogIn shootColor(shootColorPort);
   ADIAnalogIn intakeColor(intakeColorPort);
   while(true){
-    printf("current color value: %d\n", shootColor.get_value());
+    if(indexerOrders.empty()){
+      indexerMode = 0;
+    }else{
+      indexerMode = indexerOrders.front();
+      indexerOrders.pop();
+    }
     switch(indexerMode){
       case 1: {
         while(intakeColor.get_value()>intakeColorThreshold){
@@ -49,49 +56,91 @@ void indexerControl(void * ignore){
       }
       case 4: {
         indexer.move(127);
-        delay(300);
+        delay(indexerDuration);
         indexer.move(0);
         indexerMode = 0;
         break;
       }
       case 5: {
+        lRoller.move(127);
+        rRoller.move(127);
         indexer.move(127);
-        delay(600);
+        delay(indexerDuration);
+        lRoller.move(0);
+        rRoller.move(0);
+        indexer.move(0);
+        indexerMode = 0;
+        break;
+      }
+      case 6: {
+        lRoller.move(-127);
+        rRoller.move(-127);
+        indexer.move(-127);
+        delay(indexerDuration);
+        lRoller.move(0);
+        rRoller.move(0);
         indexer.move(0);
         indexerMode = 0;
         break;
       }
     }
-    Task::delay(10);
+    Task::delay(5);
   }
 }
 void frontIntake(){
-  indexerMode = 1;
+  indexerOrders.push(1);
 }
 void backIntake(){
-  printf("entered back intake\n");
-  indexerMode = 2;
+  indexerOrders.push(2);
 }
 void load(){
-  indexerMode = 3;
+  indexerOrders.push(3);
 }
+
 int shooterMode = 0;
+int shootDuration = 0;
 void shooterControl(void * ignore){
   while(true){
     if(shooterMode == 1){
       shooter.move(127);
-      delay(1000);
+      delay(shootDuration);
+      shooter.move(0);
+      shooterMode = 0;
+    }else if(shooterMode == 2){
+      shooter.move(-127);
+      delay(shootDuration);
       shooter.move(0);
       shooterMode = 0;
     }
     Task::delay(10);
   }
 }
-void loadshoot(){
-  indexerMode = 5;
+void shoot(int duration){
+  indexerOrders.push(4);
+  indexerDuration = duration;
   shooterMode = 1;
+  shootDuration = duration;
 }
-void shoot(){
-  indexerMode = 4;
+void waitIndexer(){
+  delay(100);
+  while(indexerMode != 0){
+    printf("waiting index\n");
+    delay(5);
+  }
+}
+void frontOuttake(int duration){
+  indexerOrders.push(6);
+  indexerDuration = duration;
+  shooterMode = 2;
+  shootDuration = duration;
+}
+void cycle(int duration){
+  indexerOrders.push(5);
+  indexerDuration = duration;
   shooterMode = 1;
+  shootDuration = duration;
+}
+void suck(int duration){
+  indexerOrders.push(5);
+  indexerDuration = duration;
 }

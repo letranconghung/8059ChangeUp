@@ -30,13 +30,13 @@ void initialize() {
 	// encoderL.reset();
 	// encoderR.reset();
 	/** declaratixon and initialization of asynchronous Tasks */
+	Task indexerControlTask(indexerControl);
+	Task shooterControlTask(shooterControl);
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	// Task objectOdometryTask(objectOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	// Task visionBaseControlTask(visionBaseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task indexerControlTask(indexerControl);
-	Task shooterControlTask(shooterControl);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -130,7 +130,6 @@ void opcontrol() {
     }
 		if(master.get_digital_new_press(DIGITAL_LEFT)) frontIntake();
 		if(master.get_digital_new_press(DIGITAL_RIGHT)) backIntake();
-		if(master.get_digital_new_press(DIGITAL_UP)) shoot();
 		if(master.get_digital_new_press(DIGITAL_DOWN)) load();
 		pros::delay(5);
 	}
