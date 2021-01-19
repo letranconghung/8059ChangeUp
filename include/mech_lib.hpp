@@ -3,14 +3,14 @@
 #define _MECH_LIB_HPP_
 /** refer to mech_lib.cpp for function documentation */
 #endif
-void indexerControl(void * ignore);
-void shooterControl(void * ignore);
-void frontIntake();
-void backIntake();
-void load();
-void suck(int duration);
-void shoot(int shootDuration);
-void loadshoot(int shootDuration);
-void cycle(int duration);
-void frontOuttake(int duration);
-void waitIndexer();
+void waitIntakeColor();
+void waitShootColor();
+void mechBlock();
+void mechControl(void * ignore);
+void autoFrontIntake();
+void autoBackIntake();
+void autoLoad();
+void autoIntakeLoad();
+void timedCycle(int p_shooterSpeed, int duration);
+void timedReverseCycle(int duration);
+void timedColumnCycle(int p_shooterSpeed, int duration);

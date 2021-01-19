@@ -30,8 +30,7 @@ void initialize() {
 	// encoderL.reset();
 	// encoderR.reset();
 	/** declaratixon and initialization of asynchronous Tasks */
-	Task indexerControlTask(indexerControl);
-	Task shooterControlTask(shooterControl);
+	Task mechControlTask(mechControl, (void*)"PROS", TASK_PRIORITY_DEFAULT+1, TASK_STACK_DEPTH_DEFAULT);
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
@@ -128,9 +127,16 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
-		if(master.get_digital_new_press(DIGITAL_LEFT)) frontIntake();
-		if(master.get_digital_new_press(DIGITAL_RIGHT)) backIntake();
-		if(master.get_digital_new_press(DIGITAL_DOWN)) load();
+		int negate = master.get_digital(DIGITAL_L2)? -1: 1;
+		lRoller.move(negate * master.get_digital(DIGITAL_L1));
+		rRoller.move(negate * master.get_digital(DIGITAL_L1));
+		indexer.move(negate * (master.get_digital(DIGITAL_R1) + master.get_digital(DIGITAL_R2)));
+		shooter.move(negate * master.get_digital(DIGITAL_R2));
+
+		if(master.get_digital_new_press(DIGITAL_RIGHT)) autoFrontIntake();
+		if(master.get_digital_new_press(DIGITAL_LEFT)) autoBackIntake();
+		if(master.get_digital_new_press(DIGITAL_DOWN)) autoLoad();
+		if(master.get_digital_new_press(DIGITAL_UP)) autoIntakeLoad();
 		pros::delay(5);
 	}
 }
