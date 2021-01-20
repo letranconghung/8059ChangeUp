@@ -107,6 +107,7 @@ void opcontrol() {
 	master.clear();
 	/** boolean flag for whether the driver uses tank drive or not */
 	bool tankDrive = false;
+	// setMechMode(MECH_MODE::E_MANUAL);
 	while (true) {
 		/** toggle tank drive */
 		// printf("intakecolor: %d, shootColor: %d\n", intakeColor.get_value(), shootColor.get_value());
@@ -127,16 +128,11 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
-		int negate = master.get_digital(DIGITAL_L2)? -1: 1;
-		lRoller.move(negate * master.get_digital(DIGITAL_L1));
-		rRoller.move(negate * master.get_digital(DIGITAL_L1));
-		indexer.move(negate * (master.get_digital(DIGITAL_R1) + master.get_digital(DIGITAL_R2)));
-		shooter.move(negate * master.get_digital(DIGITAL_R2));
-
 		if(master.get_digital_new_press(DIGITAL_RIGHT)) autoFrontIntake();
 		if(master.get_digital_new_press(DIGITAL_LEFT)) autoBackIntake();
 		if(master.get_digital_new_press(DIGITAL_DOWN)) autoLoad();
 		if(master.get_digital_new_press(DIGITAL_UP)) autoIntakeLoad();
+		if(master.get_digital_new_press(DIGITAL_X)) timedCycle(127, 700);
 		pros::delay(5);
 	}
 }

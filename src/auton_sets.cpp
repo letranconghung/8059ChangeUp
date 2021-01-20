@@ -3,7 +3,7 @@
 /** programming skills run */
 void skills(){
   /** shoot */
-  timedCycle(127,500);
+  timedCycle(127,700);
   /** intake 1st and 2nd blue balls */
   autoIntakeLoad();
   autoFrontIntake();
@@ -14,7 +14,7 @@ void skills(){
   /** move out */
   baseMove(-15);
   waitBase(1000);
-  timedCycle(50, 700);
+  timedCycle(100,700);
   autoLoad(); //also serve as backIntake
   baseMove(-15);
   waitBase(1000);

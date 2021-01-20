@@ -16,7 +16,7 @@
 #define encdR_port 4
 #define intakeColorPort 6
 #define shootColorPort 7
-#define imuPort 17
+#define imuPort 14
 #define visBallport 2
 #define visFlagport 3
 extern bool useVision;

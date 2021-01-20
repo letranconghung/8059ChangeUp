@@ -14,24 +14,25 @@ int mechMode = 0;
 /** control shooterSpeed to shoot or eject */
 int shooterSpeed = 0;
 std::queue<int> mechOrders;
-enum MECH_MODE{
-  E_AUTO_FRONT_INTAKE = 1,
-  E_AUTO_BACK_INTAKE = 2,
-  E_AUTO_LOAD = 3,
-  E_AUTO_INTAKE_LOAD = 4,
-  E_TIMED_CYCLE = 5,
-  E_TIMED_REVERSE_CYCLE = 6,
-  E_TIMED_COLUMN_CYCLE = 7,
-};
-void waitIntakeColor(){
-  ADIAnalogIn intakeColor(intakeColorPort);
-  while(intakeColor.get_value()>intakeColorThreshold) delay(5);
-}
-void waitShootColor(){
-  ADIAnalogIn shootColor(shootColorPort);
-  while(shootColor.get_value()>shootColorThreshold) delay(5);
-}
+// void waitIntakeColor(){
+//   ADIAnalogIn intakeColor(intakeColorPort);
+//   while(intakeColor.get_value()>intakeColorThreshold) delay(5);
+// }
+// void waitShootColor(){
+//   ADIAnalogIn shootColor(shootColorPort);
+//   while(shootColor.get_value()>shootColorThreshold) delay(5);
+// }
 /** block the program until mech task is done */
+int timer;
+void setMechMode(int value){
+  mechMode = value;
+}
+void setMech(int l, int r, int i, int s){
+  lRoller.move(l);
+  rRoller.move(r);
+  indexer.move(i);
+  shooter.move(s);
+}
 void mechBlock(){
   /** time for mechControl to refresh mechMode */
   delay(50);
@@ -40,83 +41,85 @@ void mechBlock(){
 void mechControl(void * ignore){
   ADIAnalogIn shootColor(shootColorPort);
   ADIAnalogIn intakeColor(intakeColorPort);
+  int count = 0;
+  bool doneOrder = true;
   while(true){
-    if(mechOrders.empty()){
-      mechMode = 0;
-    }else{
-      mechMode = mechOrders.front();
-      mechOrders.pop();
+    if(doneOrder){
+      if(mechOrders.empty()){
+        mechMode = MECH_MODE::E_DEFAULT;
+      }else{
+        mechMode = mechOrders.front();
+        mechOrders.pop();
+        doneOrder = false;
+      }
     }
     switch(mechMode){
+      case MECH_MODE::E_DEFAULT: {
+        if (++count % 20 == 0) printf("default behavior\n");
+        setMech(0, 0, 0, 0);
+        break;
+      }
       case MECH_MODE::E_AUTO_FRONT_INTAKE: {
-        lRoller.move(127);
-        rRoller.move(127);
-        indexer.move(127);
-        waitIntakeColor();
-        lRoller.move(0);
-        rRoller.move(0);
-        indexer.move(0);
-        mechMode = 0;
+        if (++count % 20 == 0) printf("auto front intake\n");
+        setMech(127, 127, 127, 0);
+        if(intakeColor.get_value()<intakeColorThreshold){
+          mechMode = 0;
+          doneOrder = true;
+        }
         break;
       }
       case MECH_MODE::E_AUTO_BACK_INTAKE: {
-        indexer.move(127);
-        waitIntakeColor();
-        indexer.move(0);
-        mechMode = 0;
+        if (++count % 20 == 0) printf("auto back intake\n");
+        setMech(0, 0, 127, 0);
+        if(intakeColor.get_value()<intakeColorThreshold){
+          mechMode = 0;
+          doneOrder = true;
+        }
         break;
       }
       case MECH_MODE::E_AUTO_LOAD: {
-        indexer.move(127);
-        waitShootColor();
-        indexer.move(0);
-        mechMode = 0;
+        if (++count % 20 == 0) printf("auto load\n");
+        setMech(0, 0, 127, 0);
+        if(shootColor.get_value()<shootColorThreshold){
+          mechMode = 0;
+          doneOrder = true;
+        }
         break;
       }
       case MECH_MODE::E_AUTO_INTAKE_LOAD: {
-        lRoller.move(127);
-        rRoller.move(127);
-        indexer.move(127);
-        waitShootColor();
-        lRoller.move(0);
-        rRoller.move(0);
-        indexer.move(0);
-        mechMode = 0;
+        if (++count % 20 == 0) printf("auto intake load\n");
+        setMech(127, 127, 127, 0);
+        if(shootColor.get_value()<shootColorThreshold){
+          mechMode = 0;
+          doneOrder = true;
+        }
         break;
       }
       case MECH_MODE::E_TIMED_CYCLE: {
-        lRoller.move(127);
-        rRoller.move(127);
-        indexer.move(127);
-        shooter.move(shooterSpeed);
-        delay(mechDuration);
-        lRoller.move(0);
-        rRoller.move(0);
-        indexer.move(0);
-        shooter.move(0);
-        mechMode = 0;
+        if (++count % 20 == 0) printf("timed cycle\n");
+        setMech(127, 127, 127, shooterSpeed);
+        if(millis() - timer > mechDuration){
+          mechMode = 0;
+          doneOrder = true;
+        }
         break;
       }
       case MECH_MODE::E_TIMED_REVERSE_CYCLE: {
-        lRoller.move(-127);
-        rRoller.move(-127);
-        indexer.move(-127);
-        shooter.move(-127);
-        delay(mechDuration);
-        lRoller.move(0);
-        rRoller.move(0);
-        indexer.move(0);
-        shooter.move(0);
-        mechMode = 0;
+        if (++count % 20 == 0) printf("timed reverse cycle\n");
+        setMech(-127, -127, -127, -127);
+        if(millis() - timer > mechDuration){
+          mechMode = 0;
+          doneOrder = true;
+        }
         break;
       }
       case MECH_MODE::E_TIMED_COLUMN_CYCLE: {
-        indexer.move(127);
-        shooter.move(shooterSpeed);
-        delay(mechDuration);
-        indexer.move(0);
-        shooter.move(0);
-        mechMode = 0;
+        if (++count % 20 == 0) printf("timed column cycle\n");
+        setMech(0, 0, 127, shooterSpeed);
+        if(millis() - timer > mechDuration){
+          mechMode = 0;
+          doneOrder = true;
+        }
         break;
       }
     }
@@ -133,19 +136,23 @@ void autoLoad(){
   mechOrders.push(MECH_MODE::E_AUTO_LOAD);
 }
 void autoIntakeLoad(){
+  printf("intakeload\n");
   mechOrders.push(MECH_MODE::E_AUTO_INTAKE_LOAD);
 }
 void timedCycle(int p_shooterSpeed, int duration){
   mechOrders.push(MECH_MODE::E_TIMED_CYCLE);
+  timer = millis();
   shooterSpeed = p_shooterSpeed;
   mechDuration = duration;
 }
 void timedReverseCycle(int duration){
   mechOrders.push(MECH_MODE::E_TIMED_REVERSE_CYCLE);
+  timer = millis();
   mechDuration = duration;
 }
 void timedColumnCycle(int p_shooterSpeed, int duration){
   mechOrders.push(MECH_MODE::E_TIMED_COLUMN_CYCLE);
+  timer = millis();
   shooterSpeed = p_shooterSpeed;
   mechDuration = duration;
 }
