@@ -107,6 +107,7 @@ void opcontrol() {
 	master.clear();
 	/** boolean flag for whether the driver uses tank drive or not */
 	bool tankDrive = false;
+	mech(false);
 	// setMechMode(MECH_MODE::E_MANUAL);
 	while (true) {
 		/** toggle tank drive */
@@ -128,11 +129,18 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
-		if(master.get_digital_new_press(DIGITAL_RIGHT)) autoFrontIntake();
-		if(master.get_digital_new_press(DIGITAL_LEFT)) autoBackIntake();
-		if(master.get_digital_new_press(DIGITAL_DOWN)) autoLoad();
-		if(master.get_digital_new_press(DIGITAL_UP)) autoIntakeLoad();
-		if(master.get_digital_new_press(DIGITAL_X)) timedCycle(127, 700);
+		lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
+		rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
+		if(master.get_digital(DIGITAL_R1)){
+			indexer.move(127);
+			shooter.move(127);
+		}else if(master.get_digital(DIGITAL_R2)){
+			indexer.move(0);
+			shooter.move(-127);
+		}else{
+			indexer.move(0);
+			shooter.move(0);
+		}
 		pros::delay(5);
 	}
 }

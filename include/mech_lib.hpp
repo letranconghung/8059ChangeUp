@@ -12,7 +12,9 @@ enum MECH_MODE{
   E_TIMED_REVERSE_CYCLE = 6,
   E_TIMED_COLUMN_CYCLE = 7,
   E_MANUAL = 8,
+  E_TIMED_FRONT_OUTTAKE = 9
 };
+void mech(bool b);
 void setMechMode(int value);
 void mechBlock();
 void mechControl(void * ignore);
@@ -23,4 +25,5 @@ void autoIntakeLoad();
 void timedCycle(int p_shooterSpeed, int duration);
 void timedReverseCycle(int duration);
 void timedColumnCycle(int p_shooterSpeed, int duration);
+void timedFrontOuttake(int duration);
 #endif
