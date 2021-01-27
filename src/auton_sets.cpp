@@ -2,36 +2,72 @@
 #include "main.h"
 /** programming skills run */
 void skills(){
+  // Imu imu(imuPort);
   /** shoot */
-  timedColumnCycle(127,700);
+  shoot(127,700);
   /** intake 1st and 2nd blue balls */
-  autoIntakeLoad();
+  powerBase(127, 127);
+  autoFrontIntakeLoad();
   autoFrontIntake();
-  timedFrontOuttake(1000);
-  timerBase(100, 100, 1000);
-  mechBlock();
-  /** delay for debugging */
-  delay(2000);
-  /** move out */
+  pauseBase(false);
   baseMove(-7);
+  setMech(-127, -127, 0, 0);
+  waitBase(1000);
+  resetMech();
+  delay(500);
+  baseTurn(-15);
   waitBase(1000);
   delay(500);
-
-  timedColumnCycle(127,700);
+  shoot(110, 1000);
+  /** move out */
+  baseMove(-25);
+  /** hypothesis: autoLoad is providing the delay for the base movements */
   autoLoad(); //also serve as backIntake
-  baseMove(-18);
   waitBase(1000);
   delay(500);
 
-  baseTurn(-35);
+  baseTurn(-30);
   waitBase(1000);
   delay(500);
 
-  baseMove(-40);
+  baseMove(-31);
   waitBase(2000);
   delay(500);
 
-  baseTurn(55);
+  baseTurn(60);
+  waitBase(1000);
+  delay(500);
+
+  // scoring 2nd goal
+  baseMove(10);
+  waitBase(1000);
+  delay(500);
+
+  shoot(127,300);
+  powerBase(127, 127);
+  autoFrontIntake();
+  pauseBase(false);
+  baseMove(-35);
+  setMech(-80, -80, -127, -127, 800);
+  autoLoad();
+  waitBase(500);
+  delay(500);
+
+  baseMove(13);
+  waitBase(1000);
+  delay(500);
+
+  baseTurn(-50);
+  waitBase(2000);
+  delay(500);
+
+  baseMove(-54);
+  autoBackIntake();
+  waitBase(2500);
+  delay(500);
+
+
+  baseTurn(110);
   waitBase(1000);
   delay(500);
 
@@ -39,52 +75,58 @@ void skills(){
   waitBase(1000);
   delay(500);
 
-  timedColumnCycle(127,300);
-  autoFrontIntake();
-  timerBase(80, 80, 500);
-  mechBlock();
-  autoLoad();
-
-  autoFrontIntake();
-  baseMove(-10);
-  waitBase(1000);
-  delay(500);
-
-  baseTurn(148);
-  waitBase(1000);
-  delay(500);
-
-  baseMove(53);
-  waitBase(2500);
-  delay(500);
-
-  baseTurn(100);
-  waitBase(1000);
-  delay(500);
-
-  baseMove(20);
-  waitBase(1000);
-  delay(500);
-  /** shoot */
-  timedColumnCycle(127,300);
+  shoot(127, 300);
+  powerBase(127, 127);
   autoLoad();
   autoFrontIntake();
-  timedColumnCycle(127,300);
+  shoot(127, 300);
   autoLoad();
   autoFrontIntake();
-  timerBase(80, 80, 1000);
-  mechBlock();
-
+  pauseBase(false);
+  setMech(-127, -127, 0, 0);
   baseMove(-20);
   waitBase(1000);
   delay(500);
+  resetMech();
+
+  baseTurn(60);
+  waitBase(1000);
+  delay(500);
+  setMech(-127, -127, -127, -127, 1000);
+
+  baseMove(-55);
+  autoLoad();
+  waitBase(500);
+  delay(500);
+
+  baseTurn(150);
+  waitBase(1000);
+  delay(500);
+
+  // scoring 4th goal
+  baseMove(15);
+  waitBase(1000);
+  delay(500);
+
+  shoot(127,300);
+  powerBase(127, 127);
+  autoFrontIntake();
+  pauseBase(false);
+  baseMove(-30);
+  setMech(-80, -80, -127, -127, 800);
+  autoLoad();
+  waitBase(500);
+  delay(500);
+
 
 }
 /** Autonomous routine for blue left spawn. */
 void blueLeft(){
+  baseMove(40,0.525,0.3);
 }
 /** Autonomous routine for blue right spawn. */
 void blueRight(){
+  baseTurn(90, 0.525, 0.15);
 }
 /** Autonomous routine for red left spawn. */
 void redLeft(){

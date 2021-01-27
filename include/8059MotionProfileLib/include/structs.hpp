@@ -17,6 +17,7 @@ public:
   Coordinates();
   Coordinates(double x, double y);
   Coordinates(double x, double y, double angleDeg);
+  void setCoords(double x, double y);
   void setCoords(double x, double y, double angleDeg);
   void printCoordsTerminal();
   void printCoordsMaster();

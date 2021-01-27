@@ -1,10 +1,10 @@
 /** Base movement tasks and functions */
 #include "main.h"
 /** default values of kP and kD */
-#define DEFAULT_KP 0.35
-#define DEFAULT_KD 0.07
-#define DEFAULT_TURN_KP 0.45
-#define DEFAULT_TURN_KD 0
+#define DEFAULT_KP 0.525
+#define DEFAULT_KD 0.15
+#define DEFAULT_TURN_KP 0.525
+#define DEFAULT_TURN_KD 0.15
 /** declare motors */
 Motor FL (FLPort);
 Motor BL (BLPort);
@@ -191,7 +191,7 @@ void baseTurn(double x, double y, bool reverse = false){
  * kD
  */
 void baseTurnRelative(double angle, double kp, double kd){
-  /** refer to Odometry Documentation for mathematical proof */
+  /** refer to Odometry Documentation for mathemcmatical proof */
   double diff = angle*toRad*baseWidth/inPerDeg;
   targetEncdL += diff/2;
   targetEncdR += -diff/2;
@@ -305,6 +305,18 @@ void resetCoords(double x, double y, double angleDeg){
 	FR.tare_position();
 	BL.tare_position();
 	BR.tare_position();
+  /** reset target encoder values */
+  targetEncdL = 0;
+  targetEncdR = 0;
+}
+void resetCoords(double x, double y){
+  /** set position */
+  position.setCoords(x, y);
+  /** tare all motors */
+  FL.tare_position();
+  FR.tare_position();
+  BL.tare_position();
+  BR.tare_position();
   /** reset target encoder values */
   targetEncdL = 0;
   targetEncdR = 0;

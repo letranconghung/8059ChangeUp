@@ -11,7 +11,7 @@
  */
 #define DEBUG_MODE 0
 /** maximum allowed power */
-#define MAX_POW 120
+#define MAX_POW 105
 /**
  * maximum power increment step
  * mathematically: |V - V previous| <= RAMPING_POW
@@ -38,6 +38,7 @@ void pauseBase(bool pause);
 void timerBase(double powL, double powR, double time);
 void powerBase(double powL, double powR);
 void resetCoords(double x, double y, double angleDeg);
+void resetCoords(double x, double y);
 extern double targetEncdL, targetEncdR;
 void baseControl(void * ignore);
 void baseMotorControl(void * ignore);

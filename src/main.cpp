@@ -29,8 +29,8 @@ void initialize() {
 	imu.reset();
 	// encoderL.reset();
 	// encoderR.reset();
-	/** declaratixon and initialization of asynchronous Tasks */
-	Task mechControlTask(mechControl, (void*)"PROS", TASK_PRIORITY_DEFAULT+1, TASK_STACK_DEPTH_DEFAULT);
+	/** declaration and initialization of asynchronous Tasks */
+	Task mechControlTask(mechControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseOdometryTask(baseOdometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseControlTask(baseControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task baseMotorControlTask(baseMotorControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
@@ -106,8 +106,7 @@ void opcontrol() {
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 	/** boolean flag for whether the driver uses tank drive or not */
-	bool tankDrive = false;
-	mech(false);
+	bool tankDrive = true;
 	// setMechMode(MECH_MODE::E_MANUAL);
 	while (true) {
 		/** toggle tank drive */
@@ -122,8 +121,8 @@ void opcontrol() {
       FR.move(r-BRAKE_POW);
       BR.move(r+BRAKE_POW);
     } else{
-      int y = master.get_analog(ANALOG_LEFT_Y);
-      int x = master.get_analog(ANALOG_RIGHT_X);
+      int y = master.get_analog(ANALOG_RIGHT_Y);
+      int x = master.get_analog(ANALOG_LEFT_X);
       FL.move(y+x-BRAKE_POW);
       BL.move(y+x+BRAKE_POW);
       FR.move(y-x-BRAKE_POW);
@@ -135,12 +134,14 @@ void opcontrol() {
 			indexer.move(127);
 			shooter.move(127);
 		}else if(master.get_digital(DIGITAL_R2)){
-			indexer.move(0);
+			indexer.move(5);
 			shooter.move(-127);
 		}else{
-			indexer.move(0);
-			shooter.move(0);
+			/** motor braking */
+			indexer.move(5);
+			shooter.move(5);
 		}
+		if(master.get_digital_new_press(DIGITAL_X)) autoFrontIntakeLoad();
 		pros::delay(5);
 	}
 }

@@ -52,6 +52,10 @@ void Coordinates::setCoords(double x, double y, double angleDeg){
   this -> y = y;
   this -> angle = angleDeg*toRad;
 }
+void Coordinates::setCoords(double x, double y){
+  this -> x = x;
+  this -> y = y;
+}
 /** Print Coordinates to the terminal. */
 void Coordinates::printCoordsTerminal(){
   printf("x: %.2f, y: %.2f, angle: %.2f\n",this->x, this->y, this->angle*toDeg);
