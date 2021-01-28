@@ -106,7 +106,7 @@ void opcontrol() {
 	Controller master(E_CONTROLLER_MASTER);
 	master.clear();
 	/** boolean flag for whether the driver uses tank drive or not */
-	bool tankDrive = true;
+	bool tankDrive = false;
 	// setMechMode(MECH_MODE::E_MANUAL);
 	while (true) {
 		/** toggle tank drive */
@@ -121,8 +121,8 @@ void opcontrol() {
       FR.move(r-BRAKE_POW);
       BR.move(r+BRAKE_POW);
     } else{
-      int y = master.get_analog(ANALOG_RIGHT_Y);
-      int x = master.get_analog(ANALOG_LEFT_X);
+      int y = master.get_analog(ANALOG_LEFT_Y);
+      int x = master.get_analog(ANALOG_RIGHT_X);
       FL.move(y+x-BRAKE_POW);
       BL.move(y+x+BRAKE_POW);
       FR.move(y-x-BRAKE_POW);
@@ -152,6 +152,7 @@ void opcontrol() {
 		}
 
 		if(master.get_digital_new_press(DIGITAL_X)) autoFrontIntakeLoad();
+		if(master.get_digital_new_press(DIGITAL_A)) autoFrontIntake();
 		pros::delay(5);
 	}
 }

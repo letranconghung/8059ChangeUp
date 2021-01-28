@@ -7,7 +7,7 @@
 /** Tuning: turn at least 2 rotations and compare results in program & real life */
 #define baseWidth 16.18003749869522
 /** Tuning: go straight and compare results in program & real life */
-#define inPerDeg 0.0372817639078584
+#define inPerDeg 0.03470537205205
 /** makes position a universally accessible object */
 extern Coordinates position;
 /** refer to baseOdometry.cpp for function documentation */

@@ -2,7 +2,7 @@
  * Vision task that constantly updates the largest (and therefore closest) red ball, blue ball and green flag
  */
 #include "main.h"
-const VisionCoordinates TARG_BALL{0, 150, 50, 110, 100};
+const VisionCoordinates TARG_BALL{0, 98, 146, 136, 62};
 const VisionCoordinates TARG_FLAG{0,161,52,82,95};
 /** VisionObject objects that bundle current ball locations with target ball locations */
 VisionObject redBall(VisionCoordinates(), TARG_BALL);

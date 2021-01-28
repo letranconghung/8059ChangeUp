@@ -8,7 +8,7 @@ int iMax = 127;
 int rMax = 127;
 int intakeColorValue = 0, shootColorValue = 0;
 int intakeColorThreshold = 2800;
-int shootColorThreshold = 2400;
+int shootColorThreshold = 2820;
 void setMech(int l, int r, int i, int s){
   Motor lRoller (lRollerPort);
   Motor rRoller (rRollerPort);
@@ -28,12 +28,14 @@ void setMech(int l, int r, int i, int s, int t){
   resetMech();
 }
 void waitIntakeColor(){
-  printf("wait intake color \t value: %d\n", shootColorValue);
-  while(intakeColorValue>intakeColorThreshold) delay(5);
+  while(intakeColorValue>intakeColorThreshold){
+    delay(5);
+    printf("wait intake color \t value: %d\n", shootColorValue);
+  }
 }
 void waitShootColor(){
-  printf("wait Shoot color \t value: %d\n", shootColorValue);
   while(shootColorValue>shootColorThreshold){
+    printf("wait Shoot color \t value: %d\n", shootColorValue);
     delay(5);
   }
 }

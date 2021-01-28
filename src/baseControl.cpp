@@ -2,9 +2,9 @@
 #include "main.h"
 /** default values of kP and kD */
 #define DEFAULT_KP 0.525
-#define DEFAULT_KD 0.15
-#define DEFAULT_TURN_KP 0.525
-#define DEFAULT_TURN_KD 0.15
+#define DEFAULT_KD 0.3
+#define DEFAULT_TURN_KP 0.5975
+#define DEFAULT_TURN_KD 0.12
 /** declare motors */
 Motor FL (FLPort);
 Motor BL (BLPort);

@@ -4,9 +4,9 @@
 void skills(){
   // Imu imu(imuPort);
   /** shoot */
-  shoot(127,700);
   /** intake 1st and 2nd blue balls */
   powerBase(127, 127);
+  shoot(127,700);
   autoFrontIntakeLoad();
   autoFrontIntake();
   pauseBase(false);
@@ -15,7 +15,7 @@ void skills(){
   waitBase(1000);
   resetMech();
   delay(500);
-  baseTurn(-15);
+  baseTurn(-5);
   waitBase(1000);
   delay(500);
   shoot(110, 1000);
@@ -122,14 +122,16 @@ void skills(){
 }
 /** Autonomous routine for blue left spawn. */
 void blueLeft(){
-  baseMove(40,0.525,0.3);
+  baseMove(48,0.525,0.3);
 }
 /** Autonomous routine for blue right spawn. */
 void blueRight(){
-  baseTurn(90, 0.525, 0.15);
+  baseTurn(180, 0.5975, 0.12);
 }
 /** Autonomous routine for red left spawn. */
 void redLeft(){
+  // visionBaseMove(SIG_RED_BALL);
+  // visionWaitBase(2000);
 }
 /** Autonomous routine for red right spawn. */
 void redRight(){

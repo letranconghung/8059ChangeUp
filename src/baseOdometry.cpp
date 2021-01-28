@@ -45,9 +45,9 @@ void baseOdometry(void * ignore){
       double encdChangeR = (encdR-prevEncdR);
       double sumEncdChange = encdChangeL + encdChangeR;
       // double deltaAngle = (encdChangeL - encdChangeR)/baseWidth;
-      double deltaAngle = imu.get_rotation()*toRad - position.angle;
+      double deltaAngle = imu.get_rotation()*toRad/177*180 - position.angle;
       // position.angle += deltaAngle;
-      position.angle = imu.get_rotation()*toRad;
+      position.angle = imu.get_rotation()*toRad/177*180;
       /** update x- and y-coordinates */
       if(deltaAngle == 0){
         /** handle 0 as the formula involves division by deltaAngle */
