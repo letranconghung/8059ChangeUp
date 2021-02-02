@@ -202,6 +202,12 @@ void baseTurnRelative(double angle, double kp, double kd){
 void baseTurnRelative(double angle) {
   baseTurnRelative(angle, DEFAULT_TURN_KP, DEFAULT_TURN_KD);
 }
+void resetTargets(){
+  printf("resetTargets: \noriginal L: %.2f R: %.2f\n", targetEncdL, targetEncdR);
+  targetEncdL = getEncdVals(true).first;
+  targetEncdR = getEncdVals(true).second;
+  printf("final L: %.2f R: %.2f\n", targetEncdL, targetEncdR);
+}
 /**
  * Introduce a cutoff to base movements to interfere with the task when it takes too long to reach a target (e.g. due to too small DISTANCE_LEEWAY or too small kP).
  * @param cutoff
@@ -217,6 +223,8 @@ void waitBase(double cutoff){
 	BL.move(0);
 	FR.move(0);
 	BR.move(0);
+  /** experimental */
+  resetTargets();
 }
 /** boolean flag for whether there is a cap on base motor powers */
 bool basePowCapped = false;

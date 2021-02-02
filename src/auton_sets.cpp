@@ -2,7 +2,8 @@
 #include "main.h"
 /** programming skills run */
 void skills(){
-  // Imu imu(imuPort);
+  Imu imu(imuPort);
+  Controller master(E_CONTROLLER_MASTER);
   /** shoot */
   /** intake 1st and 2nd blue balls */
   powerBase(127, 127);
@@ -10,13 +11,11 @@ void skills(){
   autoFrontIntakeLoad();
   autoFrontIntake();
   pauseBase(false);
+  resetTargets();
   baseMove(-7);
   setMech(-127, -127, 0, 0);
   waitBase(1000);
   resetMech();
-  delay(500);
-  baseTurn(-5);
-  waitBase(1000);
   delay(500);
   shoot(110, 1000);
   /** move out */
@@ -26,7 +25,7 @@ void skills(){
   waitBase(1000);
   delay(500);
 
-  baseTurn(-30);
+  baseTurn(-25);
   waitBase(1000);
   delay(500);
 
@@ -47,27 +46,30 @@ void skills(){
   powerBase(127, 127);
   autoFrontIntake();
   pauseBase(false);
+  resetTargets();
+
   baseMove(-35);
-  setMech(-80, -80, -127, -127, 800);
+  shoot(80,700);
   autoLoad();
   waitBase(500);
   delay(500);
-
+  master.print(2, 0, "value: %.2f", imu.get_rotation());
+  delay(2000);
   baseMove(13);
   waitBase(1000);
   delay(500);
 
-  baseTurn(-50);
+  baseTurn(-30);
   waitBase(2000);
   delay(500);
 
-  baseMove(-54);
+  baseMove(-48);
   autoBackIntake();
   waitBase(2500);
   delay(500);
 
 
-  baseTurn(110);
+  baseTurn(100);
   waitBase(1000);
   delay(500);
 

@@ -11,7 +11,7 @@
  */
 #define DEBUG_MODE 0
 /** maximum allowed power */
-#define MAX_POW 105
+#define MAX_POW 100
 /**
  * maximum power increment step
  * mathematically: |V - V previous| <= RAMPING_POW
@@ -31,6 +31,7 @@ void baseTurn(double angleDeg);
 void baseTurn(double x, double y, double kp, double kd, bool reverse);
 void baseTurnRelative(double angle, double kp, double kd);
 void baseTurnRelative(double angle);
+void resetTargets();
 void waitBase(double cutoff);
 void capBasePow(double cap);
 void rmBaseCap();

@@ -107,6 +107,7 @@ void opcontrol() {
 	master.clear();
 	/** boolean flag for whether the driver uses tank drive or not */
 	bool tankDrive = false;
+	bool autoIndex = true;
 	// setMechMode(MECH_MODE::E_MANUAL);
 	while (true) {
 		/** toggle tank drive */
@@ -128,31 +129,50 @@ void opcontrol() {
       FR.move(y-x-BRAKE_POW);
       BR.move(y-x+BRAKE_POW);
     }
+		int indexerMove = 0, shooterMove = 0;
+		if(autoIndex){
+			if(intakeColor.get_value() < intakeColorThreshold && shootColor.get_value() < shootColorThreshold) indexerMove = 0;
+			else indexerMove = 1;
+		}
+		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
+
 		lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
 		rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
-		if(master.get_digital(DIGITAL_R2)){
-			// indexer.move(5);
-			shooter.move(-127);
+
+		if(master.get_digital(DIGITAL_L2)){
+			indexerMove = -1;
+			shooterMove = -1;
 		}else if(master.get_digital(DIGITAL_R1)){
-			// indexer.move(127);
-			shooter.move(127);
-		}else{
-			/** motor braking */
-			// indexer.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127 + 5);
-			shooter.move(5);
+			indexerMove = 1;
+			shooterMove = 1;
 		}
-
-		if(master.get_digital(DIGITAL_R1)){
-			indexer.move(127);
-			// shooter.move(127);
-		}else{
-			/** motor braking */
-			indexer.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127 + 5);
-			// shooter.move(5);
-		}
-
-		if(master.get_digital_new_press(DIGITAL_X)) autoFrontIntakeLoad();
-		if(master.get_digital_new_press(DIGITAL_A)) autoFrontIntake();
+		indexer.move(127*indexerMove);
+		shooter.move(127*shooterMove);
+		// lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
+		// rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
+		// if(master.get_digital(DIGITAL_R2)){
+		// 	// indexer.move(5);
+		// 	shooter.move(-127);
+		// }else if(master.get_digital(DIGITAL_R1)){
+		// 	// indexer.move(127);
+		// 	shooter.move(127);
+		// }else{
+		// 	/** motor braking */
+		// 	// indexer.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127 + 5);
+		// 	shooter.move(5);
+		// }
+		//
+		// if(master.get_digital(DIGITAL_R1)){
+		// 	indexer.move(127);
+		// 	// shooter.move(127);
+		// }else{
+		// 	/** motor braking */
+		// 	indexer.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127 + 5);
+		// 	// shooter.move(5);
+		// }
+		//
+		// if(master.get_digital_new_press(DIGITAL_X)) autoFrontIntakeLoad();
+		// if(master.get_digital_new_press(DIGITAL_A)) autoFrontIntake();
 		pros::delay(5);
 	}
 }

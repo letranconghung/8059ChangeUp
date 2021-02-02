@@ -63,7 +63,7 @@ void baseOdometry(void * ignore){
   		prevEncdR = encdR;
   		prevAngle = position.angle;
       /** debugging */
-      if(!COMPETITION_MODE) position.printCoordsMaster();
+      // if(!COMPETITION_MODE) position.printCoordsMaster();
       if((DEBUG_MODE == 1) && (count++ % 100 == 0)){
         position.printCoordsTerminal();
       }
