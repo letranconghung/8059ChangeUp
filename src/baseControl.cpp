@@ -6,7 +6,6 @@
 #define DEFAULT_TURN_KP 0.525
 #define DEFAULT_TURN_KD 0.15
 /** declare motors */
-Hello
 Motor FL (FLPort);
 Motor BL (BLPort);
 Motor FR (FRPort);
