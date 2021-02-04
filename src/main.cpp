@@ -136,10 +136,10 @@ void opcontrol() {
 		}
 		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
 
-		lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
-		rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
+		lRoller.move((master.get_digital(DIGITAL_R2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
+		rRoller.move((master.get_digital(DIGITAL_R2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
 
-		if(master.get_digital(DIGITAL_L2)){
+		if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R2)){
 			indexerMove = -1;
 			shooterMove = -1;
 		}else if(master.get_digital(DIGITAL_R1)){
