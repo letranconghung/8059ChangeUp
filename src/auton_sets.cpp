@@ -133,16 +133,25 @@ void redLeft(){
 }
 /** Autonomous routine for red right spawn. */
 void redRight(){
+  Motor FL(FLPort);
+  Motor BL(BLPort);
+  Motor FR(FRPort);
+  Motor BR(BRPort);
   resetCoords(0, 0);
-  double speed = 130;
-  powerBase(speed, speed);
+  double speed = 0;
 
-  delay(500);
-  std::pair<double, double> init = getEncdVals(true);
-  delay(500);
-  std::pair<double, double> final = getEncdVals(true);
+  // delay(500);
+  // std::pair<double, double> init = getEncdVals(true);
+  // delay(500);
+  // std::pair<double, double> final = getEncdVals(true);
 
-  printf("%.2f %.2f %.2f\n", battery::get_capacity(), final.first - init.first, final.second - init.second);
+  while(speed < 130) {
+    powerBase(speed, speed);
+    delay(200);
+    printf("%.2f %d\n", speed, (FL.get_voltage()+BL.get_voltage()+FR.get_voltage()+BR.get_voltage())/4);
+    speed += 10;
+  }
+  // printf("%.2f %.2f %.2f\n", battery::get_capacity(), final.first - init.first, final.second - init.second);
   powerBase(0, 0);
 
 }
