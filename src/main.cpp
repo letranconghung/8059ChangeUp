@@ -65,9 +65,9 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	delay(3000);
+	delay(5000);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 0;
+	int autonNum = 4;
 	switch (autonNum){
 		case 0: skills(); break;
 		case 1: blueLeft(); break;

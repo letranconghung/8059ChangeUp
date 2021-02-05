@@ -3,7 +3,6 @@
 /** programming skills run */
 void skills(){
   // Imu imu(imuPort);
-  Hello
   /** shoot */
   shoot(127,700);
   /** intake 1st and 2nd blue balls */
@@ -134,4 +133,16 @@ void redLeft(){
 }
 /** Autonomous routine for red right spawn. */
 void redRight(){
+  resetCoords(0, 0);
+  double speed = 130;
+  powerBase(speed, speed);
+
+  delay(500);
+  std::pair<double, double> init = getEncdVals(true);
+  delay(500);
+  std::pair<double, double> final = getEncdVals(true);
+
+  printf("%.2f %.2f %.2f\n", battery::get_capacity(), final.first - init.first, final.second - init.second);
+  powerBase(0, 0);
+
 }
