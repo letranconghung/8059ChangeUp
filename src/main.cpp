@@ -130,7 +130,9 @@ void opcontrol() {
     }
 		lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
 		rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
-		if(master.get_digital(DIGITAL_R2)){
+		if(master.get_digital(DIGITAL_DOWN)) {
+			shooter.move(127*0.35);
+		}else if(master.get_digital(DIGITAL_R2)){
 			// indexer.move(5);
 			shooter.move(-127);
 		}else if(master.get_digital(DIGITAL_R1)){
