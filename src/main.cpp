@@ -27,6 +27,7 @@ void initialize() {
 	BL.tare_position();
 	BR.tare_position();
 	imu.reset();
+	resetCoords(0, 0);
 	// encoderL.reset();
 	// encoderR.reset();
 	/** declaration and initialization of asynchronous Tasks */
@@ -64,9 +65,10 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	delay(5000);
+	Imu imu (imuPort);
+	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 4;
+	int autonNum = 0;
 	switch (autonNum){
 		case 0: skills(); break;
 		case 1: blueLeft(); break;
