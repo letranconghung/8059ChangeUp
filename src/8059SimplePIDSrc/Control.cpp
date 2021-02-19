@@ -4,6 +4,7 @@
 #define DEFAULT_TURN_KP 0.525
 #define DEFAULT_TURN_KD 0.15
 #define RAMPING_POW 5
+#define DISTANCE_LEEWAY 3
 double targEncdL = 0, targEncdR = 0, targBearing = 0;
 double errorEncdL = 0, errorEncdR = 0;
 double powerL = 0, powerR = 0;
@@ -13,8 +14,8 @@ double kP = DEFAULT_KP, kD = DEFAULT_KD;
 bool turnMode = false;
 
 void baseMove(double dis, double kp, double kd){
-  targetEncdL += dis/inPerDeg;
-  targetEncdR += dis/inPerDeg;
+  targEncdL += dis/inPerDeg;
+  targEncdR += dis/inPerDeg;
 
   kP = kp;
   kD = kd;
@@ -34,10 +35,10 @@ void baseTurn(double bearing){
 
 void waitBase(double cutoff){
 	double start = millis();
-	while(fabs(targetEncdL - encdL) > DISTANCE_LEEWAY && fabs(targetEncdR - encdR) > DISTANCE_LEEWAY && (millis()-start) < cutoff) delay(20);
+	while(fabs(targEncdL - encdL) > DISTANCE_LEEWAY && fabs(targEncdR - encdR) > DISTANCE_LEEWAY && (millis()-start) < cutoff) delay(20);
 
-  targetEncdL = encdL;
-  targetEncdR = encdR;
+  targEncdL = encdL;
+  targEncdR = encdR;
 }
 
 void Control(void * ignore){
@@ -45,37 +46,45 @@ void Control(void * ignore){
   Motor BL (BLPort);
   Motor FR (FRPort);
   Motor BR (BRPort);
+  Imu imu (imuPort);
 
-  while(true){
-    if(turnMode){
-      double errorBearing = targBearing - bearing;
-      targPowerL = errorBearing * kP;
-      targPowerR = -errorBearing * kP;
-    }else{
-      double errorEncdL = targEncdL - encdL;
-      double errorEncdR = targEncdR - encdR;
+  while(competition::is_autonomous()){
+    if(!imu.is_calibrating()) {
+      if(turnMode){
+        double errorBearing = targBearing - bearing;
+        targPowerL = errorBearing * kP;
+        targPowerR = -errorBearing * kP;
+      }else{
+        double errorEncdL = targEncdL - encdL;
+        double errorEncdR = targEncdR - encdR;
 
-      targPowerL = errorEncdL * kP;
-      targPowerR = errorEncdR * kP;
+        targPowerL = errorEncdL * kP;
+        targPowerR = errorEncdR * kP;
+      }
+
+      double deltaPowerL = targPowerL - powerL;
+      powerL += abscap(deltaPowerL, RAMPING_POW);
+      double deltaPowerR = targPowerR - powerR;
+      powerR += abscap(deltaPowerR, RAMPING_POW);
+
+      powerL = abscap(powerL, 127);
+      powerR = abscap(powerR, 127);
+
+      FL.move(powerL);
+      BL.move(powerL);
+      FR.move(powerR);
+      BR.move(powerR);
     }
-
-    double deltaPowerL = targetPowerL - powerL;
-    powerL += abscap(deltaPowerL, RAMPING_POW);
-    double deltaPowerR = targetPowerR - powerR;
-    powerR += abscap(deltaPowerR, RAMPING_POW);
-
-    powerL = abscap(powerL, 127);
-    powerR = abscap(powerR, 127);
-
-    FL.move(powerL);
-    BL.move(powerL);
-    FR.move(powerR);
-    BR.move(powerR);
     delay(5);
   }
 }
 
 void resetCoords(double x, double y){
+  Motor FL (FLPort);
+  Motor BL (BLPort);
+  Motor FR (FRPort);
+  Motor BR (BRPort);
+
   setCoords(x, y);
 
   FL.tare_position();
@@ -83,6 +92,6 @@ void resetCoords(double x, double y){
   BL.tare_position();
   BR.tare_position();
 
-  targetEncdL = 0;
-  targetEncdR = 0;
+  targEncdL = 0;
+  targEncdR = 0;
 }

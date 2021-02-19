@@ -1,6 +1,6 @@
 /** Other mechanical functions. */
 #include "main.h"
-#include "mech_lib.hpp"
+#include "mechLib.hpp"
 /** declare motors and sensors */
 
 /** thresholds */

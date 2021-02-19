@@ -3,5 +3,5 @@
 extern double X, Y;
 extern const double inPerDeg;
 void setCoords(double x, double y);
-void Odom(void * ignore);
+void Odometry(void * ignore);
 #endif

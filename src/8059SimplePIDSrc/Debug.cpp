@@ -1,8 +1,10 @@
 #include "main.h"
-int DEBUG_MODE = 0;
+int DEBUG_MODE = 1;
 void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
-  master.print(2, 0, "%.2f %.2f %.2f", X, Y, bearing);
+  Imu imu (imuPort);
+  if(imu.is_calibrating()) master.print(2, 0, "Callibrate IMU");
+  else master.print(2, 0, "%.2f %.2f %.2f", X, Y, bearing);
 }
 void printPosTerminal(){
   printf("x: %.2f y: %.2f bearing: %.2f\n", X, Y, bearing);
@@ -17,13 +19,16 @@ void printPowerTerminal(){
   printf("powerL: %.2f powerR: %.2f\n", powerL, powerR);
 }
 void Debug(void * ignore){
+  Imu imu (imuPort);
   while(true){
     printPosMaster();
-    switch(DEBUG_MODE){
-      case 1: printPosTerminal(); break;
-      case 2: printEncdTerminal(); break;
-      case 3: printErrorEncdTerminal(); break;
-      case 4: printPowerTerminal(); break;
+    if(!imu.is_calibrating()) {
+      switch(DEBUG_MODE){
+        case 1: printPosTerminal(); break;
+        case 2: printEncdTerminal(); break;
+        case 3: printErrorEncdTerminal(); break;
+        case 4: printPowerTerminal(); break;
+      }
     }
     delay(50);
   }

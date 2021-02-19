@@ -4,4 +4,6 @@ void Debug(void * ignore);
 void printPosTerminal();
 void printPosMaster();
 void printEncdTerminal();
+void printErrorEncdTerminal();
+void printPowerTerminal();
 #endif
