@@ -1,12 +1,13 @@
 #include "main.h"
-#define DEFAULT_KP 0.525
-#define DEFAULT_KD 0.15
-#define DEFAULT_TURN_KP 1.8
-#define DEFAULT_TURN_KD 0.4
-#define RAMPING_POW 3
-#define DISTANCE_LEEWAY 3
+#define DEFAULT_KP 0.3
+#define DEFAULT_KD 0.05
+#define DEFAULT_TURN_KP 1.25
+#define DEFAULT_TURN_KD 0.10
+#define RAMPING_POW 1.2
+#define DISTANCE_LEEWAY 2
 #define BEARING_LEEWAY 5
 #define MAX_POW 100
+
 double targEncdL = 0, targEncdR = 0, targBearing = 0;
 double errorEncdL = 0, errorEncdR = 0;
 double powerL = 0, powerR = 0;
@@ -114,11 +115,11 @@ void resetCoords(double x, double y){
   Motor FR (FRPort);
   Motor BR (BRPort);
 
-
   FL.tare_position();
   FR.tare_position();
   BL.tare_position();
   BR.tare_position();
+  resetPrevEncd();
 
   targBearing = bearing;
   targEncdL = 0;

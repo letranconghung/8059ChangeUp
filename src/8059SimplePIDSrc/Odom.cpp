@@ -1,15 +1,16 @@
 #include "main.h"
-const double inPerDeg = 0.0372817639078584;
-double X = 0, Y = 0;
+const double inPerDeg = 0.0461916735714906;
+double X = 0, Y = 0, prevEncdL = 0, prevEncdR = 0;
 void setCoords(double x, double y){
   X = x;
   Y = y;
 }
 void Odometry(void * ignore){
-  double prevEncdL = 0, prevEncdR = 0;
   Imu imu (imuPort);
   while(true){
-    if(!imu.is_calibrating()){
+    if(imu.is_calibrating()){
+      resetCoords(0, 0);
+    }else {
       double encdChangeL = encdL-prevEncdL;
       double encdChangeR = encdR-prevEncdR;
 
@@ -17,9 +18,13 @@ void Odometry(void * ignore){
       X += distance*cos(angle);
       Y += distance*sin(angle);
       /** update prev variables */
-  		prevEncdL = encdL;
-  		prevEncdR = encdR;
+      prevEncdL = encdL;
+      prevEncdR = encdR;
     }
     Task::delay(5);
   }
+}
+void resetPrevEncd() {
+  prevEncdL = 0;
+  prevEncdR = 0;
 }
