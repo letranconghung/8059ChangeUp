@@ -1,6 +1,6 @@
 #include "main.h"
-#define DEFAULT_KP 0.3
-#define DEFAULT_KD 0.05
+#define DEFAULT_KP 0.35
+#define DEFAULT_KD 0.1
 #define DEFAULT_TURN_KP 1.25
 #define DEFAULT_TURN_KD 0.10
 #define RAMPING_POW 1.2
@@ -38,6 +38,12 @@ void baseTurn(double bearing){
   baseTurn(bearing, DEFAULT_TURN_KP, DEFAULT_TURN_KD);
 }
 
+void powerBase(double l, double r) {
+  pauseBase = true;
+  powerL = l;
+  powerR = r;
+}
+
 void timerBase(double l, double r, double t) {
   pauseBase = true;
   powerL = l;
@@ -49,12 +55,19 @@ void timerBase(double l, double r, double t) {
   resetCoords(X, Y);
 }
 
+void unPauseBase() {
+  powerL = 0;
+  powerR = 0;
+  pauseBase = false;
+  resetCoords(X, Y);
+}
+
 void waitBase(double cutoff){
 	double start = millis();
   if(turnMode) {
     while(fabs(targBearing - bearing) > BEARING_LEEWAY && (millis()-start) < cutoff) delay(20);
   }else{
-    while(fabs(targEncdL - encdL) > DISTANCE_LEEWAY && fabs(targEncdR - encdR) > DISTANCE_LEEWAY && (millis()-start) < cutoff) delay(20);
+    while((fabs(targEncdL - encdL) > DISTANCE_LEEWAY && fabs(targEncdR - encdR) > DISTANCE_LEEWAY) || (millis()-start) < cutoff) delay(20);
   }
 
   targEncdL = encdL;
