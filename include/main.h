@@ -36,8 +36,7 @@
  */
 //#include "okapi/api.hpp"
 //#include ``"pros/api_legacy.h"
-#include "8059MotionProfileLib/api.hpp"
-#include "8059VisionLib/api.hpp"
+#include "8059SimplePIDInclude/API.hpp"
 #include "mech_lib.hpp"
 #include "auton_sets.hpp"
 #include "globals.hpp"
