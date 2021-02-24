@@ -7,11 +7,8 @@ void Sensors(void * ignore){
   Motor FR (FRPort);
   Motor BR (BRPort);
   Imu imu (imuPort);
-  int count = 0;
   while(true){
-    if(imu.is_calibrating()){
-      if (++count % 10 == 0) printf("imu is calibrating...\n");
-    }else{
+    if(!imu.is_calibrating()){
       encdL = BL.get_position();
       encdR = BR.get_position();
       bearing = imu.get_rotation();

@@ -1,15 +1,15 @@
 #include "main.h"
-#define DEFAULT_KP 0.35
-#define DEFAULT_KD 0.1
-#define DEFAULT_TURN_KP 1.25
-#define DEFAULT_TURN_KD 0.10
+#define DEFAULT_KP 0.27
+#define DEFAULT_KD 0.2
+#define DEFAULT_TURN_KP 1.2 // 20 degrees = 2.5, 180 degrees = 1
+#define DEFAULT_TURN_KD 0.6
 #define RAMPING_POW 1.2
-#define DISTANCE_LEEWAY 2
-#define BEARING_LEEWAY 5
+#define DISTANCE_LEEWAY 15
+#define BEARING_LEEWAY 1.5
 #define MAX_POW 100
 
 double targEncdL = 0, targEncdR = 0, targBearing = 0;
-double errorEncdL = 0, errorEncdR = 0;
+double errorEncdL = 0, errorEncdR = 0, errorBearing = 0;
 double powerL = 0, powerR = 0;
 double targPowerL = 0, targPowerR = 0;
 double kP = DEFAULT_KP, kD = DEFAULT_KD;
@@ -67,7 +67,7 @@ void waitBase(double cutoff){
   if(turnMode) {
     while(fabs(targBearing - bearing) > BEARING_LEEWAY && (millis()-start) < cutoff) delay(20);
   }else{
-    while((fabs(targEncdL - encdL) > DISTANCE_LEEWAY && fabs(targEncdR - encdR) > DISTANCE_LEEWAY) || (millis()-start) < cutoff) delay(20);
+    while((fabs(targEncdL - encdL) > DISTANCE_LEEWAY || fabs(targEncdR - encdR) > DISTANCE_LEEWAY) && (millis()-start) < cutoff) delay(20);
   }
 
   targEncdL = encdL;
@@ -85,7 +85,7 @@ void Control(void * ignore){
   while(competition::is_autonomous()){
     if(!imu.is_calibrating() && !pauseBase) {
       if(turnMode){
-        double errorBearing = targBearing - bearing;
+        errorBearing = targBearing - bearing;
         double deltaErrorBearing = errorBearing - prevErrorBearing;
 
         targPowerL = errorBearing * kP + deltaErrorBearing * kD;
