@@ -93,68 +93,57 @@ void autonomous() {
 void opcontrol() {
 	/** braking */
 	double BRAKE_POW = 0;
-	/** declare references to motors and controller */
 	Motor FL (FLPort);
-	Motor BL (BLPort);
-	Motor FR (FRPort);
-	Motor BR (BRPort);
-	Motor lRoller (lRollerPort);
-	Motor rRoller (rRollerPort);
-	Motor indexer (indexerPort);
-	Motor shooter (shooterPort);
-	ADIAnalogIn intakeColor (intakeColorPort);
-	ADIAnalogIn shootColor (shootColorPort);
-	Controller master(E_CONTROLLER_MASTER);
-	master.clear();
-	/** boolean flag for whether the driver uses tank drive or not */
-	bool tankDrive = true;
-	// setMechMode(MECH_MODE::E_MANUAL);
-	while (true) {
-		/** toggle tank drive */
-		// printf("intakecolor: %d, shootColor: %d\n", intakeColor.get_value(), shootColor.get_value());
-		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
-		/** handle tankDrive */
-		if(tankDrive){
-      int l = master.get_analog(ANALOG_LEFT_Y);
-      int r = master.get_analog(ANALOG_RIGHT_Y);
-      FL.move(l-BRAKE_POW);
-      BL.move(l+BRAKE_POW);
-      FR.move(r-BRAKE_POW);
-      BR.move(r+BRAKE_POW);
-    } else{
-      int y = master.get_analog(ANALOG_RIGHT_Y);
-      int x = master.get_analog(ANALOG_LEFT_X);
-      FL.move(y+x-BRAKE_POW);
-      BL.move(y+x+BRAKE_POW);
-      FR.move(y-x-BRAKE_POW);
-      BR.move(y-x+BRAKE_POW);
-    }
-		lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
-		rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
-		if(master.get_digital(DIGITAL_DOWN)) {
-			shooter.move(127*0.35);
-		}else if(master.get_digital(DIGITAL_R2)){
-			// indexer.move(5);
-			shooter.move(-127);
-		}else if(master.get_digital(DIGITAL_R1)){
-			// indexer.move(127);
-			shooter.move(127);
-		}else{
-			/** motor braking */
-			// indexer.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127 + 5);
-			shooter.move(5);
-		}
+		Motor BL (BLPort);
+		Motor FR (FRPort);
+		Motor BR (BRPort);
+		Motor lRoller (lRollerPort);
+		Motor rRoller (rRollerPort);
+		Motor indexer (indexerPort);
+		Motor shooter (shooterPort);
+		ADIAnalogIn intakeColor (intakeColorPort);
+		ADIAnalogIn shootColor (shootColorPort);
+		Controller master(E_CONTROLLER_MASTER);
+		master.clear();
+		/** boolean flag for whether the driver uses tank drive or not */
+		bool tankDrive = false;
+		bool autoIndex = true;
+		// setMechMode(MECH_MODE::E_MANUAL);
+		while (true) {
+			/** toggle tank drive */
+			// printf("intakecolor: %d, shootColor: %d\n", intakeColor.get_value(), shootColor.get_value());
+			if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
+			/** handle tankDrive */
+			if(tankDrive){
+	      int l = master.get_analog(ANALOG_LEFT_Y);
+	      int r = master.get_analog(ANALOG_RIGHT_Y);
+	      FL.move(l-BRAKE_POW);
+	      BL.move(l+BRAKE_POW);
+	      FR.move(r-BRAKE_POW);
+	      BR.move(r+BRAKE_POW);
+	    } else{
+	      int y = master.get_analog(ANALOG_LEFT_Y);
+	      int x = master.get_analog(ANALOG_RIGHT_X);
+	      FL.move(y+x-BRAKE_POW);
+	      BL.move(y+x+BRAKE_POW);
+	      FR.move(y-x-BRAKE_POW);
+	      BR.move(y-x+BRAKE_POW);
+	    }
+			int indexerMove = 0, shooterMove = 0;
+			if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
 
-		if(master.get_digital(DIGITAL_R1)){
-			indexer.move(127);
-			// shooter.move(127);
-		}else{
-			/** motor braking */
-			indexer.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127 + 5);
-			// shooter.move(5);
-		}
+			lRoller.move((master.get_digital(DIGITAL_R2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
+			rRoller.move((master.get_digital(DIGITAL_R2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
 
-		if(master.get_digital_new_press(DIGITAL_X)) autoFrontIntakeLoad();
-		pros::delay(5);
-	}
+			if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R2)){
+				indexerMove = -1;
+				shooterMove = -1;
+			}else if(master.get_digital(DIGITAL_R1)){
+				indexerMove = 1;
+				shooterMove = 1;
+			}
+			indexer.move(127*indexerMove);
+			shooter.move(127*shooterMove);
+			pros::delay(5);
+		}
 }
