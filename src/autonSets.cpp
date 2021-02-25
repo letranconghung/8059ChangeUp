@@ -5,7 +5,7 @@ void skills(){
   resetCoords(0, 0);
   delay(100);
 
-  baseMove(48, 0.4, 0);
+  baseTurn(-180, 1.6, 0);
   waitBase(3000);
   delay(500);
 }

@@ -1,8 +1,8 @@
 #include "main.h"
-#define DEFAULT_KP 0.27
-#define DEFAULT_KD 0.2
-#define DEFAULT_TURN_KP 1.2 // 20 degrees = 2.5, 180 degrees = 1
-#define DEFAULT_TURN_KD 0.6
+#define DEFAULT_KP 0.45
+#define DEFAULT_KD 0.0
+#define DEFAULT_TURN_KP 1.7 //1.7 for 90, 1.5 for 180
+#define DEFAULT_TURN_KD 0
 #define RAMPING_POW 2
 #define DISTANCE_LEEWAY 10
 #define BEARING_LEEWAY 1.5
