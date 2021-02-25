@@ -3,8 +3,8 @@
 #define DEFAULT_KD 0.2
 #define DEFAULT_TURN_KP 1.2 // 20 degrees = 2.5, 180 degrees = 1
 #define DEFAULT_TURN_KD 0.6
-#define RAMPING_POW 1.2
-#define DISTANCE_LEEWAY 15
+#define RAMPING_POW 2
+#define DISTANCE_LEEWAY 10
 #define BEARING_LEEWAY 1.5
 #define MAX_POW 100
 
@@ -62,8 +62,8 @@ void unPauseBase() {
   resetCoords(X, Y);
 }
 
-void waitBase(double cutoff){
-	double start = millis();
+void waitBase(int cutoff){
+	int start = millis();
   if(turnMode) {
     while(fabs(targBearing - bearing) > BEARING_LEEWAY && (millis()-start) < cutoff) delay(20);
   }else{
@@ -72,6 +72,7 @@ void waitBase(double cutoff){
 
   targEncdL = encdL;
   targEncdR = encdR;
+  printf("time taken: %d ms\t cutoff: %d ms\n", millis() - start, cutoff);
 }
 
 void Control(void * ignore){

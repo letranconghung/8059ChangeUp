@@ -8,7 +8,7 @@ void baseTurn(double bearing);
 void powerBase(double l, double r);
 void timerBase(double l, double r, double t);
 void unPauseBase();
-void waitBase(double cutoff);
+void waitBase(int cutoff);
 void Control(void * ignore);
 void resetCoords(double x, double y);
 #endif
