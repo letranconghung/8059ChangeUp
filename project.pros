@@ -1,7 +1,7 @@
 {
     "py/object": "pros.conductor.project.Project",
     "py/state": {
-        "project_name": "8059B SingNats",
+        "project_name": "8059X SingNats",
         "target": "v5",
         "templates": {
             "kernel": {
