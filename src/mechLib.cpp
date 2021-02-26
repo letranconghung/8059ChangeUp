@@ -5,12 +5,19 @@
 /** thresholds */
 int iMax = 127;
 int rMax = 127;
+int iLoad = 110;
+int sLoad = 0;
 int intakeColorValue = 0, shootColorValue = 0;
-int intakeColorThreshold = 2900;
-int shootColorThreshold = 2800;
+int intakeColorThreshold = 2850;
+int shootColorThreshold = 2875;
 bool pauseMech = false;
 int mechMode = 0;
+int shooterSpeed = 0, shooterTime = 0;
+int start;
 bool firstStageDone = false;
+void setPauseMech(bool pm){
+  pauseMech = pm;
+}
 void setMech(int l, int r, int i, int s){
   Motor lRoller (lRollerPort);
   Motor rRoller (rRollerPort);
@@ -32,11 +39,11 @@ void setMech(int l, int r, int i, int s, int t){
   pauseMech = false;
 }
 void waitIntakeColor(){
-  printf("wait intake color \t value: %d\n", shootColorValue);
+  // printf("wait intake color \t value: %d\n", shootColorValue);
   while(intakeColorValue>intakeColorThreshold) delay(5);
 }
 void waitShootColor(){
-  printf("wait Shoot color \t value: %d\n", shootColorValue);
+  // printf("wait Shoot color \t value: %d\n", shootColorValue);
   while(shootColorValue>shootColorThreshold) delay(5);
 }
 void autoFrontIntake(){
@@ -57,7 +64,7 @@ void autoBackIntake(){
 void autoLoad(){
   pauseMech = true;
   printf("auto load\n");
-  setMech(0, 0, 80, 0);
+  setMech(0, 0, iLoad, sLoad);
   waitShootColor();
   resetMech();
   pauseMech = false;
@@ -79,6 +86,15 @@ void shoot(int s, int t){
   printf("shoot complete\n");
   pauseMech = false;
 }
+void centerpole(){
+  printf("centerpole\n");
+  pauseMech = true;
+  setMech(127, 127, -127, 127);
+  delay(5000);
+  resetMech();
+  printf("centerpole complete\n");
+  pauseMech = false;
+}
 void asyncFrontIntake(){
   mechMode = 1;
 }
@@ -94,6 +110,12 @@ void asyncFrontIntakeLoad(){
 void asyncDouble(){
   mechMode = 5;
 }
+void asyncShoot(int s, int t){
+  start = millis();
+  shooterSpeed = s;
+  shooterTime = t;
+  mechMode = 6;
+}
 void mechControl(void * ignore){
   Motor lRoller (lRollerPort);
   Motor rRoller (rRollerPort);
@@ -101,12 +123,14 @@ void mechControl(void * ignore){
   Motor indexer (indexerPort);
   ADIAnalogIn intakeColor(intakeColorPort);
   ADIAnalogIn shootColor(shootColorPort);
-  while(true){
+  while(competition::is_autonomous()){
     intakeColorValue = intakeColor.get_value();
     shootColorValue = shootColor.get_value();
+    // printf("intake: %d shoot: %d\n", intakeColorValue, shootColorValue);
     if(!pauseMech){
       switch(mechMode){
         case 0:{
+          printf("in case 0\n");
           resetMech();
           break;
         }
@@ -124,13 +148,16 @@ void mechControl(void * ignore){
         }
         case 3:{
           //load
-          setMech(0, 0, iMax, 0);
-          if(shootColorValue<shootColorThreshold) mechMode = 0;
+          setMech(0, 0, iLoad, sLoad);
+          if(shootColorValue<shootColorThreshold){
+            mechMode = 0;
+            printf("got out of asyncload\n");
+          }
           break;
         }
         case 4:{
           //frontIntakeLoad
-          setMech(rMax, rMax, iMax, 0);
+          setMech(rMax, rMax, iMax, sLoad);
           if(shootColorValue<shootColorThreshold) mechMode = 0;
           break;
         }
@@ -145,7 +172,17 @@ void mechControl(void * ignore){
               firstStageDone = false;
             }
           }
+          break;
         }
+        case 6:{
+          //asyncshoot
+          setMech(-127, -127, iMax, shooterSpeed);
+          if(millis() - start > shooterTime){
+            mechMode = 0;
+          }
+          break;
+        }
+
       }
     }
     delay(5);

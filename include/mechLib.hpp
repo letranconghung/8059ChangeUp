@@ -3,6 +3,7 @@
 #define _MECH_LIB_HPP_
 /** refer to mech_lib.cpp for function documentation */
 /** traditional-style mech library */
+void setPauseMech(bool pm);
 void setMech(int l, int r, int i, int s);
 void resetMech();
 void setMech(int l, int r, int i, int s, int t);
@@ -13,10 +14,12 @@ void autoBackIntake();
 void autoLoad();
 void autoFrontIntakeLoad();
 void shoot(int s, int t);
+void centerpole();
 void asyncFrontIntake();
 void asyncBackIntake();
 void asyncLoad();
 void asyncFrontIntakeLoad();
 void asyncDouble();
+void asyncShoot(int s, int t);
 void mechControl(void * ignore);
 #endif

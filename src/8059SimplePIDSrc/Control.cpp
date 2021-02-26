@@ -17,6 +17,7 @@ double kP = DEFAULT_KP, kD = DEFAULT_KD;
 bool turnMode = false, pauseBase = false;
 
 void baseMove(double dis, double kp, double kd){
+  printf("baseMove: %.1f\t", dis);
   turnMode = false;
   targEncdL += dis/inPerDeg;
   targEncdR += dis/inPerDeg;
@@ -29,6 +30,7 @@ void baseMove(double dis){
 }
 
 void baseTurn(double p_bearing, double kp, double kd){
+  printf("baseTurn: %.1f\t", p_bearing);
   turnMode = true;
   targBearing = p_bearing;
 	kP = kp;
@@ -54,7 +56,6 @@ void timerBase(double l, double r, double t) {
   pauseBase = false;
   resetCoords(X, Y);
 }
-
 void unPauseBase() {
   powerL = 0;
   powerR = 0;

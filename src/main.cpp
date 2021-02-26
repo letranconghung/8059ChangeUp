@@ -144,7 +144,7 @@ void opcontrol() {
 			}
 			indexer.move(127*indexerMove);
 			shooter.move(127*shooterMove);
-			if(master.get_digital(DIGITAL_B)) autoBackIntake();
+			if(master.get_digital(DIGITAL_B)) autoLoad();
 			if(master.get_digital(DIGITAL_X)) autoFrontIntake();
 			pros::delay(5);
 		}
