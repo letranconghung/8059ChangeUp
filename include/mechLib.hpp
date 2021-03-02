@@ -3,6 +3,7 @@
 #define _MECH_LIB_HPP_
 /** refer to mech_lib.cpp for function documentation */
 /** traditional-style mech library */
+extern int intakeColorThreshold, shootColorThreshold;
 void setPauseMech(bool pm);
 void setMech(int l, int r, int i, int s);
 void resetMech();

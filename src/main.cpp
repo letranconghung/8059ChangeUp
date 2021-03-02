@@ -106,14 +106,20 @@ void opcontrol() {
 		Controller master(E_CONTROLLER_MASTER);
 		master.clear();
 		/** boolean flag for whether the driver uses tank drive or not */
-		bool tankDrive = false;
+		bool tankDrive = true;
 		bool autoIndex = true;
 		// setMechMode(MECH_MODE::E_MANUAL);
 		while (true) {
+			int indexerMove = 0, shooterMove = 0;
 			/** toggle tank drive */
 			// printf("intakecolor: %d, shootColor: %d\n", intakeColor.get_value(), shootColor.get_value());
 			if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 			/** handle tankDrive */
+			if(autoIndex){
+				if(intakeColor.get_value() < intakeColorThreshold && shootColor.get_value() < shootColorThreshold) indexerMove = 0;
+				else indexerMove = 1;
+			}
+			if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
 			if(tankDrive){
 	      int l = master.get_analog(ANALOG_LEFT_Y);
 	      int r = master.get_analog(ANALOG_RIGHT_Y);
@@ -129,9 +135,7 @@ void opcontrol() {
 	      FR.move(y-x-BRAKE_POW);
 	      BR.move(y-x+BRAKE_POW);
 	    }
-			int indexerMove = 0, shooterMove = 0;
 			if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
-
 			lRoller.move((master.get_digital(DIGITAL_R2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
 			rRoller.move((master.get_digital(DIGITAL_R2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
 
@@ -144,8 +148,6 @@ void opcontrol() {
 			}
 			indexer.move(127*indexerMove);
 			shooter.move(127*shooterMove);
-			if(master.get_digital(DIGITAL_B)) autoLoad();
-			if(master.get_digital(DIGITAL_X)) autoFrontIntake();
 			pros::delay(5);
 		}
 }
