@@ -9,7 +9,7 @@ int iLoad = 110;
 int sLoad = 0;
 int intakeColorValue = 0, shootColorValue = 0;
 int intakeColorThreshold = 2850;
-int shootColorThreshold = 2875;
+int shootColorThreshold = 2875; // working 2875
 bool pauseMech = false;
 int mechMode = 0;
 int shooterSpeed = 0, shooterTime = 0;
@@ -77,6 +77,39 @@ void autoFrontIntakeLoad(){
   resetMech();
   pauseMech = false;
 }
+void auto2for2(){
+  pauseMech = true;
+  setMech(rMax, rMax, iLoad, 127); // shoot out 1st ball
+  delay(400); //1st ball fly
+  setMech(rMax, rMax, iMax, 0);
+  delay(100); // separation delay
+  setMech(rMax,rMax, iLoad, 127); // shoot out 2nd ball
+  delay(400); // for 2nd ball to fly
+  resetMech();
+  autoFrontIntakeLoad();
+  pauseMech = false;
+}
+void auto2for1(){
+  pauseMech = true;
+  setMech(rMax, rMax, iLoad, 127); // shoot out 1st ball
+  delay(400); //1st ball fly
+  setMech(rMax, rMax, iMax, 0);
+  delay(100); // separation delay
+  setMech(rMax,rMax, iLoad, 127); // shoot out 2nd ball
+  delay(400); // for 2nd ball to fly
+  resetMech();
+  pauseMech = false;
+  asyncLoad();
+}
+void auto1for1(){
+  pauseMech = true;
+  setMech(rMax, rMax, iLoad, 127); // shoot out 1st ball
+  delay(400); //1st ball fly
+  autoFrontIntake();
+  resetMech();
+  pauseMech = false;
+  asyncLoad();
+}
 void shoot(int s, int t){
   printf("shoot: speed: %d, time: %d\n", s, t);
   pauseMech = true;
@@ -130,7 +163,6 @@ void mechControl(void * ignore){
     if(!pauseMech){
       switch(mechMode){
         case 0:{
-          printf("in case 0\n");
           resetMech();
           break;
         }
