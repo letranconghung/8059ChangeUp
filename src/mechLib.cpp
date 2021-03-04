@@ -79,36 +79,42 @@ void autoFrontIntakeLoad(){
 }
 void auto2for2(){
   pauseMech = true;
-  setMech(rMax, rMax, iLoad, 127); // shoot out 1st ball
-  delay(400); //1st ball fly
-  setMech(rMax, rMax, iMax, 0);
-  delay(100); // separation delay
-  setMech(rMax,rMax, iLoad, 127); // shoot out 2nd ball
-  delay(400); // for 2nd ball to fly
+  setMech(rMax, rMax, iMax, 127);
+  powerBase(90, 90);
+  delay(300);
+  while(shootColorValue < shootColorThreshold) delay(2);
+  delay(800);
   resetMech();
-  autoFrontIntakeLoad();
+  powerBase(0, 0);
+  unPauseBase();
+  autoLoad();
   pauseMech = false;
 }
 void auto2for1(){
   pauseMech = true;
-  setMech(rMax, rMax, iLoad, 127); // shoot out 1st ball
-  delay(400); //1st ball fly
-  setMech(rMax, rMax, iMax, 0);
-  delay(100); // separation delay
-  setMech(rMax,rMax, iLoad, 127); // shoot out 2nd ball
-  delay(400); // for 2nd ball to fly
+  setMech(rMax, rMax, iMax, 127);
+  powerBase(90, 90);
+  delay(300);
+  setMech(0, 0, iLoad, 127);
+  while(shootColorValue < shootColorThreshold) delay(2);
+  delay(800);
   resetMech();
+  powerBase(0, 0);
+  unPauseBase();
+  autoLoad();
   pauseMech = false;
-  asyncLoad();
 }
 void auto1for1(){
   pauseMech = true;
-  setMech(rMax, rMax, iLoad, 127); // shoot out 1st ball
-  delay(400); //1st ball fly
-  autoFrontIntake();
+  setMech(rMax, rMax, iLoad, 127);
+  powerBase(90, 90);
+  delay(500);
+  setMech(0, 0, iLoad, 127);
   resetMech();
+  powerBase(0, 0);
+  unPauseBase();
+  autoLoad();
   pauseMech = false;
-  asyncLoad();
 }
 void shoot(int s, int t){
   printf("shoot: speed: %d, time: %d\n", s, t);
@@ -148,6 +154,9 @@ void asyncShoot(int s, int t){
   shooterSpeed = s;
   shooterTime = t;
   mechMode = 6;
+}
+void asyncIntakeNoRollers(){
+  mechMode = 7;
 }
 void mechControl(void * ignore){
   Motor lRoller (lRollerPort);
@@ -212,6 +221,11 @@ void mechControl(void * ignore){
           if(millis() - start > shooterTime){
             mechMode = 0;
           }
+          break;
+        }
+        case 7:{
+          setMech(0, 0, iLoad, 0);
+          if(intakeColorValue < intakeColorThreshold) mechMode = 0;
           break;
         }
 

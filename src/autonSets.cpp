@@ -9,23 +9,22 @@ void skills(){
   delay(100);
 
   // ----------------------- going for 1st goal --------------------------------
-  baseMove(53);
+  baseMove(51);
   asyncDouble();
   waitBase(1700);
   delay(d);
 
-  baseMove(-19);
-  waitBase(800);
+  baseMove(-18);
+  waitBase(1000);
   delay(d);
 
   baseTurn(135-initAngle);
-  waitBase(800);
+  waitBase(1000);
   delay(d);
 
-  baseMove(25);
-  waitBase(1200);
+  baseMove(16);
+  waitBase(1000);
   delay(d);
-
   auto2for2();
   // --------------------------------- going for 2nd goal -----------------------
 
@@ -40,21 +39,21 @@ void skills(){
   delay(d);
 
   baseTurn(180-initAngle);
-  waitBase(900);
-  delay(d);
-
-  baseMove(-27);
-  asyncLoad();
   waitBase(1000);
   delay(d);
 
-  baseTurn(88-initAngle);
-  waitBase(800);
+  baseMove(-28.5);
+  asyncLoad();
+  waitBase(1500);
   delay(d);
 
-  baseMove(36);
+  baseTurn(88-initAngle);
+  waitBase(1200);
+  delay(d);
+
+  baseMove(29);
   asyncFrontIntake();
-  waitBase(1500);
+  waitBase(1400);
   delay(d);
   // END
 
@@ -73,7 +72,7 @@ void skills(){
   delay(d);
   asyncShoot(100, 500);
 
-  baseMove(-53);
+  baseMove(-55);
   delay(600);
   asyncLoad();
   waitBase(2500);
@@ -83,7 +82,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(27);
+  baseMove(25);
   asyncFrontIntake();
   waitBase(1200);
   delay(d);
@@ -96,7 +95,7 @@ void skills(){
   waitBase(800);
   delay(d);
 
-  baseMove(25);
+  baseMove(17);
   waitBase(1000);
   delay(d);
 
@@ -104,150 +103,161 @@ void skills(){
   auto2for2();
 
   // // -------------------------------------------- going for 4th pole ------------------
-  //
-  // // SET 1
-  // baseMove(-53);
+  // // ------------- 90, 0, auto1for1 -----------------
+  // // // SET 1
+  // // // SET 1
+  baseMove(-55);
+  asyncShoot(0, 500);
+  delay(500);
+  asyncShoot(120, 300);
+  delay(200);
+  asyncShoot(120, 1000);
+  waitBase(1500);
+  delay(d);
+
+  baseTurn(90-initAngle);
+  waitBase(1000);
+  delay(d);
+
+  baseMove(-28.5);
+  asyncLoad();
+  waitBase(1500);
+  delay(d);
+
+  baseTurn(0-initAngle);
+  waitBase(1200);
+  delay(d);
+
+  baseMove(32);
+  asyncFrontIntake();
+  waitBase(1500);
+  delay(d);
+  // END
+  auto1for1();
+  // //
+  // // // // ---------------------------------------- going for 5th pole ------------------------------------
+  // // // 90, -110, -45, auto2for2
+  // // // SET 2
+  // // // SET 2
+  // baseMove(-13);
   // asyncShoot(0, 500);
-  // asyncShoot(120,1000);
-  // waitBase(2000);
+  // waitBase(1000);
   // delay(d);
   //
   // baseTurn(90-initAngle);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // baseMove(-26);
-  // asyncLoad();
-  // waitBase(1500);
-  // delay(d);
-  //
-  // baseTurn(0-initAngle);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // baseMove(40);
-  // asyncFrontIntake();
-  // waitBase(2000);
-  // delay(d);
-  //
-  // // END
-  // auto1for1();
-  //
-  // // // ---------------------------------------- going for 5th pole ------------------------------------
-  //
-  // // SET 2
-  // baseMove(-10);
-  // waitBase(2000);
-  // delay(d);
-  //
-  // baseTurn(90-initAngle);
-  // waitBase(2000);
-  // delay(d);
-  //
-  // asyncShoot(127, 500);
-  // baseMove(-40);
-  // delay(500);
-  // asyncLoad();
-  // waitBase(2000);
-  //
-  // baseTurn(-110-initAngle);
-  // waitBase(6000);
-  // delay(d);
-  //
-  // baseMove(25);
-  // asyncFrontIntake();
-  // waitBase(2000);
-  // delay(d);
-  //
-  // baseMove(-20);
-  // waitBase(2000);
-  // delay(d);
-  //
-  // baseTurn(-45-initAngle);
-  // waitBase(2000);
-  // delay(d);
-  //
-  // baseMove(40);
-  // waitBase(1500);
-  // delay(d);
-  //
-  // // END
-  // auto2for2();
-  //
-  // // // ---------------------------- going for 6th pole ----------------------
-  // // SET 1
-  //
-  // baseMove(-53);
-  // asyncShoot(120,1500);
-  // waitBase(2000);
-  // delay(d);
-  //
-  // baseTurn(0-initAngle);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // baseMove(-26);
-  // asyncLoad();
-  // waitBase(1500);
-  // delay(d);
-  //
-  // baseTurn(-90-initAngle);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // baseMove(40);
-  // asyncFrontIntake();
-  // waitBase(2000);
-  // delay(d);
-  //
-  // // END
-  // auto2for1();
-  //
-  // // ------------------------------------- going for 7th pole ------------------
-  // // // initAngle = -90;
-  //
-  //
-  // // SET 2
-  // baseMove(-10);
-  // waitBase(2000);
-  // delay(d);
-  //
-  // baseTurn(-15-initAngle);
-  // waitBase(2000);
+  // waitBase(800);
   // delay(d);
   // asyncShoot(100, 500);
   //
   // baseMove(-53);
   // delay(600);
   // asyncLoad();
-  // waitBase(2000);
+  // waitBase(2500);
+  // delay(d);
+  //
+  // baseTurn(-110-initAngle);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // baseMove(27);
+  // asyncFrontIntake();
+  // waitBase(1200);
+  // delay(d);
+  //
+  // baseMove(-22);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // baseTurn(-45-initAngle);
+  // waitBase(800);
+  // delay(d);
+  //
+  // baseMove(22);
+  // waitBase(1000);
+  // delay(d);
+  // // // END
+  // auto2for2();
+  // //
+  // // // // ---------------------------- going for 6th pole ----------------------
+  // // // SET 1
+  // // // ------ 0, -90, auto2for1
+  // //
+  // // // SET 1
+  // baseMove(-53);
+  // asyncShoot(0, 500);
+  // delay(500);
+  // asyncShoot(120, 300);
+  // delay(200);
+  // asyncShoot(120, 1000);
+  // waitBase(1500);
+  // delay(d);
+  //
+  // baseTurn(0-initAngle);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // baseMove(-28.5);
+  // asyncLoad();
+  // waitBase(1500);
+  // delay(d);
+  //
+  // baseTurn(-90-initAngle);
+  // waitBase(1200);
+  // delay(d);
+  //
+  // baseMove(32);
+  // asyncFrontIntake();
+  // waitBase(1500);
+  // delay(d);
+  // // END
+  // // // END
+  // auto2for1();
+  // //
+  // // // ------------------------------------- going for 7th pole ------------------
+  // // // -------- -15, -70, -135, auto2for2
+  // //
+  // // // SET 2
+  // // // SET 2
+  // baseMove(-13);
+  // asyncShoot(0, 500);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // baseTurn(-15-initAngle);
+  // waitBase(800);
+  // delay(d);
+  // asyncShoot(100, 500);
+  //
+  // baseMove(-53);
+  // delay(600);
+  // asyncLoad();
+  // waitBase(2500);
   // delay(d);
   //
   // baseTurn(-70-initAngle);
   // waitBase(1000);
   // delay(d);
   //
-  // baseMove(25);
+  // baseMove(27);
   // asyncFrontIntake();
-  // waitBase(2000);
+  // waitBase(1200);
   // delay(d);
   //
-  // baseMove(-20);
-  // waitBase(2000);
+  // baseMove(-22);
+  // waitBase(1000);
   // delay(d);
   //
   // baseTurn(-135-initAngle);
-  // waitBase(2000);
+  // waitBase(800);
   // delay(d);
   //
-  // baseMove(40);
-  // waitBase(1500);
+  // baseMove(22);
+  // waitBase(1000);
   // delay(d);
-  //
-  // // END
+  // // // END
   // auto2for2();
-  //
-  // // ------------------------------------------- going for 8th pole -------------------
+  // //
+  // // // ------------------------------------------- going for 8th pole -------------------
   // baseMove(-15);
   // waitBase(1000);
   // delay(d);
@@ -277,7 +287,7 @@ void skills(){
   //
   // auto1for1();
   //
-  // // ------------------------ going for 9th center pole ------------------------
+  // // // ------------------------ going for 9th center pole ------------------------
   // baseMove(-15);
   // waitBase(1000);
   // delay(d);
@@ -285,7 +295,7 @@ void skills(){
   // baseTurn(0-initAngle);
   // waitBase(5000);
   // delay(d);
-  //
+
   // // printf("start centerpoling\n");
   // // baseMove(30);
   // // autoFrontIntake();
@@ -311,7 +321,7 @@ void blueRight(){
   resetCoords(0, 0);
   delay(100);
 
-  auto1for1();
+  auto2for2();
 }
 /** Autonomous routine for red left spawn. */
 void redLeft(){
