@@ -5,11 +5,11 @@
 /** thresholds */
 int iMax = 127;
 int rMax = 127;
-int iLoad = 110;
+int iLoad = 80;
 int sLoad = 0;
 int intakeColorValue = 0, shootColorValue = 0;
 int intakeColorThreshold = 2850;
-int shootColorThreshold = 2875; // working 2875
+int shootColorThreshold = 2830; // working 2875
 bool pauseMech = false;
 int mechMode = 0;
 int shooterSpeed = 0, shooterTime = 0;
@@ -29,7 +29,7 @@ void setMech(int l, int r, int i, int s){
   shooter.move(s);
 }
 void resetMech(){
-  setMech(0, 0, 0, 0);
+  setMech(10, 10, 10, 10);
 }
 void setMech(int l, int r, int i, int s, int t){
   pauseMech = true;
@@ -79,41 +79,64 @@ void autoFrontIntakeLoad(){
 }
 void auto2for2(){
   pauseMech = true;
-  setMech(rMax, rMax, iMax, 127);
+  setMech(rMax, rMax, iLoad, 127);
   powerBase(90, 90);
-  delay(300);
-  while(shootColorValue < shootColorThreshold) delay(2);
-  delay(800);
+  delay(600);
+  setMech(rMax, rMax, iMax, 127);
+  while(shootColorValue > shootColorThreshold){
+    printf("> threshold shootColorValue: %d\n", shootColorValue);
+    delay(5);
+  }
+  while(shootColorValue < shootColorThreshold){
+    printf("< threshold shootColorValue: %d\n", shootColorValue);
+    delay(5);
+  }
+  while(shootColorValue > shootColorThreshold){
+    printf("> threshold shootColorValue: %d\n", shootColorValue);
+    delay(5);
+  }
   resetMech();
   powerBase(0, 0);
   unPauseBase();
-  autoLoad();
   pauseMech = false;
 }
 void auto2for1(){
   pauseMech = true;
-  setMech(rMax, rMax, iMax, 127);
+  setMech(rMax, rMax, iLoad, 127);
   powerBase(90, 90);
-  delay(300);
-  setMech(0, 0, iLoad, 127);
-  while(shootColorValue < shootColorThreshold) delay(2);
-  delay(800);
+  delay(600);
+  setMech(rMax, rMax, iMax, 127);
+  while(shootColorValue > shootColorThreshold){
+    printf("> threshold shootColorValue: %d\n", shootColorValue);
+    delay(5);
+  }
+  setMech(-127, -127, iMax, 127);
+  while(shootColorValue < shootColorThreshold){
+    printf("< threshold shootColorValue: %d\n", shootColorValue);
+    delay(5);
+  }
+  while(shootColorValue > shootColorThreshold){
+    printf("> threshold shootColorValue: %d\n", shootColorValue);
+    delay(5);
+  }
   resetMech();
   powerBase(0, 0);
   unPauseBase();
-  autoLoad();
   pauseMech = false;
 }
 void auto1for1(){
   pauseMech = true;
   setMech(rMax, rMax, iLoad, 127);
   powerBase(90, 90);
-  delay(500);
-  setMech(0, 0, iLoad, 127);
+  delay(400);
+  setMech(-rMax, -rMax, iMax, 0);
+  while(shootColorValue > shootColorThreshold){
+    printf("> threshold shootColorValue: %d\n", shootColorValue);
+    delay(5);
+  }
   resetMech();
   powerBase(0, 0);
   unPauseBase();
-  autoLoad();
   pauseMech = false;
 }
 void shoot(int s, int t){
@@ -168,7 +191,6 @@ void mechControl(void * ignore){
   while(competition::is_autonomous()){
     intakeColorValue = intakeColor.get_value();
     shootColorValue = shootColor.get_value();
-    // printf("intake: %d shoot: %d\n", intakeColorValue, shootColorValue);
     if(!pauseMech){
       switch(mechMode){
         case 0:{
