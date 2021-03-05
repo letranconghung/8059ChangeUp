@@ -42,6 +42,7 @@ void autoFrontIntake(){
   waitIntakeColor();
   resetMech();
 }
+
 void autoBackIntake(){
   setMech(0, 0, iMax, 0);
   waitIntakeColor();
@@ -80,6 +81,33 @@ void mechControl(void * ignore){
     intakeColorValue = intakeColor.get_value();
     shootColorValue = shootColor.get_value();
     delay(5);
+  }
+}
+//////////////////////////////////////////////////////////////////////
+/* testing functions for 59b*/
+void ball_intake(double speed,double run_time,double waitForCompletion)
+{
+  Motor lRoller (lRollerPort);
+  Motor rRoller (rRollerPort);
+  lRoller.move(speed);
+  rRoller.move(speed);
+  delay(run_time);
+  if(waitForCompletion==1)
+  {
+    lRoller.move(0);
+    rRoller.move(0);
+  }
+}
+
+void intaker(double speed, int t)
+{
+  Motor lRoller(lRollerPort);
+  Motor rRoller (rRollerPort);
+  lRoller.move(speed);
+  rRoller.move(speed);
+  if(t == 0)
+  {
+    delay(50);
   }
 }
 

@@ -68,6 +68,9 @@ void autonomous() {
 	Imu imu (imuPort);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
+	// while(imu.is_calibrating()) delay(5);
+	//delay(4000);
+
 	int autonNum = 0;
 	switch (autonNum){
 		case 0: skills(); break;
@@ -131,8 +134,8 @@ void opcontrol() {
     }
 		lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
 		rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
-		if(master.get_digital(DIGITAL_DOWN)) {
-			shooter.move(127*0.35);
+		if(master.get_digital(DIGITAL_R2) && master.get_digital(DIGITAL_R1)) {
+			shooter.move(127*0.75);
 		}else if(master.get_digital(DIGITAL_R2)){
 			// indexer.move(5);
 			shooter.move(-127);
@@ -143,6 +146,13 @@ void opcontrol() {
 			/** motor braking */
 			// indexer.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127 + 5);
 			shooter.move(5);
+		}
+		if(master.get_digital(DIGITAL_L2))
+		{
+			shooter.move(-127);
+			lRoller.move(-127);
+			rRoller.move(-127);
+			indexer.move(-127);
 		}
 
 		if(master.get_digital(DIGITAL_R1)){

@@ -15,6 +15,11 @@ void autoFrontIntakeLoad();
 void shoot(int s);
 void shoot(int s, int t);
 void mechControl(void * ignore);
+
+/* Testing functions for 59b */
+void ball_intake(double speed,double run_time,double waitForCompletion);
+void intaker(double speed);
+
 /** async mech library for increased efficiency (not working) */
 // enum MECH_MODE{
 //   E_DEFAULT = 0,
