@@ -7,11 +7,34 @@ void skills(){
 
 //Goal1 (middle goal)
   setMech(127, 127, 0, 0);
-  timerBase(127,0,350);
-  setMech(127,127,127,127,450);//
-  timerBase(-127,-17,400);
+  timerBase(127,0,400);
+  setMech(127,127,127,127,550);//
+  delay(10);
+  timerBase(-127,-11,350);
+  setMech(-127,-127,-127,0,500);
+  delay(100);
+  setMech(0,0,127,0);
+  baseMove(-58);
+  waitBase(2000);
+
+  setMech(127, 127, 0, 0);
+
+  baseTurn(90);
+  waitBase(2000);
+  baseMove(20);
+  waitBase(2000);
+  timerBase(100,20,400);
+  setMech(127,127,127,127,750);
+  delay(90);
+  baseMove(-10);
+  setMech(-127,-127,-127,0,700);
+  delay(90);
+  timerBase(-127,0,100);
+  baseMove(-30);
+  // angle need to tune
+  // move bake abit more to outtake 
   //setMech(-127,-127,-127,-127);
-  /*setMech(-127,-127,-127,0,500);
+  /*
   delay(100);
   ball_intake(127,10,0);
   setMech(0,0,127,0);
