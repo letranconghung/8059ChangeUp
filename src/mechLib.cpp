@@ -5,7 +5,7 @@
 /** thresholds */
 int iMax = 127;
 int rMax = 127;
-int iLoad = 80;
+int iLoad = 90;
 int sLoad = 0;
 int intakeColorValue = 0, shootColorValue = 0;
 int intakeColorThreshold = 2850;

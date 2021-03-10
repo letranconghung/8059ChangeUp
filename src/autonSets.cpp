@@ -112,7 +112,7 @@ void skills(){
   delay(500);
   asyncShoot(120, 300);
   delay(200);
-  asyncShoot(120, 1000);
+  asyncShoot(120, 1500);
   waitBase(1500);
   delay(d);
 
@@ -120,7 +120,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-25.5);
+  baseMove(-26.2);
   asyncLoad();
   waitBase(1500);
   delay(d);
@@ -161,12 +161,12 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(25);
+  baseMove(26);
   asyncFrontIntake();
   waitBase(1200);
   delay(d);
 
-  baseMove(-18);
+  baseMove(-19);
   waitBase(1200);
   delay(d);
 
@@ -241,12 +241,12 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(25);
+  baseMove(27);
   asyncFrontIntake();
   waitBase(1200);
   delay(d);
 
-  baseMove(-18);
+  baseMove(-20);
   waitBase(1200);
   delay(d);
 
@@ -261,39 +261,39 @@ void skills(){
   auto2for2();
   // //
   // // // ------------------------------------------- going for 8th pole -------------------
-  baseMove(-18);
-  waitBase(1000);
-  delay(d);
-
-  baseTurn(-90-initAngle);
-  waitBase(1000);
-  delay(d);
-
-  asyncShoot(127, 1000);
-  baseMove(-70);
-  delay(1000);
-  asyncLoad();
-  waitBase(3000);
-  delay(d);
-
-  baseMove(14);
-  waitBase(1000);
-  delay(d);
-
-  baseTurn(-180-initAngle);
-  waitBase(1000);
-  delay(d);
-
-  baseMove(8);
-  waitBase(1000);
-  delay(d);
-
-  auto1for1();
-
-  // // // ------------------------ going for 9th center pole ------------------------
-  baseMove(-15);
-  waitBase(1000);
-  delay(d);
+  // baseMove(-18);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // baseTurn(-90-initAngle);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // asyncShoot(127, 1000);
+  // baseMove(-70);
+  // delay(1000);
+  // asyncLoad();
+  // waitBase(3000);
+  // delay(d);
+  //
+  // baseMove(14);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // baseTurn(-180-initAngle);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // baseMove(8);
+  // waitBase(1000);
+  // delay(d);
+  //
+  // auto1for1();
+  //
+  // // // // ------------------------ going for 9th center pole ------------------------
+  // baseMove(-15);
+  // waitBase(1000);
+  // delay(d);
   //
   // baseTurn(0-initAngle);
   // waitBase(5000);
