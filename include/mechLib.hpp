@@ -4,6 +4,7 @@
 /** refer to mech_lib.cpp for function documentation */
 /** traditional-style mech library */
 extern int intakeColorValue, shootColorValue, intakeColorThreshold, shootColorThreshold;
+extern bool pauseMech;
 void setPauseMech(bool pm);
 void setMech(int l, int r, int i, int s);
 void resetMech();

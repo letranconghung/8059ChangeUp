@@ -82,6 +82,7 @@ void auto2for2(){
   setMech(rMax, rMax, iLoad, 127);
   powerBase(90, 90);
   delay(600);
+  powerBase(0, 0);
   setMech(rMax, rMax, iMax, 127);
   while(shootColorValue > shootColorThreshold){
     printf("> threshold shootColorValue: %d\n", shootColorValue);
@@ -128,7 +129,7 @@ void auto1for1(){
   pauseMech = true;
   setMech(rMax, rMax, iLoad, 127);
   powerBase(90, 90);
-  delay(400);
+  delay(600);
   setMech(-rMax, -rMax, iMax, 0);
   while(shootColorValue > shootColorThreshold){
     printf("> threshold shootColorValue: %d\n", shootColorValue);
@@ -149,12 +150,21 @@ void shoot(int s, int t){
   pauseMech = false;
 }
 void centerpole(){
-  printf("centerpole\n");
+  timerBase(100, 100, 500);
   pauseMech = true;
+  setMech(127, 127, -127, 0);
+  while(intakeColorValue>intakeColorThreshold) delay(5);
+  while(intakeColorValue<intakeColorThreshold) delay(5);
   setMech(127, 127, -127, 127);
-  delay(5000);
+  while(intakeColorValue>intakeColorThreshold) delay(5);
+  while(intakeColorValue<intakeColorThreshold) delay(5);
+  setMech(127, 127, -127, 127);
+  delay(500);
   resetMech();
   printf("centerpole complete\n");
+  setMech(-127, -127, -127, 127);
+  timerBase(-100, -100, 600);
+  delay(300);
   pauseMech = false;
 }
 void asyncFrontIntake(){
@@ -188,7 +198,7 @@ void mechControl(void * ignore){
   Motor indexer (indexerPort);
   ADIAnalogIn intakeColor(intakeColorPort);
   ADIAnalogIn shootColor(shootColorPort);
-  while(competition::is_autonomous()){
+  while(true){
     intakeColorValue = intakeColor.get_value();
     shootColorValue = shootColor.get_value();
     if(!pauseMech){

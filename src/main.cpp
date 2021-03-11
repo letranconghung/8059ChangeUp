@@ -108,6 +108,8 @@ void opcontrol() {
 		/** boolean flag for whether the driver uses tank drive or not */
 		bool tankDrive = true;
 		bool autoIndex = true;
+		pauseBase = true;
+		pauseMech = true;
 		// setMechMode(MECH_MODE::E_MANUAL);
 		while (true) {
 			int indexerMove = 0, shooterMove = 0;
@@ -123,22 +125,31 @@ void opcontrol() {
 			if(tankDrive){
 	      int l = master.get_analog(ANALOG_LEFT_Y);
 	      int r = master.get_analog(ANALOG_RIGHT_Y);
-	      FL.move(l-BRAKE_POW);
-	      BL.move(l+BRAKE_POW);
-	      FR.move(r-BRAKE_POW);
-	      BR.move(r+BRAKE_POW);
+				powerL = l;
+				powerR = r;
+	      // FL.move(l-BRAKE_POW);
+	      // BL.move(l+BRAKE_POW);
+	      // FR.move(r-BRAKE_POW);
+	      // BR.move(r+BRAKE_POW);
 	    } else{
 	      int y = master.get_analog(ANALOG_LEFT_Y);
 	      int x = master.get_analog(ANALOG_RIGHT_X);
-	      FL.move(y+x-BRAKE_POW);
-	      BL.move(y+x+BRAKE_POW);
-	      FR.move(y-x-BRAKE_POW);
-	      BR.move(y-x+BRAKE_POW);
+				powerL = y+x;
+				powerR = y-x;
+	      // FL.move(y+x-BRAKE_POW);
+	      // BL.move(y+x+BRAKE_POW);
+	      // FR.move(y-x-BRAKE_POW);
+	      // BR.move(y-x+BRAKE_POW);
 	    }
+			if(master.get_digital_new_press(DIGITAL_B)){
+				centerpole();
+				pauseBase = true;
+				pauseMech = true;
+			}
+			// mech
 			if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
-			lRoller.move((master.get_digital(DIGITAL_R2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
-			rRoller.move((master.get_digital(DIGITAL_R2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2))*127);
-
+			lRoller.move((master.get_digital(DIGITAL_L2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2))*127);
+			rRoller.move((master.get_digital(DIGITAL_L2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2))*127);
 			if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R2)){
 				indexerMove = -1;
 				shooterMove = -1;

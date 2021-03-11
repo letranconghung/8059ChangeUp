@@ -8,7 +8,7 @@ void skills(){
   resetCoords(0, 0);
   delay(100);
 
-  // ----------------------- going for 1st goal --------------------------------
+  // // ----------------------- going for 1st goal --------------------------------
   baseMove(51);
   asyncDouble();
   waitBase(1700);
@@ -259,55 +259,60 @@ void skills(){
   delay(d);
   // // // END
   auto2for2();
+
+
+
   // //
   // // // ------------------------------------------- going for 8th pole -------------------
-  // baseMove(-18);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // baseTurn(-90-initAngle);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // asyncShoot(127, 1000);
-  // baseMove(-70);
-  // delay(1000);
-  // asyncLoad();
-  // waitBase(3000);
-  // delay(d);
-  //
-  // baseMove(14);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // baseTurn(-180-initAngle);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // baseMove(8);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // auto1for1();
-  //
-  // // // // ------------------------ going for 9th center pole ------------------------
-  // baseMove(-15);
-  // waitBase(1000);
-  // delay(d);
-  //
-  // baseTurn(0-initAngle);
-  // waitBase(5000);
-  // delay(d);
+  baseMove(-18);
+  waitBase(1000);
+  delay(d);
 
-  // // printf("start centerpoling\n");
-  // // baseMove(30);
-  // // autoFrontIntake();
-  // // setPauseMech(true);
-  // // setMech(127, 127, -127, 127);
-  // // waitBase(1500);
-  // // powerBase(127, 127);
-  // // delay(5000);
-  // // timerBase(-127, -127, 500);
+  baseTurn(-90-initAngle);
+  waitBase(1000);
+  delay(d);
+
+  asyncShoot(127, 1000);
+  baseMove(-70);
+  delay(1000);
+  asyncLoad();
+  waitBase(3000);
+  delay(d);
+  delay(300);
+
+  baseMove(16);
+  waitBase(1000);
+  delay(d);
+
+  baseTurn(-180-initAngle);
+  waitBase(1000);
+  delay(d);
+
+  baseMove(8);
+  waitBase(1000);
+  delay(d);
+
+  auto1for1();
+
+  // // // ------------------------ going for 9th center pole ------------------------
+  baseMove(-20);
+  asyncShoot(127, 600);
+  waitBase(2000);
+  delay(d+100);
+
+
+  baseTurn(-90-initAngle);
+  waitBase(5000);
+  delay(d);
+
+  baseTurn(-3-initAngle);
+  waitBase(3000);
+  delay(d+200);
+
+  baseMove(25);
+  autoFrontIntakeLoad();
+  waitBase(2000);
+  centerpole();
   printf("AUTON TIME TAKEN: %.1f s\n", (float)(millis() - progStart)/1000);
 }
 /** Autonomous routine for blue left spawn. */
@@ -324,7 +329,7 @@ void blueRight(){
   resetCoords(0, 0);
   delay(100);
 
-  auto1for1();
+  auto2for2();
 }
 /** Autonomous routine for red left spawn. */
 void redLeft(){

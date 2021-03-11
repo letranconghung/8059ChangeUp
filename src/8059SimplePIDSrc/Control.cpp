@@ -85,7 +85,7 @@ void Control(void * ignore){
   Imu imu (imuPort);
 
   double prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
-  while(competition::is_autonomous()){
+  while(true){
     if(!imu.is_calibrating() && !pauseBase) {
       if(turnMode){
         errorBearing = targBearing - bearing;
