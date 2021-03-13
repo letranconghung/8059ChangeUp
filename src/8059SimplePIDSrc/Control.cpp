@@ -1,5 +1,5 @@
 #include "main.h"
-#define DEFAULT_KP 0.42
+#define DEFAULT_KP 0.43
 #define DEFAULT_KD 0.005
 #define DEFAULT_TURN_KP 1.8
 #define DEFAULT_TURN_KD 0.01

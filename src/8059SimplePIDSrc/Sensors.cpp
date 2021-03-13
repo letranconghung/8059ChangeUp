@@ -9,8 +9,8 @@ void Sensors(void * ignore){
   Imu imu (imuPort);
   while(true){
     if(!imu.is_calibrating()){
-      encdL = BL.get_position();
-      encdR = BR.get_position();
+      encdL = FL.get_position();
+      encdR = FR.get_position();
       bearing = imu.get_rotation();
       angle = halfPI - bearing * toRad;
     }
