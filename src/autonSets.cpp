@@ -44,7 +44,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-25);
+  baseMove(-23.5);
   asyncLoad();
   waitBase(1500);
   delay(d);
@@ -53,7 +53,7 @@ void skills(){
   waitBase(1200);
   delay(d);
 
-  baseMove(34);
+  baseMove(30); //34
   asyncFrontIntake();
   waitBase(1000);
   delay(d);
@@ -85,7 +85,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(26);
+  baseMove(27);
   asyncFrontIntake();
   waitBase(1500);
   delay(d);
@@ -159,7 +159,7 @@ void skills(){
   baseMove(-40);
   asyncLoad();
   // autoLoad
-  waitBase(1000);
+  waitBase(2000);
   delay(d);
 
   delay(300);
@@ -168,13 +168,13 @@ void skills(){
   waitBase(1200);
   delay(d);
 
-  baseMove(21);
+  baseMove(22.5);
   asyncFrontIntake();
-  waitBase(1500);
+  waitBase(1200);
   delay(d);
 
-  baseMove(-17); //-15
-  waitBase(1200);
+  baseMove(-16); //-15
+  waitBase(1500);
   delay(d);
 
   baseTurn(315-initAngle);
@@ -207,7 +207,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-21.5);
+  baseMove(-20.5);
   asyncLoad();
   autoLoad();
   waitBase(1500);
@@ -248,7 +248,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(27);
+  baseMove(28.5);
   asyncFrontIntake();
   waitBase(1500);
   delay(d);
@@ -315,9 +315,9 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(5);
-  waitBase(400);
-  delay(d);
+  // baseMove(5);
+  // waitBase(400);
+  // delay(d);
 
   baseTurn(360-initAngle);
   waitBase(1000);

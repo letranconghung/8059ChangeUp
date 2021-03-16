@@ -5,7 +5,7 @@
 /** thresholds */
 int iMax = 127;
 int rMax = 127;
-int iLoad = 90;
+int iLoad = 127;
 int sLoad = 0;
 int intakeColorValue = 0, shootColorValue = 0;
 int intakeColorThreshold = 2850;
@@ -79,7 +79,7 @@ void autoFrontIntakeLoad(){
 }
 void auto2for2(){
   pauseMech = true;
-  setMech(rMax, rMax, iLoad, 127);
+  setMech(rMax, rMax, 90, 127);
   timerBase(80, 80, 650);
   setMech(rMax, rMax, iMax, 127);
   while(shootColorValue > shootColorThreshold){
@@ -101,7 +101,7 @@ void auto2for2(){
 }
 void auto2for1(){
   pauseMech = true;
-  setMech(rMax, rMax, iLoad, 127);
+  setMech(rMax, rMax, 90, 127);
   timerBase(80, 80, 700);
   setMech(rMax, rMax, iMax, 127);
   while(shootColorValue > shootColorThreshold){
@@ -124,7 +124,7 @@ void auto2for1(){
 }
 void auto1for1(){
   pauseMech = true;
-  setMech(rMax, rMax, iLoad, 127);
+  setMech(rMax, rMax, 127, 127);
   timerBase(60, 60, 600);
   delay(200);
   setMech(-rMax, -rMax, iMax, 0);
@@ -255,6 +255,7 @@ void mechControl(void * ignore){
           break;
         }
         case 7:{
+          // intakeNoRollers
           setMech(0, 0, iLoad, 0);
           if(intakeColorValue < intakeColorThreshold) mechMode = 0;
           break;
