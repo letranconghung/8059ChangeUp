@@ -147,7 +147,7 @@ void shoot(int s, int t){
   pauseMech = false;
 }
 void centerpole(){
-  timerBase(100, 100, 500);
+  timerBase(110, 110, 600);
   pauseMech = true;
   setMech(127, 127, -127, 0);
   while(intakeColorValue>intakeColorThreshold) delay(5);
@@ -156,7 +156,7 @@ void centerpole(){
   while(intakeColorValue>intakeColorThreshold) delay(5);
   while(intakeColorValue<intakeColorThreshold) delay(5);
   setMech(127, 127, -127, 127);
-  delay(500);
+  delay(400);
   resetMech();
   printf("centerpole complete\n");
   setMech(-127, -127, -127, 127);
@@ -220,7 +220,7 @@ void mechControl(void * ignore){
         }
         case 3:{
           //load
-          setMech(0, 0, iLoad, sLoad);
+          setMech(-rMax, -rMax, iLoad, sLoad);
           if(shootColorValue<shootColorThreshold){
             mechMode = 0;
             printf("got out of asyncload: shootColorValue: %d\n", shootColorValue);

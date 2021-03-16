@@ -3,7 +3,7 @@
 /** programming skills run */
 void skills(){
   double initAngle = 65;
-  int d = 20;
+  int d = 0;
   int progStart = millis();
   resetCoords(0, 0);
   delay(100);
@@ -22,9 +22,8 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(16.3); //18
+  baseMove(19); //20
   waitBase(1000);
-
   delay(d);
   auto2for2();
   // --------------------------------- going for 2nd goal -----------------------
@@ -44,7 +43,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-23.5);
+  baseMove(-25);
   asyncLoad();
   waitBase(1500);
   delay(d);
@@ -53,7 +52,7 @@ void skills(){
   waitBase(1200);
   delay(d);
 
-  baseMove(30); //34
+  baseMove(34);
   asyncFrontIntake();
   waitBase(1000);
   delay(d);
@@ -78,14 +77,14 @@ void skills(){
   baseMove(-53);
   delay(600);
   asyncLoad();
-  waitBase(2000);
+  waitBase(1000);
   delay(d);
 
   baseTurn(110-initAngle);
   waitBase(1000);
   delay(d);
 
-  baseMove(27);
+  baseMove(26);
   asyncFrontIntake();
   waitBase(1500);
   delay(d);
@@ -158,23 +157,22 @@ void skills(){
 
   baseMove(-40);
   asyncLoad();
-  // autoLoad
-  waitBase(2000);
-  delay(d);
+  // autoLoad();
 
-  delay(300);
+  waitBase(1000);
+  delay(d);
 
   baseTurn(245-initAngle);
   waitBase(1200);
   delay(d);
 
-  baseMove(22.5);
+  baseMove(21);
   asyncFrontIntake();
-  waitBase(1200);
+  waitBase(1500);
   delay(d);
 
-  baseMove(-16); //-15
-  waitBase(1500);
+  baseMove(-17); //-15
+  waitBase(1200);
   delay(d);
 
   baseTurn(315-initAngle);
@@ -194,7 +192,7 @@ void skills(){
   // //
   // // // SET 1
   // // SET 1
-  baseMove(-55);
+  baseMove(-53);
   asyncShoot(0, 500);
   delay(500);
   asyncShoot(120, 300);
@@ -207,9 +205,8 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-20.5);
+  baseMove(-22);
   asyncLoad();
-  autoLoad();
   waitBase(1500);
   delay(d);
 
@@ -241,14 +238,14 @@ void skills(){
   baseMove(-50);
   delay(600);
   asyncLoad();
-  waitBase(2500);
+  waitBase(1500);
   delay(d);
 
   baseTurn(283-initAngle);
   waitBase(1000);
   delay(d);
 
-  baseMove(28.5);
+  baseMove(27);
   asyncFrontIntake();
   waitBase(1500);
   delay(d);
@@ -285,20 +282,19 @@ void skills(){
   baseMove(-63);
   delay(1000);
   asyncLoad();
-  waitBase(2000);
+  waitBase(1500);
   delay(d);
-  delay(300);
 
   baseMove(16);
   waitBase(1000);
   delay(d);
 
   baseTurn(180-initAngle);
-  waitBase(1000);
+  waitBase(700);
   delay(d);
 
   baseMove(8);
-  waitBase(1000);
+  waitBase(500);
   delay(d);
 
   auto1for1();
@@ -315,9 +311,9 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  // baseMove(5);
-  // waitBase(400);
-  // delay(d);
+  baseMove(3);
+  waitBase(500);
+  delay(d);
 
   baseTurn(360-initAngle);
   waitBase(1000);
