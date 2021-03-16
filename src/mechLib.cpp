@@ -223,7 +223,7 @@ void mechControl(void * ignore){
           setMech(0, 0, iLoad, sLoad);
           if(shootColorValue<shootColorThreshold){
             mechMode = 0;
-            printf("got out of asyncload\n");
+            printf("got out of asyncload: shootColorValue: %d\n", shootColorValue);
           }
           break;
         }
