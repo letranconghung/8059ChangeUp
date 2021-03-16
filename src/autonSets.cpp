@@ -159,7 +159,7 @@ void skills(){
   asyncLoad();
   // autoLoad();
 
-  waitBase(1000);
+  waitBase(1500);
   delay(d);
 
   baseTurn(245-initAngle);
@@ -282,7 +282,7 @@ void skills(){
   baseMove(-63);
   delay(1000);
   asyncLoad();
-  waitBase(1500);
+  waitBase(1000);
   delay(d);
 
   baseMove(16);
