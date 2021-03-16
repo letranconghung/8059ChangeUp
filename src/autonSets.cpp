@@ -3,7 +3,7 @@
 /** programming skills run */
 void skills(){
   double initAngle = 65;
-  int d = 100;
+  int d = 20;
   int progStart = millis();
   resetCoords(0, 0);
   delay(100);
@@ -22,8 +22,9 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(20);
+  baseMove(16.3); //18
   waitBase(1000);
+
   delay(d);
   auto2for2();
   // --------------------------------- going for 2nd goal -----------------------
@@ -54,7 +55,7 @@ void skills(){
 
   baseMove(34);
   asyncFrontIntake();
-  waitBase(1400);
+  waitBase(1000);
   delay(d);
   // END
 
@@ -157,10 +158,11 @@ void skills(){
 
   baseMove(-40);
   asyncLoad();
-  // autoLoad();
-
+  // autoLoad
   waitBase(1000);
   delay(d);
+
+  delay(300);
 
   baseTurn(245-initAngle);
   waitBase(1200);
@@ -171,7 +173,7 @@ void skills(){
   waitBase(1500);
   delay(d);
 
-  baseMove(-15);
+  baseMove(-17); //-15
   waitBase(1200);
   delay(d);
 
@@ -207,6 +209,7 @@ void skills(){
 
   baseMove(-21.5);
   asyncLoad();
+  autoLoad();
   waitBase(1500);
   delay(d);
 
@@ -216,7 +219,7 @@ void skills(){
 
   baseMove(32);
   asyncFrontIntake();
-  waitBase(1400);
+  waitBase(1000);
   delay(d);
   // // // END
   auto2for1();
@@ -312,8 +315,8 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(3);
-  waitBase(500);
+  baseMove(5);
+  waitBase(400);
   delay(d);
 
   baseTurn(360-initAngle);

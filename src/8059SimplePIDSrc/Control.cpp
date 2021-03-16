@@ -131,12 +131,12 @@ void Control(void * ignore){
         powerL = abscap(powerL, MAX_POW);
         powerR = abscap(powerR, MAX_POW);
 
-        if(++count % 10 == 0) printf("power: %.1f %.1f", powerL, powerR);
+        // if(++count % 10 == 0) printf("power: %.1f %.1f", powerL, powerR);
 
         if(mod >= 1) powerR /= mod;
         else powerL /= mod;
 
-        if(count % 10 == 0) printf("\t modded power: %.1f %.1f\n", powerL, powerR);
+        // if(count % 10 == 0) printf("\t modded power: %.1f %.1f\n", powerL, powerR);
         prevErrorEncdL = errorEncdL;
         prevErrorEncdR = errorEncdR;
       }

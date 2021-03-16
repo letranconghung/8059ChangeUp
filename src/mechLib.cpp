@@ -126,6 +126,7 @@ void auto1for1(){
   pauseMech = true;
   setMech(rMax, rMax, iLoad, 127);
   timerBase(60, 60, 600);
+  delay(200);
   setMech(-rMax, -rMax, iMax, 0);
   while(shootColorValue > shootColorThreshold){
     printf("> threshold shootColorValue: %d\n", shootColorValue);
@@ -194,10 +195,11 @@ void mechControl(void * ignore){
   Motor indexer (indexerPort);
   ADIAnalogIn intakeColor(intakeColorPort);
   ADIAnalogIn shootColor(shootColorPort);
+  int count = 0;
   while(true){
     intakeColorValue = intakeColor.get_value();
     shootColorValue = shootColor.get_value();
-    // printf("intakeColorValue: %d, shootColorValue: %d\n", intakeColorValue, shootColorValue);
+    if(++count % 10 == 0) printf("intakeColorValue: %d, shootColorValue: %d\n", intakeColorValue, shootColorValue);
     if(!pauseMech){
       switch(mechMode){
         case 0:{
