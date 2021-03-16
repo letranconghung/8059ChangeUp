@@ -1,9 +1,9 @@
 #include "main.h"
-#define DEFAULT_KP 0.43
-#define DEFAULT_KD 0.005
+#define DEFAULT_KP 0.38
+#define DEFAULT_KD 0.001
 #define DEFAULT_TURN_KP 1.8
 #define DEFAULT_TURN_KD 0.01
-#define RAMPING_POW 2
+#define RAMPING_POW 3
 #define DISTANCE_LEEWAY 12
 #define BEARING_LEEWAY 1.5
 #define MAX_POW 110
@@ -83,7 +83,7 @@ void Control(void * ignore){
   Motor FR (FRPort);
   Motor BR (BRPort);
   Imu imu (imuPort);
-
+  int count = 0;
   double prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
   while(true){
     if(!imu.is_calibrating() && !pauseBase) {
@@ -95,6 +95,16 @@ void Control(void * ignore){
         targPowerR = -targPowerL;
 
         prevErrorBearing = errorBearing;
+
+        // package
+        double deltaPowerL = targPowerL - powerL;
+        powerL += abscap(deltaPowerL, RAMPING_POW);
+        double deltaPowerR = targPowerR - powerR;
+        powerR += abscap(deltaPowerR, RAMPING_POW);
+
+        powerL = abscap(powerL, MAX_POW);
+        powerR = abscap(powerR, MAX_POW);
+        // package
       }else{
         errorEncdL = targEncdL - encdL;
         errorEncdR = targEncdR - encdR;
@@ -105,17 +115,31 @@ void Control(void * ignore){
         targPowerL = errorEncdL * kP + deltaErrorEncdL * kD;
         targPowerR = errorEncdR * kP + deltaErrorEncdR * kD;
 
+        double deltaPowerL = targPowerL - powerL;
+        powerL += abscap(deltaPowerL, RAMPING_POW);
+        double deltaPowerR = targPowerR - powerR;
+        powerR += abscap(deltaPowerR, RAMPING_POW);
+
+
+        // moving straight factor
+        double mod = 1;
+        // double modConst;
+        // if(errorEncdL < 0) modConst = 1.01;
+        // else modConst = 1/1.001;
+        // if(errorEncdR != 0) mod = modConst*errorEncdL/errorEncdR;
+
+        powerL = abscap(powerL, MAX_POW);
+        powerR = abscap(powerR, MAX_POW);
+
+        if(++count % 10 == 0) printf("power: %.1f %.1f", powerL, powerR);
+
+        if(mod >= 1) powerR /= mod;
+        else powerL /= mod;
+
+        if(count % 10 == 0) printf("\t modded power: %.1f %.1f\n", powerL, powerR);
         prevErrorEncdL = errorEncdL;
         prevErrorEncdR = errorEncdR;
       }
-
-      double deltaPowerL = targPowerL - powerL;
-      powerL += abscap(deltaPowerL, RAMPING_POW);
-      double deltaPowerR = targPowerR - powerR;
-      powerR += abscap(deltaPowerR, RAMPING_POW);
-
-      powerL = abscap(powerL, MAX_POW);
-      powerR = abscap(powerR, MAX_POW);
     }
     FL.move(powerL);
     BL.move(powerL);

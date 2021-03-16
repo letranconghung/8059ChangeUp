@@ -29,20 +29,21 @@ void skills(){
   // --------------------------------- going for 2nd goal -----------------------
 
   // // SET 1
-  baseMove(-55);
+  baseMove(-50);
   asyncShoot(0, 500);
   delay(500);
   asyncShoot(120, 300);
   delay(200);
   asyncShoot(120, 1000);
-  waitBase(1500);
+  waitBase(1200);
+  //reduced from 1500
   delay(d);
 
   baseTurn(180-initAngle);
   waitBase(1000);
   delay(d);
 
-  baseMove(-23);
+  baseMove(-25);
   asyncLoad();
   waitBase(1500);
   delay(d);
@@ -62,7 +63,8 @@ void skills(){
   // // // ---------------------------- going for 3rd pole ---------------------------------
   //
   // // SET 2
-  baseMove(-13);
+
+  baseMove(-11);
   asyncShoot(0, 500);
   waitBase(1000);
   delay(d);
@@ -72,7 +74,7 @@ void skills(){
   delay(d);
   asyncShoot(100, 500);
 
-  baseMove(-50);
+  baseMove(-53);
   delay(600);
   asyncLoad();
   waitBase(2000);
@@ -84,10 +86,10 @@ void skills(){
 
   baseMove(26);
   asyncFrontIntake();
-  waitBase(1200);
+  waitBase(1500);
   delay(d);
 
-  baseMove(-17);
+  baseMove(-16);
   waitBase(1200);
   delay(d);
 
@@ -107,6 +109,8 @@ void skills(){
   // // // SET 1
   // // // SET 1
   // // SET 1
+
+  initAngle = 45-bearing;
   baseMove(-53);
   asyncShoot(0, 500);
   delay(500);
@@ -120,7 +124,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-23);
+  baseMove(-22);
   asyncLoad();
   waitBase(2000);
   delay(d);
@@ -141,7 +145,7 @@ void skills(){
   // // // 90, -110, -45, auto2for2
   //
   // // SET 3 cus not diagonal
-  baseMove(-13);
+  baseMove(-11);
   asyncShoot(0, 500);
   waitBase(1000);
   delay(d);
@@ -153,26 +157,26 @@ void skills(){
 
   baseMove(-40);
   asyncLoad();
-  autoLoad();
+  // autoLoad();
 
-  waitBase(2500);
+  waitBase(1000);
   delay(d);
 
-  baseTurn(240-initAngle);
-  waitBase(1300);
-  delay(d);
-
-  baseMove(20);
-  asyncFrontIntake();
+  baseTurn(245-initAngle);
   waitBase(1200);
   delay(d);
 
-  baseMove(-13);
+  baseMove(21);
+  asyncFrontIntake();
+  waitBase(1500);
+  delay(d);
+
+  baseMove(-15);
   waitBase(1200);
   delay(d);
 
   baseTurn(315-initAngle);
-  waitBase(800);
+  waitBase(1500);
   delay(d);
 
   baseMove(19);
@@ -237,13 +241,13 @@ void skills(){
   waitBase(2500);
   delay(d);
 
-  baseTurn(290-initAngle);
+  baseTurn(283-initAngle);
   waitBase(1000);
   delay(d);
 
-  baseMove(24.5);
+  baseMove(27);
   asyncFrontIntake();
-  waitBase(1200);
+  waitBase(1500);
   delay(d);
 
   baseMove(-18);
@@ -264,23 +268,25 @@ void skills(){
 
   // //
   // // // ------------------------------------------- going for 8th pole -------------------
+  initAngle = 225 - bearing;
   baseMove(-18);
   waitBase(1000);
   delay(d);
 
-  baseTurn(270-initAngle);
+//previous 270
+  baseTurn(271.5-initAngle);
   waitBase(1000);
   delay(d);
 
   asyncShoot(127, 1000);
-  baseMove(-67);
+  baseMove(-63);
   delay(1000);
   asyncLoad();
-  waitBase(3000);
+  waitBase(2000);
   delay(d);
   delay(300);
 
-  baseMove(20);
+  baseMove(16);
   waitBase(1000);
   delay(d);
 
@@ -295,23 +301,29 @@ void skills(){
   auto1for1();
 
   // // // ------------------------ going for 9th center pole ------------------------
-  baseMove(-20);
-  asyncShoot(127, 600);
-  waitBase(2000);
-  delay(d+100);
+  baseMove(-15);
+  delay(200);
+  asyncShoot(100, 400);
+  delay(400);
+  waitBase(1000);
 
 
-  baseTurn(357-initAngle);
-  waitBase(5000);
+  baseTurn(270-initAngle);
+  waitBase(1000);
   delay(d);
 
-  baseTurn(-3-initAngle);
-  waitBase(3000);
-  delay(d+200);
+  baseMove(3);
+  waitBase(500);
+  delay(d);
+
+  baseTurn(360-initAngle);
+  waitBase(1000);
+  delay(d);
 
   baseMove(25);
-  autoFrontIntakeLoad();
-  waitBase(2000);
+  asyncFrontIntakeLoad();
+  waitBase(1500);
+  delay(d);
   centerpole();
   printf("AUTON TIME TAKEN: %.1f s\n", (float)(millis() - progStart)/1000);
 }
@@ -341,7 +353,9 @@ void blueRight(){
 }
 /** Autonomous routine for red left spawn. */
 void redLeft(){
-  autoLoad();
+  baseMove(48);
+  waitBase(2000);
+  delay(500);
 }
 /** Autonomous routine for red right spawn. */
 void redRight(){

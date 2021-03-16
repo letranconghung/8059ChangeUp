@@ -80,7 +80,7 @@ void autoFrontIntakeLoad(){
 void auto2for2(){
   pauseMech = true;
   setMech(rMax, rMax, iLoad, 127);
-  timerBase(60, 60, 650);
+  timerBase(80, 80, 650);
   setMech(rMax, rMax, iMax, 127);
   while(shootColorValue > shootColorThreshold){
     printf("> threshold shootColorValue: %d\n", shootColorValue);
@@ -102,7 +102,7 @@ void auto2for2(){
 void auto2for1(){
   pauseMech = true;
   setMech(rMax, rMax, iLoad, 127);
-  timerBase(60, 60, 700);
+  timerBase(80, 80, 700);
   setMech(rMax, rMax, iMax, 127);
   while(shootColorValue > shootColorThreshold){
     printf("> threshold shootColorValue: %d\n", shootColorValue);
@@ -197,7 +197,7 @@ void mechControl(void * ignore){
   while(true){
     intakeColorValue = intakeColor.get_value();
     shootColorValue = shootColor.get_value();
-    printf("intakeColorValue: %d, shootColorValue: %d\n", intakeColorValue, shootColorValue);
+    // printf("intakeColorValue: %d, shootColorValue: %d\n", intakeColorValue, shootColorValue);
     if(!pauseMech){
       switch(mechMode){
         case 0:{
