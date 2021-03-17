@@ -2,6 +2,7 @@
 #include "main.h"
 /** programming skills run */
 void skills(){
+  Controller master(E_CONTROLLER_MASTER);
   double initAngle = 65;
   int d = 0;
   int progStart = millis();
@@ -14,22 +15,22 @@ void skills(){
   waitBase(1700);
   delay(d);
 
-  baseMove(-15.2);
-  waitBase(1000);
+  baseMove(-14);
+  waitBase(800);
   delay(d);
 
   baseTurn(135-initAngle);
   waitBase(1000);
   delay(d);
 
-  baseMove(19); //20
-  waitBase(1000);
+  baseMove(17); //20
+  waitBase(800);
   delay(d);
   auto2for2();
   // --------------------------------- going for 2nd goal -----------------------
 
   // // SET 1
-  baseMove(-50);
+  baseMove(-52);
   asyncShoot(0, 500);
   delay(500);
   asyncShoot(120, 300);
@@ -43,7 +44,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-25);
+  baseMove(-26);
   asyncLoad();
   waitBase(1500);
   delay(d);
@@ -64,7 +65,7 @@ void skills(){
   //
   // // SET 2
 
-  baseMove(-11);
+  baseMove(-9.8);
   asyncShoot(0, 500);
   waitBase(1000);
   delay(d);
@@ -84,12 +85,12 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(26);
+  baseMove(27.2);
   asyncFrontIntake();
   waitBase(1500);
   delay(d);
 
-  baseMove(-16);
+  baseMove(-17.5);
   waitBase(1200);
   delay(d);
 
@@ -111,7 +112,7 @@ void skills(){
   // // SET 1
 
   initAngle = 45-bearing;
-  baseMove(-53);
+  baseMove(-49.5);
   asyncShoot(0, 500);
   delay(500);
   asyncShoot(120, 300);
@@ -120,11 +121,11 @@ void skills(){
   waitBase(1500);
   delay(d);
 
-  baseTurn(90-initAngle);
+  baseTurn(91.5-initAngle);
   waitBase(1000);
   delay(d);
 
-  baseMove(-22);
+  baseMove(-25.8);
   asyncLoad();
   waitBase(2000);
   delay(d);
@@ -151,27 +152,27 @@ void skills(){
   delay(d);
 
   baseTurn(90-initAngle);
-  asyncShoot(100, 500);
+  asyncShoot(127, 400);
   waitBase(800);
-  delay(d);
+  delay(d+200);
 
-  baseMove(-40);
+  baseMove(-42);
   asyncLoad();
   // autoLoad();
 
-  waitBase(1500);
+  waitBase(2000);
   delay(d);
 
   baseTurn(245-initAngle);
   waitBase(1200);
   delay(d);
 
-  baseMove(21);
+  baseMove(23);
   asyncFrontIntake();
-  waitBase(1500);
+  waitBase(1000);
   delay(d);
 
-  baseMove(-17); //-15
+  baseMove(-15);
   waitBase(1200);
   delay(d);
 
@@ -192,7 +193,7 @@ void skills(){
   // //
   // // // SET 1
   // // SET 1
-  baseMove(-53);
+  baseMove(-50);
   asyncShoot(0, 500);
   delay(500);
   asyncShoot(120, 300);
@@ -201,11 +202,11 @@ void skills(){
   waitBase(1500);
   delay(d);
 
-  baseTurn(360-initAngle);
+  baseTurn(362-initAngle);
   waitBase(1000);
   delay(d);
 
-  baseMove(-22);
+  baseMove(-25.8);
   asyncLoad();
   waitBase(1500);
   delay(d);
@@ -225,17 +226,17 @@ void skills(){
   // // // -------- 345, 290, 225, auto2for2
   // //
   // // SET 2
-  baseMove(-13);
+  baseMove(-10);
   asyncShoot(0, 500);
   waitBase(1000);
   delay(d);
 
-  baseTurn(345-initAngle);
-  waitBase(800);
+  baseTurn(346-initAngle);
+  waitBase(1000);
   delay(d);
   asyncShoot(100, 500);
 
-  baseMove(-50);
+  baseMove(-53);
   delay(600);
   asyncLoad();
   waitBase(1500);
@@ -245,7 +246,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(27);
+  baseMove(27.2);
   asyncFrontIntake();
   waitBase(1500);
   delay(d);
@@ -274,7 +275,7 @@ void skills(){
   delay(d);
 
 //previous 270
-  baseTurn(271.5-initAngle);
+  baseTurn(272.2-initAngle);
   waitBase(1000);
   delay(d);
 
@@ -324,6 +325,7 @@ void skills(){
   waitBase(1500);
   delay(d);
   centerpole();
+  master.print(1, 0, "time: %.1f s", (float)(millis() - progStart)/1000);
   printf("AUTON TIME TAKEN: %.1f s\n", (float)(millis() - progStart)/1000);
 }
 /** Autonomous routine for blue left spawn. */
