@@ -154,7 +154,7 @@ void skills(){
   baseTurn(90-initAngle);
   asyncShoot(127, 400);
   waitBase(800);
-  delay(d+200);
+  delay(d+400);
 
   baseMove(-42);
   asyncLoad();
@@ -202,11 +202,11 @@ void skills(){
   waitBase(1500);
   delay(d);
 
-  baseTurn(362-initAngle);
+  baseTurn(363.3-initAngle);
   waitBase(1000);
   delay(d);
 
-  baseMove(-25.8);
+  baseMove(-26);
   asyncLoad();
   waitBase(1500);
   delay(d);
@@ -226,7 +226,7 @@ void skills(){
   // // // -------- 345, 290, 225, auto2for2
   // //
   // // SET 2
-  baseMove(-10);
+  baseMove(-9.5);
   asyncShoot(0, 500);
   waitBase(1000);
   delay(d);
@@ -275,7 +275,7 @@ void skills(){
   delay(d);
 
 //previous 270
-  baseTurn(272.2-initAngle);
+  baseTurn(273.3-initAngle);
   waitBase(1000);
   delay(d);
 
@@ -303,8 +303,7 @@ void skills(){
   // // // ------------------------ going for 9th center pole ------------------------
   baseMove(-15);
   delay(200);
-  asyncShoot(100, 400);
-  delay(400);
+  asyncShoot(127, 600);
   waitBase(1000);
 
 
@@ -312,11 +311,11 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(3);
-  waitBase(500);
+  baseMove(2);
+  waitBase(300);
   delay(d);
 
-  baseTurn(360-initAngle);
+  baseTurn(362-initAngle);
   waitBase(1000);
   delay(d);
 
@@ -325,8 +324,12 @@ void skills(){
   waitBase(1500);
   delay(d);
   centerpole();
-  master.print(1, 0, "time: %.1f s", (float)(millis() - progStart)/1000);
-  printf("AUTON TIME TAKEN: %.1f s\n", (float)(millis() - progStart)/1000);
+  int timeTaken = millis() - progStart;
+  printf("time: %.1f s\n", (float)timeTaken/1000.0);
+  while(true){
+    master.print(1, 0, "time: %.1f s", (float)timeTaken/1000.0);
+    delay(5);
+  }
 }
 /** Autonomous routine for blue left spawn. */
 void blueLeft(){
