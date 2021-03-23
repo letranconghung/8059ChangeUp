@@ -112,7 +112,7 @@ void skills(){
   // // SET 1
 
   initAngle = 45-bearing;
-  baseMove(-49.5);
+  baseMove(-49);
   asyncShoot(0, 500);
   delay(500);
   asyncShoot(120, 300);
@@ -125,7 +125,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-25.8);
+  baseMove(-27);
   asyncLoad();
   waitBase(2000);
   delay(d);
@@ -151,7 +151,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseTurn(90-initAngle);
+  baseTurn(90.5-initAngle);
   asyncShoot(127, 400);
   waitBase(800);
   delay(d+400);
@@ -206,7 +206,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(-26);
+  baseMove(-26.5);
   asyncLoad();
   waitBase(1500);
   delay(d);
@@ -259,7 +259,7 @@ void skills(){
   waitBase(1000);
   delay(d);
 
-  baseMove(19);
+  baseMove(20);
   waitBase(1000);
   delay(d);
   // // // END
@@ -275,7 +275,7 @@ void skills(){
   delay(d);
 
 //previous 270
-  baseTurn(273.3-initAngle);
+  baseTurn(274.7-initAngle);
   waitBase(1000);
   delay(d);
 
@@ -315,7 +315,7 @@ void skills(){
   waitBase(300);
   delay(d);
 
-  baseTurn(362-initAngle);
+  baseTurn(361.7-initAngle);
   waitBase(1000);
   delay(d);
 
@@ -353,7 +353,6 @@ void blueRight(){
   resetCoords(0, 0);
   delay(100);
 
-  auto2for2();
 }
 /** Autonomous routine for red left spawn. */
 void redLeft(){

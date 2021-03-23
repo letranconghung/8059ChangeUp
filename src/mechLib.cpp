@@ -101,7 +101,7 @@ void auto2for2(){
 }
 void auto2for1(){
   pauseMech = true;
-  setMech(rMax, rMax, 90, 127);
+  setMech(rMax, rMax, 127, 127);
   timerBase(80, 80, 700);
   setMech(rMax, rMax, iMax, 127);
   while(shootColorValue > shootColorThreshold){
@@ -132,6 +132,25 @@ void auto1for1(){
     printf("> threshold shootColorValue: %d\n", shootColorValue);
     delay(5);
   }
+  resetMech();
+  powerBase(0, 0);
+  unPauseBase();
+  pauseMech = false;
+}
+void auto1for0(){
+  pauseMech = true;
+  setMech(0, 0, 127, 127);
+  timerBase(70, 70, 600);
+  resetMech();
+  powerBase(0, 0);
+  unPauseBase();
+  pauseMech = false;
+}
+void auto2for0(){
+  pauseMech = true;
+  setMech(0, 0, 127, 127);
+  timerBase(80, 80, 700);
+  delay(600);
   resetMech();
   powerBase(0, 0);
   unPauseBase();
