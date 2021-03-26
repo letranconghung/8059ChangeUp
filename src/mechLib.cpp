@@ -11,13 +11,14 @@ int intakeColorValue = 0, shootColorValue = 0;
 int intakeColorThreshold = 2850;
 int shootColorThreshold = 2830; // working 2830
 bool pauseMech = false;
-int mechMode = 0;
+int mechMode = -1;
 int shooterSpeed = 0, shooterTime = 0;
 int start;
 bool firstStageDone = false;
 void setPauseMech(bool pm){
   pauseMech = pm;
 }
+
 void setMech(int l, int r, int i, int s){
   Motor lRoller (lRollerPort);
   Motor rRoller (rRollerPort);
@@ -70,7 +71,7 @@ void autoLoad(){
   pauseMech = false;
 }
 /** not recommended as it will accidentally intake other balls while loading (?) */
-void autoFrontIntakeLoad(){
+/*void autoFrontIntakeLoad(){
   pauseMech = true;
   setMech(rMax, rMax, iMax, 0);
   waitShootColor();
@@ -207,6 +208,7 @@ void asyncShoot(int s, int t){
 void asyncIntakeNoRollers(){
   mechMode = 7;
 }
+
 void mechControl(void * ignore){
   Motor lRoller (lRollerPort);
   Motor rRoller (rRollerPort);
@@ -285,3 +287,4 @@ void mechControl(void * ignore){
     delay(5);
   }
 }
+*/

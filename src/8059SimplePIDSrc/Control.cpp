@@ -6,7 +6,7 @@
 #define RAMPING_POW 3
 #define DISTANCE_LEEWAY 12
 #define BEARING_LEEWAY 1.5
-#define MAX_POW 120
+#define MAX_POW 115
 
 double targEncdL = 0, targEncdR = 0, targBearing = 0;
 double errorEncdL = 0, errorEncdR = 0, errorBearing = 0;

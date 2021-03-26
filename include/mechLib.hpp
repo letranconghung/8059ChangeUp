@@ -15,7 +15,7 @@ void autoFrontIntake();
 void autoBackIntake();
 void autoLoad();
 void autoFrontIntakeLoad();
-void auto2for2();
+/* void auto2for2();
 void auto2for1();
 void auto1for1();
 void auto1for0();
@@ -28,5 +28,5 @@ void asyncLoad();
 void asyncFrontIntakeLoad();
 void asyncDouble();
 void asyncShoot(int s, int t);
-void mechControl(void * ignore);
+void mechControl(void * ignore); */
 #endif

@@ -31,7 +31,7 @@ void initialize() {
 	// encoderL.reset();
 	// encoderR.reset();
 	/** declaration and initialization of asynchronous Tasks */
-	Task mechControlTask(mechControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	//Task mechControlTask(mechControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task controlTask(Control, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task debugTask(Debug, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task odometryTask(Odometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
@@ -68,7 +68,7 @@ void autonomous() {
 	Imu imu (imuPort);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 0;
+	int autonNum = 4;
 	switch (autonNum){
 		case 0: skills(); break;
 		case 1: blueLeft(); break;
@@ -141,11 +141,11 @@ void opcontrol() {
 	      // FR.move(y-x-BRAKE_POW);
 	      // BR.move(y-x+BRAKE_POW);
 	    }
-			if(master.get_digital_new_press(DIGITAL_B)){
+			/*if(master.get_digital_new_press(DIGITAL_B)){
 				centerpole();
 				pauseBase = true;
 				pauseMech = true;
-			}
+			}*/
 			// mech
 			if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
 			lRoller.move((master.get_digital(DIGITAL_L2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2))*127);

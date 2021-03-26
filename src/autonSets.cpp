@@ -1,7 +1,7 @@
 /** Autonomous routines */
 #include "main.h"
 /** programming skills run */
-void skills(){
+void skills(){ /*
   Controller master(E_CONTROLLER_MASTER);
   double initAngle = 65;
   int d = 0;
@@ -329,46 +329,57 @@ void skills(){
   while(true){
     master.print(1, 0, "time: %.1f s", (float)timeTaken/1000.0);
     delay(5);
-  }
+  }*/
 }
 /** Autonomous routine for blue left spawn. */
 void blueLeft(){
-  resetCoords(0, 0);
-  delay(100);
-
-  // baseMove(-15);
-  // asyncLoad();
-  // waitBase(1000);
-  // baseTurn(90);
-  // waitBase(3000);
-  // delay(200);
-
-  baseMove(48);
-  waitBase(3000);
-  delay(200);
 
 }
 /** Autonomous routine for blue right spawn. */
 void blueRight(){
-  resetCoords(0, 0);
-  delay(100);
 
 }
 /** Autonomous routine for red left spawn. */
 void redLeft(){
-  baseMove(48);
-  waitBase(2000);
-  delay(500);
+
 }
 /** Autonomous routine for red right spawn. */
 void redRight(){
-  // resetCoords(0, 0);
-  // delay(100);
-  //
-  // baseMove(10);
-  // autoFrontIntake();
-  // waitBase(2000);
-  // baseTurn(90);
-  // waitBase(1000);
-  // delay(500);
+
+  //Goal1 - red right goal
+  setMech(0,0,80,0);
+  baseMove(-3.5);
+  waitBase(600);
+  delay(50);
+  setMech(0,0,-127,0,400); //eject ball
+
+  //Goal 2 - middle right goal
+  baseMove(5.2);
+  waitBase(800);
+  baseTurn(77);//face goal
+  waitBase(800);
+  baseMove(47);//45
+  waitBase(1200);
+  setMech(-127,-127,-127,0,400); //eject ball
+
+  //Goal3 - red middle goal
+  baseMove(-14);
+  waitBase(1000);
+  baseTurn(25); //face ball
+  waitBase(1000);
+  setMech(127,127,127,0);
+  baseMove(25); //intake ball
+  waitBase(1000);
+  delay(80);
+  setMech(0,0,0,0);
+  baseMove(-5);
+  waitBase(300);
+  baseTurn(-70);
+  waitBase(1200);
+
+
+
+
+
+
 }
