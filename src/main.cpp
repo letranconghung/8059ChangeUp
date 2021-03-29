@@ -68,13 +68,13 @@ void autonomous() {
 	Imu imu (imuPort);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 4;
+	int autonNum = 1;
 	switch (autonNum){
 		case 0: skills(); break;
-		case 1: blueLeft(); break;
-		case 2: blueRight(); break;
-		case 3: redLeft(); break;
-		case 4: redRight(); break;
+		case 1: blueRight1(); break;
+		case 2: blueRight2(); break;
+		case 3: redRight2(); break;
+		case 4: redRight1(); break;
 	}
 }
 /**

@@ -16,6 +16,9 @@ double kP = DEFAULT_KP, kD = DEFAULT_KD;
 
 bool turnMode = false, pauseBase = false;
 
+void baseSpeed(double dis, double kp){
+
+}
 void baseMove(double dis, double kp, double kd){
   printf("baseMove: %.1f\t", dis);
   turnMode = false;
