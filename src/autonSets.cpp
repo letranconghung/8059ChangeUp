@@ -335,7 +335,7 @@ void skills(){ /*
 void blueRight1(){
   //Goal1 - red right goal
   setMech(0,0,90,0);
-  baseMove(-4);
+  baseMove(-3.5);
   waitBase(600);
   delay(5);
   setMech(0,0,-127,0,400); //eject ball
@@ -343,7 +343,7 @@ void blueRight1(){
   //Goal 2 - middle right goal
   baseMove(5.2);
   waitBase(700);
-  baseTurn(77);//face goal
+  baseTurn(75.3);//face goal -77
   waitBase(850);
   baseMove(47);//45
   waitBase(1200);
@@ -353,36 +353,49 @@ void blueRight1(){
   baseMove(-14);
   waitBase(700);
   baseTurn(25); //face ball
-  waitBase(800); //1000
+  waitBase(800);
   setMech(127,127,127,0);
   baseMove(25); //intake ball
-  waitBase(900); //1000
+  waitBase(900);
   delay(10);
   baseMove(-5);
   waitBase(300);
-  baseTurn(-76); //face goal
+  baseTurn(-77); //face goal
   waitBase(1100);
   setMech(0,0,0,0);
   timerBase(127,127,1200);
   delay(10);
-  setMech(0,0,127,127,400); //shoot
+  setMech(-127,-127,127,115,400); //shoot
   delay(10);
 
   //Goal4 - red left goal
-  baseMove(-17); //18
-  waitBase(600); //1000
-  baseTurn(-40.5); //face goal -40
-  waitBase(600);
-  setMech(115,115,127,0);
-  timerBase(127,127,1480);
-  delay(5);
-  timerBase(20,127,400); //align -500
-  setMech(0,0,127,127,650);
-  delay(10);
-  setMech(-127,-127,0,0);
-  baseMove(-10); //reverse
-  waitBase(500);
   setMech(0,0,0,0);
+  baseMove(-13);
+  waitBase(500);
+  baseTurn(-39.8); //face goal -40.5
+  waitBase(600);
+  timerBase(127,127,1280);
+  timerBase(20,127,450); //ram ball in
+  baseMove(-16.8); //reverse -20
+  waitBase(600);
+  setMech(0,0,0,0);
+
+  //auto9 letsgooooo
+  baseTurn(90);
+  waitBase(1200);
+  timerBase(127,127,500);
+  timerBase(127,50,500);
+  timerBase(127,127,300);
+  delay(5);
+  timerBase(-127,-127,200);
+  /*baseMove(34);
+  waitBase(900);
+  baseTurn(150); //face goal
+  waitBase(900);
+  baseMove(18);
+  waitBase(800);*/
+
+
 }
 /** Autonomous routine for blue right spawn. */
 void blueRight2(){
@@ -403,7 +416,7 @@ void redRight2(){
   waitBase(700);
   baseTurn(77);//face goal
   waitBase(800);
-  baseMove(47);//45
+  baseMove(47);
   waitBase(1200);
   setMech(-127,-127,-127,0,400); //eject ball
 
