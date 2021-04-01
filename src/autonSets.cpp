@@ -333,14 +333,14 @@ void skills(){ /*
 }
 /** Autonomous routine for blue left spawn. */
 void blueRight1(){
-  //Goal1 - red right goal
+  //Goal1 - Goal C
   setMech(0,0,90,0);
   baseMove(-3.5);
   waitBase(600);
   delay(5);
   setMech(0,0,-127,0,400); //eject ball
 
-  //Goal 2 - middle right goal
+  //Goal 2 - Goal B
   baseMove(5.2);
   waitBase(700);
   baseTurn(75.3);//face goal -77
@@ -349,7 +349,7 @@ void blueRight1(){
   waitBase(1200);
   setMech(-127,-127,-127,0,400); //eject ball
 
-  //Goal3 - red middle goal
+  //Goal3 - Goal F
   baseMove(-14);
   waitBase(700);
   baseTurn(25); //face ball
@@ -368,7 +368,7 @@ void blueRight1(){
   setMech(-127,-127,127,115,400); //shoot
   delay(10);
 
-  //Goal4 - red left goal
+  //Goal4 - Goal I
   setMech(0,0,0,0);
   baseMove(-13);
   waitBase(500);
