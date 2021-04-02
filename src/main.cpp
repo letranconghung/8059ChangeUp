@@ -68,13 +68,13 @@ void autonomous() {
 	Imu imu (imuPort);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 1;
+	int autonNum = 3;
 	switch (autonNum){
 		case 0: skills(); break;
-		case 1: blueRight1(); break;
-		case 2: blueRight2(); break;
-		case 3: redRight2(); break;
-		case 4: redRight1(); break;
+		case 1: blueRight7(); break;
+		case 2: blueRight9(); break;
+		case 3: redRight9(); break;
+		case 4: redRight7(); break;
 	}
 }
 /**
@@ -148,17 +148,17 @@ void opcontrol() {
 			}*/
 			// mech
 			if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
-			lRoller.move((master.get_digital(DIGITAL_L2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2))*127);
-			rRoller.move((master.get_digital(DIGITAL_L2) + master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2))*127);
-			if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R2)){
-				indexerMove = -1;
-				shooterMove = -1;
-			}else if(master.get_digital(DIGITAL_R1)){
+			lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127);
+			rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127);
+			if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R1)){
 				indexerMove = 1;
 				shooterMove = 1;
+			}else if(master.get_digital(DIGITAL_R2)){
+				indexerMove = -1;
+				shooterMove = -1;
 			}
 			indexer.move(127*indexerMove);
 			shooter.move(127*shooterMove);
 			pros::delay(5);
-		}
+		 	}
 }
