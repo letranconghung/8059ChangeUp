@@ -439,11 +439,11 @@ void blueRight9(){
   //auto9 letsgooooo
   baseTurn(95); //90
   waitBase(1200);
-  timerBase(127,127,450); //500
+  timerBase(127,127,500); //450
   delay(5);
-  timerBase(127,50,460); //500
+  timerBase(127,50,460); //face ball -500
   delay(5);
-  timerBase(127,127,300); //300
+  timerBase(127,127,300); //ram ball innnnnnn
   delay(5);
   timerBase(-127,-127,200);
   /*baseMove(34);
