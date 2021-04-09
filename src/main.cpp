@@ -110,46 +110,37 @@ void opcontrol() {
 		bool autoIndex = true;
 		pauseBase = true;
 		pauseMech = true;
-		// setMechMode(MECH_MODE::E_MANUAL);
+		bool slowMode = false;
 		while (true) {
 			int indexerMove = 0, shooterMove = 0;
-			/** toggle tank drive */
-			// printf("intakecolor: %d, shootColor: %d\n", intakeColor.get_value(), shootColor.get_value());
 			if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
-			/** handle tankDrive */
 			if(autoIndex){
 				if(intakeColor.get_value() < intakeColorThreshold && shootColor.get_value() < shootColorThreshold) indexerMove = 0;
 				else indexerMove = 1;
 			}
-			if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
+			if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
+			double baseMultiplier = (slowMode? 0.5: 1);
 			if(tankDrive){
 	      int l = master.get_analog(ANALOG_LEFT_Y);
 	      int r = master.get_analog(ANALOG_RIGHT_Y);
 				powerL = l;
 				powerR = r;
-	      // FL.move(l-BRAKE_POW);
-	      // BL.move(l+BRAKE_POW);
-	      // FR.move(r-BRAKE_POW);
-	      // BR.move(r+BRAKE_POW);
 	    } else{
 	      int y = master.get_analog(ANALOG_LEFT_Y);
 	      int x = master.get_analog(ANALOG_RIGHT_X);
 				powerL = y+x;
 				powerR = y-x;
-	      // FL.move(y+x-BRAKE_POW);
-	      // BL.move(y+x+BRAKE_POW);
-	      // FR.move(y-x-BRAKE_POW);
-	      // BR.move(y-x+BRAKE_POW);
 	    }
-			/*if(master.get_digital_new_press(DIGITAL_B)){
-				centerpole();
-				pauseBase = true;
-				pauseMech = true;
-			}*/
+			powerL *= baseMultiplier;
+			powerR *= baseMultiplier;
+
+
 			// mech
+			double shootMultiplier = (slowMode? 0.5: 1);
+			double rollerMultiplier = (slowMode? 0.3: 1);
 			if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
-			lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127);
-			rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127);
+			lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier);
+			rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier);
 			if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R1)){
 				indexerMove = 1;
 				shooterMove = 1;
@@ -158,7 +149,7 @@ void opcontrol() {
 				shooterMove = -1;
 			}
 			indexer.move(127*indexerMove);
-			shooter.move(127*shooterMove);
+			shooter.move(127*shooterMove*shootMultiplier);
 			pros::delay(5);
 		 	}
 }

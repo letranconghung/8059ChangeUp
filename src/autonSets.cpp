@@ -390,16 +390,16 @@ void blueRight7(){
 void blueRight9(){
 
   //Goal1 - Goal C
-  setMech(0,0,80,0);
-  baseMove(-3.5);
-  waitBase(600);
-  delay(5);
-  setMech(0,0,-127,0,450); //eject ball
+  setMech(0,0,98,0); //80
+  baseMove(-3.1); //-3.1， 0.5， 0
+  waitBase(500);
+  delay(10);
+  setMech(0,0,-127,0,500); //eject ball
 
   //Goal 2 - Goal B
-  baseMove(5.2);
+  baseMove(5.3); //5.2
   waitBase(700);
-  baseTurn(75.3);//face goal -77
+  baseTurn(74);//face goal //74.8
   waitBase(850);
   baseMove(47);//45
   waitBase(1200);
@@ -411,47 +411,40 @@ void blueRight9(){
   baseTurn(25); //face ball
   waitBase(800);
   setMech(127,127,127,0);
-  baseMove(25.1); //intake ball
+  baseMove(25.2); //intake ball
   waitBase(900);
   delay(10);
-  baseMove(-5.6); //5
+  baseMove(-5.7); //5
   waitBase(400);
-  baseTurn(-76.8); //face goal //76.5
+  baseTurn(-76.5); //face goal //76.8
   waitBase(1100);
-  setMech(0,0,0,0);
-  timerBase(127,127,1200);
-  delay(10);
-  setMech(-127,-127,127,127,500); //shoot
+  setMech(0,0,60,0);
+  timerBase(127,127,900); //1000
+  setMech(-127,-127,127,127,550); //shoot -500
   delay(10);
 
   //Goal4 - Goal I
   setMech(0,0,0,0);
   baseMove(-13);
   waitBase(500);
-  baseTurn(-41); //face goal -40.3
+  baseTurn(-41); //face goal -40.8
   waitBase(600);
-  timerBase(127,127,1250); //1280
+  timerBase(127,127,1350); //1280
   timerBase(20,127,450); //ram ball in
-  baseMove(-16.5); //reverse -16.5
-  waitBase(600);
+  baseMove(-16.8); //reverse -16.5
+  waitBase(700);
   setMech(0,0,0,0);
 
   //auto9 letsgooooo
   baseTurn(95); //90
   waitBase(1200);
-  timerBase(127,127,500); //450
+  timerBase(127,127,600); //450
+  delay(10);
+  timerBase(127,50,450); //face ball -500
   delay(5);
-  timerBase(127,50,460); //face ball -500
-  delay(5);
-  timerBase(127,127,300); //ram ball innnnnnn
+  timerBase(127,127,350); //ram ball innnnnnn
   delay(5);
   timerBase(-127,-127,200);
-  /*baseMove(34);
-  waitBase(900);
-  baseTurn(150); //face goal
-  waitBase(900);
-  baseMove(18);
-  waitBase(800);*/
 
 }
 /** Autonomous routine for red left spawn. */
