@@ -391,15 +391,15 @@ void blueRight9(){
 
   //Goal1 - Goal C
   setMech(0,0,98,0); //80
-  baseMove(-3.1); //-3.1， 0.5， 0
-  waitBase(500);
+  baseMove(-3,0.5,0); //-3.1， 0.5， 0
+  waitBase(400);
   delay(10);
   setMech(0,0,-127,0,500); //eject ball
 
   //Goal 2 - Goal B
-  baseMove(5.3); //5.2
+  baseMove(5.1); //5.2
   waitBase(700);
-  baseTurn(74);//face goal //74.8
+  baseTurn(75);//face goal
   waitBase(850);
   baseMove(47);//45
   waitBase(1200);
@@ -412,33 +412,36 @@ void blueRight9(){
   waitBase(800);
   setMech(127,127,127,0);
   baseMove(25.2); //intake ball
-  waitBase(900);
-  delay(10);
+  waitBase(800);
+  delay(5);
   baseMove(-5.7); //5
-  waitBase(400);
+  waitBase(300);
   baseTurn(-76.5); //face goal //76.8
+  waitBase(1000);
+  setMech(0,0,0,0);
+  baseMove(60);
   waitBase(1100);
-  setMech(0,0,60,0);
-  timerBase(127,127,900); //1000
-  setMech(-127,-127,127,127,550); //shoot -500
+  setMech(-127,-127,127,127,1000); //shoot -500
   delay(10);
 
   //Goal4 - Goal I
   setMech(0,0,0,0);
   baseMove(-13);
   waitBase(500);
-  baseTurn(-41); //face goal -40.8
+  baseTurn(-42); //face goal -40.8
   waitBase(600);
-  timerBase(127,127,1350); //1280
-  timerBase(20,127,450); //ram ball in
-  baseMove(-16.8); //reverse -16.5
-  waitBase(700);
+  baseMove(80);
+  waitBase(1700);
+  timerBase(20,127,400); //ram ball in -450
+  baseMove(-18,0.5,0); //reverse
+  waitBase(500);
   setMech(0,0,0,0);
 
   //auto9 letsgooooo
   baseTurn(95); //90
   waitBase(1200);
-  timerBase(127,127,600); //450
+  baseMove(17,0.5,0);
+  waitBase(500);
   delay(10);
   timerBase(127,50,450); //face ball -500
   delay(5);
