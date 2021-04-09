@@ -75,6 +75,7 @@ void autonomous() {
 		case 2: blueRight9(); break;
 		case 3: redRight9(); break;
 		case 4: redRight7(); break;
+		case 5: test(); break;
 	}
 }
 /**

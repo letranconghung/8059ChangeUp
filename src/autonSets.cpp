@@ -1,6 +1,10 @@
 /** Autonomous routines */
 #include "main.h"
 /** programming skills run */
+void test(){
+  baseMove(48);
+  waitBase(2000);
+}
 void skills(){ /*
   Controller master(E_CONTROLLER_MASTER);
   double initAngle = 65;
@@ -386,21 +390,22 @@ void blueRight7(){
 
 
 }
+
 /** Autonomous routine for blue right spawn. */
 void blueRight9(){
 
   //Goal1 - Goal C
-  setMech(0,0,98,0); //80
-  baseMove(-3,0.5,0); //-3.1， 0.5， 0
+  setMech(0,0,123,0); //80 - 122
+  baseMove(-3.1,0.5,0); //-3.1， 0.5， 0
   waitBase(400);
   delay(10);
-  setMech(0,0,-127,0,500); //eject ball
+  setMech(0,0,-127,0,570); //eject ball 580
 
   //Goal 2 - Goal B
-  baseMove(5.1); //5.2
-  waitBase(700);
-  baseTurn(75);//face goal
-  waitBase(850);
+  baseMove(5.8); //5.2
+  waitBase(600);
+  baseTurn(76.9);//face goal 76.5
+  waitBase(1200);//900
   baseMove(47);//45
   waitBase(1200);
   setMech(-127,-127,-127,0,400); //eject ball
@@ -408,49 +413,54 @@ void blueRight9(){
   //Goal3 - Goal F
   baseMove(-14);
   waitBase(700);
-  baseTurn(25); //face ball
+  baseTurn(25.5); //face ball 25
   waitBase(800);
   setMech(127,127,127,0);
   baseMove(25.2); //intake ball
   waitBase(800);
   delay(5);
-  baseMove(-5.7); //5
+  baseMove(-4); //5
   waitBase(300);
-  baseTurn(-76.5); //face goal //76.8
-  waitBase(1000);
-  setMech(0,0,0,0);
-  baseMove(60);
-  waitBase(1100);
-  setMech(-127,-127,127,127,1000); //shoot -500
-  delay(10);
+  baseTurn(-75.5); //face goal //75.5
+  waitBase(1200);
+  setMech(0,0,30,0);
+  baseMove(54.5);//52.5
+  waitBase(1500);
+  setMech(-127,-127,127,127,600); //shoot -500
 
   //Goal4 - Goal I
   setMech(0,0,0,0);
-  baseMove(-13);
-  waitBase(500);
-  baseTurn(-42); //face goal -40.8
+  baseMove(-15); //13
   waitBase(600);
-  baseMove(80);
-  waitBase(1700);
-  timerBase(20,127,400); //ram ball in -450
-  baseMove(-18,0.5,0); //reverse
-  waitBase(500);
+  baseTurn(-37.5); //face goal -37
+  waitBase(600);
+  setMech(127,127,0,0);
+  baseMove(77.5,0.5,0); //intake ball
+  waitBase(1550);
+  baseTurn(-65);
+  waitBase(400);
   setMech(0,0,0,0);
+  baseMove(6,0.5,0);
+  waitBase(400);
+  setMech(-127,-127,-127,0,500);
+  delay(5);
+  baseMove(-16,0.5,0); //reverse
+  waitBase(400);
+  setMech(0,0,0,0);
+  delay(500);
 
   //auto9 letsgooooo
-  baseTurn(95); //90
-  waitBase(1200);
-  baseMove(17,0.5,0);
-  waitBase(500);
-  delay(10);
-  timerBase(127,50,450); //face ball -500
+  baseTurn(80); //95
+  waitBase(800);
+  baseMove(27,0.45,0);
+  waitBase(800);
+  timerBase(127,50,650); //face ball -500
   delay(5);
   timerBase(127,127,350); //ram ball innnnnnn
   delay(5);
   timerBase(-127,-127,200);
-
 }
-/** Autonomous routine for red left spawn. */
+/* Autonomous routine for red left spawn. */
 void redRight9(){
   //Goal1 - red right goal
   setMech(0,0,80,0);
@@ -533,7 +543,7 @@ void redRight9(){
   delay(5);
   timerBase(-127,-127,200);*/
 }
-/** Autonomous routine for red right spawn. */
+/* Autonomous routine for red right spawn. */
 void redRight7(){
 
   //Goal1 - red right goal
