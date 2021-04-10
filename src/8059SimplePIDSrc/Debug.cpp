@@ -4,7 +4,7 @@ void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
   Imu imu (imuPort);
   if(imu.is_calibrating()) master.print(2, 0, "Callibrate IMU");
-  else master.print(2, 0, "%.1f %.1f %.1f      ", X, Y, bearing);
+  else master.print(2, 0, "%.1f %.1f %.1f     ", X, Y, bearing);
 }
 void printPosTerminal(){
   printf("x: %.2f y: %.2f bearing: %.2f\n", X, Y, bearing);
