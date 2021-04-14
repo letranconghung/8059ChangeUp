@@ -7,14 +7,16 @@
  */
 void initialize() {
 	/** declaration and initialization of motors, encoders and controller */
-	Motor FL (FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor BL (BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor BR (BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
-	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+	Motor L1 (L1Port, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor L2 (L2Port, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor L3 (L3Port, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor R1 (R1Port, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor R2 (R2Port, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor R3 (R3Port, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
-	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+	Motor indexer (indexerPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Controller master(E_CONTROLLER_MASTER);
 	Imu imu(imuPort);
 	ADIDigitalIn intakeColor(intakeColorPort);
@@ -22,10 +24,12 @@ void initialize() {
 	// ADIEncoder encoderL (encdL_port,encdL_port+1,false);
 	// ADIEncoder encoderR (encdR_port,encdR_port+1,true);
 	/** tare all motors and reset encoder counts */
-	FL.tare_position();
-	FR.tare_position();
-	BL.tare_position();
-	BR.tare_position();
+	L1.tare_position();
+	L2.tare_position();
+	L3.tare_position();
+	R1.tare_position();
+	R2.tare_position();
+	R3.tare_position();
 	imu.reset();
 	resetCoords(0, 0);
 	// encoderL.reset();
@@ -94,10 +98,12 @@ void autonomous() {
 void opcontrol() {
 	/** braking */
 	double BRAKE_POW = 0;
-	Motor FL (FLPort);
-	Motor BL (BLPort);
-	Motor FR (FRPort);
-	Motor BR (BRPort);
+	Motor L1(L1Port);
+	Motor L2(L2Port);
+	Motor L3(L3Port);
+	Motor R1(R1Port);
+	Motor R2(R2Port);
+	Motor R3(R3Port);
 	Motor lRoller (lRollerPort);
 	Motor rRoller (rRollerPort);
 	Motor indexer (indexerPort);

@@ -81,10 +81,12 @@ void waitBase(int cutoff){
 }
 
 void Control(void * ignore){
-  Motor FL (FLPort);
-  Motor BL (BLPort);
-  Motor FR (FRPort);
-  Motor BR (BRPort);
+  Motor L1(L1Port);
+	Motor L2(L2Port);
+	Motor L3(L3Port);
+	Motor R1(R1Port);
+	Motor R2(R2Port);
+	Motor R3(R3Port);
   Imu imu (imuPort);
   int count = 0;
   double prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
@@ -144,24 +146,30 @@ void Control(void * ignore){
         prevErrorEncdR = errorEncdR;
       }
     }
-    FL.move(powerL);
-    BL.move(powerL);
-    FR.move(powerR);
-    BR.move(powerR);
+    L1.move(powerL);
+    L2.move(powerL);
+    L3.move(powerL);
+    R1.move(powerR);
+    R2.move(powerR);
+    R3.move(powerR);
     delay(5);
   }
 }
 
 void resetCoords(double x, double y){
-  Motor FL (FLPort);
-  Motor BL (BLPort);
-  Motor FR (FRPort);
-  Motor BR (BRPort);
+  Motor L1(L1Port);
+  Motor L2(L2Port);
+  Motor L3(L3Port);
+  Motor R1(R1Port);
+  Motor R2(R2Port);
+  Motor R3(R3Port);
 
-  FL.tare_position();
-  FR.tare_position();
-  BL.tare_position();
-  BR.tare_position();
+  L1.tare_position();
+  L2.tare_position();
+  L3.tare_position();
+  R1.tare_position();
+  R2.tare_position();
+  R3.tare_position();
   resetPrevEncd();
 
   targBearing = bearing;
