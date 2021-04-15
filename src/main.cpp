@@ -71,10 +71,10 @@ void autonomous() {
 	int autonNum = 3;
 	switch (autonNum){
 		case 0: skills(); break;
-		case 1: blueRight7(); break;
-		case 2: blueRight9(); break;
-		case 3: redRight9(); break;
-		case 4: redRight7(); break;
+		case 1: BHR(); break;
+		case 2: BMR(); break;
+		case 3: RHR(); break;
+		case 4: RMR(); break;
 		case 5: test(); break;
 	}
 }
