@@ -68,7 +68,7 @@ void autonomous() {
 	Imu imu (imuPort);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 1;
+	int autonNum = 2;
 	switch (autonNum){
 		case 0: skills(); break;
 		case 1: BHR(); break;
