@@ -12,41 +12,43 @@ void skills(){
 void BHR(){
 
   //Goal 1 - G
-  setMech(127,127,40,0);
+  setMech(127,127,70,0);
   baseMove(8.5);
   waitBase(500);
   baseTurn(40);
   waitBase(400);//600
-  baseMove(5);
+  setMech(0,0,70,0);
+  baseMove(4.5);//5
   waitBase(500);
-  setMech(0,0,127,127,500);
+  setMech(0,0,127,127,350);
   delay(5);
 
   //Goal 2 - D
-  baseMove(-20);//-22
-  waitBase(800);//800
+  baseMove(-19.5);//-20
+  waitBase(750);//800
   baseTurn(0);
   waitBase(600);
   baseMove(-41);
-  waitBase(1300);//1500
+  waitBase(1200);//1300
   baseTurn(90);
   waitBase(700);//800
-  baseMove(8);
+  baseMove(7.5);//8
   waitBase(500);//800
-  setMech(0,0,127,127,650);
+  setMech(0,0,127,127,600);
   delay(5);
 
   //Goal 3 - A
-  baseMove(-10);
-  waitBase(700);//800
-  baseTurn(163);//165
+  baseMove(-9.5);
+  waitBase(500);//800
+  baseTurn(160);//160
   waitBase(1000);
-  setMech(127,127,90,0);//60
-  baseMove(55);
-  waitBase(1500);///2000
+  setMech(127,127,70,0);//60
+  baseMove(57);
+  waitBase(1300);///1500
   baseTurn(135);//135
   waitBase(500);//800
-  baseMove(8);
+  setMech(0,0,70,0);
+  baseMove(7.5);
   waitBase(500);//1000
   setMech(0,0,127,127,600);
   delay(5);
