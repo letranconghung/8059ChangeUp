@@ -86,7 +86,7 @@ void BMR(){
   baseTurn(90);
   waitBase(700);//800
   baseMove(6.8);//7 into the goal
-  waitBase(500);//800
+  waitBase(400);//500 - 450
   setMech(0,0,127,127,600);
   delay(5);
 
@@ -98,18 +98,18 @@ void BMR(){
   setMech(127,127,70,0);//60
   baseMove(58);//57
   waitBase(1300);///1500
-  baseTurn(135);//135
+  baseTurn(135);//Face the Goal
   waitBase(400);//450
   setMech(0,0,70,0);
-  baseMove(7.5);
-  waitBase(400);//500
+  baseMove(4.5);//4.5
+  waitBase(300);//350
   setMech(0,0,127,127,500);
   delay(5);
   //Goal 4
   setMech(0,0,0,0);
-  baseMove(-27.5);//-28
+  baseMove(-24);//-26
   waitBase(800);//1200
-  baseTurn(267,1.60,0);//270
+  baseTurn(267,1.60,0);//270 Face Ball
   waitBase(1000);//1200
   setMech(127,127,70,0);
   // baseMove(26.5);//27
@@ -126,17 +126,21 @@ void BMR(){
   // waitBase(300);
   // setMech(0,0,127,127);
 
-  baseMove(25.7);
+  baseMove(31);//28
   waitBase(1500);
   baseTurn(356,1.6,0);
   waitBase(750);
   baseMove(29);
   waitBase(1000);
-  setMech(0, 0, 50, 0);
-  timerBase(-30, 127, 600);
-  delay(500);
-  timerBase(0, 40, 300);
-  setMech(0, 0, 127, 127);
+  setMech(0, 127, 50, 0);//(0,0,50,0)
+  timerBase(-56, 125, 450);//(-45,127,500)
+  delay(5);
+  baseTurn(245,1.6,0);//245
+  waitBase(600);
+  baseMove(2);
+  waitBase(100);
+  //timerBase(-17, 42, 300);//(-15,40,300)-17/42 -(-16,45,300)
+  setMech(0, 0, 90, 127);//127-100-115
 }
 /* Autonomous routine for red left spawn. */
 void RHR(){
