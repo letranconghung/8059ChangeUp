@@ -6,10 +6,12 @@
 #define RAMPING_POW 2
 #define DISTANCE_LEEWAY 8
 #define BEARING_LEEWAY 1.5
-#define MAX_POW 120//115
+
+const double MAX_POW = 120;
 
 double targEncdL = 0, targEncdR = 0, targBearing = 0;
 double errorEncdL = 0, errorEncdR = 0, errorBearing = 0;
+double prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
 double powerL = 0, powerR = 0;
 double targPowerL = 0, targPowerR = 0;
 double kP = DEFAULT_KP, kD = DEFAULT_KD;
@@ -76,7 +78,10 @@ void waitBase(int cutoff){
 
   targEncdL = encdL;
   targEncdR = encdR;
-
+  errorEncdL = 0;
+  errorEncdR = 0;
+  prevErrorEncdL = 0;
+  prevErrorEncdR = 0;
   printf("time taken: %d ms\t cutoff: %d ms\n", millis() - start, cutoff);
 }
 
@@ -87,7 +92,7 @@ void Control(void * ignore){
   Motor BR (BRPort);
   Imu imu (imuPort);
   int count = 0;
-  double prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
+  prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
   while(true){
     if(!imu.is_calibrating() && !pauseBase) {
       if(turnMode){
@@ -109,29 +114,32 @@ void Control(void * ignore){
       }else{
         errorEncdL = targEncdL - encdL;
         errorEncdR = targEncdR - encdR;
-        double avgErrorEncd = (errorEncdL + errorEncdR)/2;
 
         double deltaErrorEncdL = errorEncdL - prevErrorEncdL;
         double deltaErrorEncdR = errorEncdR - prevErrorEncdR;
 
         double pd_targPowerL = errorEncdL * kP + deltaErrorEncdL * kD;
         double pd_targPowerR = errorEncdR * kP + deltaErrorEncdR * kD;
-
-        if(pd_targPowerL > MAX_POW || pd_targPowerR > MAX_POW){
-          double pd_maxTargPower = std::max(pd_targPowerL, pd_targPowerR);
-          targPowerL = MAX_POW/pd_maxTargPower*pd_targPowerL;
-          targPowerR = MAX_POW/pd_maxTargPower*pd_targPowerR;
+        double pd_maxTargPower = std::max(pd_targPowerL, pd_targPowerR);
+        double setPower = std::min(pd_maxTargPower, MAX_POW);
+        double lToR = ((pd_targPowerR != 0)? (pd_targPowerL/pd_targPowerR) : 1);
+        double avgErrorEncd = (errorEncdL + errorEncdR)/2;
+        double adjustmentFactor = avgErrorEncd/10000;
+        // adjustmentFactor = 0;
+        double allowance = 0.005;
+        if(fabs(lToR-1)<=allowance) adjustmentFactor = 0;
+        if(++count % 20 == 0) printf("adjustmentFactor: %.7f \n", adjustmentFactor);
+        if(lToR >= 1){
+          lToR += adjustmentFactor;
+          targPowerL = setPower;
+          targPowerR = setPower/lToR;
         }else{
-          targPowerL = pd_targPowerL;
-          targPowerR = pd_targPowerR;
+          lToR -= adjustmentFactor;
+          targPowerL = setPower*lToR;
+          targPowerR = setPower;
         }
         double deltaPowerL = targPowerL - powerL;
         double deltaPowerR = targPowerR - powerR;
-        if(deltaPowerL < deltaPowerR && avgErrorEncd != 0){
-          deltaPowerL *= (1-avgErrorEncd/1e4);
-        }else{
-          deltaPowerR *= (1-avgErrorEncd/1e4);
-        }
         if(deltaPowerL > RAMPING_POW || deltaPowerR > RAMPING_POW){
           double deltaPowerMax = std::max(deltaPowerL, deltaPowerR);
           deltaPowerL = RAMPING_POW/deltaPowerMax*deltaPowerL;

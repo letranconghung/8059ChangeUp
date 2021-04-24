@@ -2,9 +2,8 @@
 #include "main.h"
 /** programming skills run */
 void test(){
-  baseMove(48);
+  baseMove(48,.35,.02);
   waitBase(4000);
-
 }
 void skills(){
 
