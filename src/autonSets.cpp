@@ -2,11 +2,8 @@
 #include "main.h"
 /** programming skills run */
 void test(){
-  setMech(127,127,70,0);
-  baseMove(3);
-  waitBase(300);
-  timerBase(-40,127,500);
-  setMech(127,127,127,100);
+  baseMove(48);
+  waitBase(4000);
 
 }
 void skills(){
@@ -66,81 +63,66 @@ void BHR(){
 void BMR(){
   //Goal 1 - G
   setMech(127,127,70,0);
-  baseMove(8);//8.5
-  waitBase(450);//500
-  baseTurn(40);
-  waitBase(400);//600
+  baseMove(8);
+  waitBase(420); //420
+  baseTurn(40); //face goal
+  waitBase(400);//400
   setMech(0,0,70,0);
-  baseMove(4.5);//5
-  waitBase(500);
-  setMech(0,0,70,127,350);//350
-  delay(5);
+  baseMove(4.5); //allign
+  waitBase(450);//500
+  setMech(0,0,70,127,350);
 
   //Goal 2 - D
-  baseMove(-21.5);//-19.5
-  waitBase(1000);//750
-  baseTurn(1.5);
-  waitBase(450);//450
-  baseMove(-40); //41
-  waitBase(1200);//1300
-  baseTurn(90);
-  waitBase(700);//800
-  baseMove(6.8);//7 into the goal
-  waitBase(400);//500 - 450
+  baseMove(-18);//-19.5
+  waitBase(680);//750
+  baseTurn(0);
+  waitBase(550);//600
+  baseMove(-42.5);//40
+  waitBase(1150);//1200
+  baseTurn(90);//face goal
+  waitBase(650);//700
+  baseMove(5.5);//6.8
+  waitBase(400);
   setMech(0,0,127,127,600);
   delay(5);
 
   //Goal 3 - A
-  baseMove(-8.8);//-10
-  waitBase(400);//500
-  baseTurn(159);//161
-  waitBase(1000);
-  setMech(127,127,70,0);//60
-  baseMove(58);//57
-  waitBase(1300);///1500
-  baseTurn(135);//Face the Goal
+  baseMove(-10.2); //-8.8
+  waitBase(800);
+  baseTurn(160);//face ball
+  waitBase(900);//1000
+  setMech(127,127,70,0);
+  baseMove(59);//58
+  waitBase(1300);
+  baseTurn(135);//face goal
   waitBase(400);//450
   setMech(0,0,70,0);
-  baseMove(4.5);//4.5
-  waitBase(300);//350
+  baseMove(6);//5
+  waitBase(400);
   setMech(0,0,127,127,500);
   delay(5);
   //Goal 4
   setMech(0,0,0,0);
-  baseMove(-24);//-26
-  waitBase(800);//1200
-  baseTurn(267,1.60,0);//270 Face Ball
-  waitBase(1000);//1200
+  baseMove(-28.5);//-26
+  waitBase(1000);//800
+  baseTurn(267,1.60,0);//face ball - 270
+  waitBase(1000);//1000
   setMech(127,127,70,0);
-  // baseMove(26.5);//27
-  // waitBase(1500);
-  // baseTurn(356,1.60,0);//357 ***
-  // waitBase(750);//800
-  // baseMove(27);//25.5
-  // waitBase(1000);//1000
-  // setMech(0,0,50,0);
-  // timerBase(-50,127,450);//-40
-  // baseTurn(450);
-  // waitBase(200);
-  // baseMove(5);
-  // waitBase(300);
-  // setMech(0,0,127,127);
-
-  baseMove(31);//28
-  waitBase(1500);
+  // go for standalone ball
+  baseMove(28.2);//29 - intake ball
+  waitBase(900);//1000
   baseTurn(356,1.6,0);
-  waitBase(750);
-  baseMove(29);
-  waitBase(1000);
-  setMech(0, 127, 50, 0);//(0,0,50,0)
-  timerBase(-56, 125, 450);//(-45,127,500)
+  waitBase(650); //650
+  baseMove(29.5);//push ball in - 29
+  waitBase(1000);//1000
+  setMech(0, 127, 100, 0);//60
+  timerBase(-56, 125, 450);//intake ball
   delay(5);
-  baseTurn(245,1.6,0);//245
-  waitBase(600);
-  baseMove(2);
-  waitBase(100);
-  //timerBase(-17, 42, 300);//(-15,40,300)-17/42 -(-16,45,300)
-  setMech(0, 0, 90, 127);//127-100-115
+  baseTurn(240,1.6,0);//face goal(260=270)
+  waitBase(450);//600
+  baseMove(5);//5
+  waitBase(400);//500
+  setMech(0, 0, 90, 127);//shoot
 }
 /* Autonomous routine for red left spawn. */
 void RHR(){
@@ -188,11 +170,71 @@ void RHR(){
   waitBase(800);
   setMech(0,0,0,0);
 
-
-
-
 }
 /* Autonomous routine for red right spawn. */
 void RMR(){
+    //Goal 1 - G
+    setMech(127,127,70,0);
+    baseMove(8);
+    waitBase(420); //420
+    baseTurn(40); //face goal
+    waitBase(400);//400
+    setMech(0,0,70,0);
+    baseMove(4.5); //allign
+    waitBase(500);//500
+    setMech(0,0,70,127,350);
 
+    //Goal 2 - D
+    baseMove(-19.5);//-19.5
+    waitBase(750);//750
+    baseTurn(0);
+    waitBase(600);//600
+    baseMove(-39);//38
+    waitBase(1100);//1200
+    baseTurn(90);//face goal
+    waitBase(800);//700
+    baseMove(5.5);//6.8
+    waitBase(600);//750 x
+    setMech(0,0,127,127,600);
+    delay(5);
+
+    //Goal 3 - A
+    baseMove(-8); //-10
+    waitBase(650);//700
+    baseTurn(163);//face ball 161
+    waitBase(900);//1000
+    setMech(127,127,70,0);
+    baseMove(60);//61
+    waitBase(1300);//1300
+    baseTurn(135);//face goal
+    waitBase(400);//450
+    setMech(0,0,70,0);
+    baseMove(6);//5
+    waitBase(400);
+    setMech(0,0,127,127,500);
+    delay(5);
+    //Goal 4
+    setMech(0,0,0,0);
+    baseMove(-26);//-28.5
+    waitBase(800);//800
+    baseTurn(267,1.60,0);//face ball - 270
+    waitBase(750);//1000
+    setMech(127,127,70,0);
+    // go for standalone ball
+    baseMove(27.5);//28.7 - intake ball
+    waitBase(900);//1000
+    baseTurn(356,1.6,0);
+    waitBase(650); //650
+    setMech(0, 0, 127, 0);//70
+    baseMove(28.5);//push ball in - 29
+    waitBase(1000);//1000
+    baseMove(-2,2.0,0);
+    waitBase(400);//400
+    baseTurn(313,2.0,0);
+    waitBase(400);//500
+    baseMove(7);//5
+    waitBase(600);
+    setMech(0, 0, 127, 127,500);
+    baseMove(-5);
+    waitBase(200);
 }

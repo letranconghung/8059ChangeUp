@@ -1,12 +1,12 @@
 #include "main.h"
 #define DEFAULT_KP 0.35
-#define DEFAULT_KD 0.001
+#define DEFAULT_KD 0.01
 #define DEFAULT_TURN_KP 1.8
 #define DEFAULT_TURN_KD 0.01
-#define RAMPING_POW 3
-#define DISTANCE_LEEWAY 12
+#define RAMPING_POW 2
+#define DISTANCE_LEEWAY 8
 #define BEARING_LEEWAY 1.5
-#define MAX_POW 127//115
+#define MAX_POW 120//115
 
 double targEncdL = 0, targEncdR = 0, targBearing = 0;
 double errorEncdL = 0, errorEncdR = 0, errorBearing = 0;
@@ -99,7 +99,6 @@ void Control(void * ignore){
 
         prevErrorBearing = errorBearing;
 
-        // package
         double deltaPowerL = targPowerL - powerL;
         powerL += abscap(deltaPowerL, RAMPING_POW);
         double deltaPowerR = targPowerR - powerR;
@@ -107,39 +106,43 @@ void Control(void * ignore){
 
         powerL = abscap(powerL, MAX_POW);
         powerR = abscap(powerR, MAX_POW);
-        // package
       }else{
         errorEncdL = targEncdL - encdL;
         errorEncdR = targEncdR - encdR;
+        double avgErrorEncd = (errorEncdL + errorEncdR)/2;
 
         double deltaErrorEncdL = errorEncdL - prevErrorEncdL;
         double deltaErrorEncdR = errorEncdR - prevErrorEncdR;
 
-        targPowerL = errorEncdL * kP + deltaErrorEncdL * kD;
-        targPowerR = errorEncdR * kP + deltaErrorEncdR * kD;
+        double pd_targPowerL = errorEncdL * kP + deltaErrorEncdL * kD;
+        double pd_targPowerR = errorEncdR * kP + deltaErrorEncdR * kD;
 
+        if(pd_targPowerL > MAX_POW || pd_targPowerR > MAX_POW){
+          double pd_maxTargPower = std::max(pd_targPowerL, pd_targPowerR);
+          targPowerL = MAX_POW/pd_maxTargPower*pd_targPowerL;
+          targPowerR = MAX_POW/pd_maxTargPower*pd_targPowerR;
+        }else{
+          targPowerL = pd_targPowerL;
+          targPowerR = pd_targPowerR;
+        }
         double deltaPowerL = targPowerL - powerL;
-        powerL += abscap(deltaPowerL, RAMPING_POW);
         double deltaPowerR = targPowerR - powerR;
-        powerR += abscap(deltaPowerR, RAMPING_POW);
-
-
-        // moving straight factor
-        double mod = 1;
-        // double modConst;
-        // if(errorEncdL < 0) modConst = 1.01;
-        // else modConst = 1/1.001;
-        // if(errorEncdR != 0) mod = modConst*errorEncdL/errorEncdR;
-
-        powerL = abscap(powerL, MAX_POW);
-        powerR = abscap(powerR, MAX_POW);
-
-        // if(++count % 10 == 0) printf("power: %.1f %.1f", powerL, powerR);
-
-        if(mod >= 1) powerR /= mod;
-        else powerL /= mod;
-
-        // if(count % 10 == 0) printf("\t modded power: %.1f %.1f\n", powerL, powerR);
+        if(deltaPowerL < deltaPowerR && avgErrorEncd != 0){
+          deltaPowerL *= (1-avgErrorEncd/1e4);
+        }else{
+          deltaPowerR *= (1-avgErrorEncd/1e4);
+        }
+        if(deltaPowerL > RAMPING_POW || deltaPowerR > RAMPING_POW){
+          double deltaPowerMax = std::max(deltaPowerL, deltaPowerR);
+          deltaPowerL = RAMPING_POW/deltaPowerMax*deltaPowerL;
+          deltaPowerR = RAMPING_POW/deltaPowerMax*deltaPowerR;
+        }
+        powerL += deltaPowerL;
+        powerR += deltaPowerR;
+        // manual base compensation factor
+        // double mod = 1; //>1 to make left faster, <1 to make right faster
+        // if(mod >= 1) powerR /= mod;
+        // else powerL *= mod;
         prevErrorEncdL = errorEncdL;
         prevErrorEncdR = errorEncdR;
       }

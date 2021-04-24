@@ -1,5 +1,5 @@
 #include "main.h"
-int DEBUG_MODE = 0;
+int DEBUG_MODE = 7;
 void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
   Imu imu (imuPort);
@@ -25,6 +25,7 @@ void printPowerTerminal(){
   printf("powerL: %.2f powerR: %.2f\n", powerL, powerR);
 }
 void Debug(void * ignore){
+  int count = 0;
   Imu imu (imuPort);
   while(true){
     printPosMaster();
@@ -38,8 +39,14 @@ void Debug(void * ignore){
         case 4: printErrorBearingTerminal(); break;
         case 5: printTargPowerTerminal(); break;
         case 6: printPowerTerminal(); break;
+        case 7: {
+            printf("errorEncdL: %.2f errorEncdR: %.2f\t", errorEncdL, errorEncdR);
+            printf("targPowerL: %.2f, targPowerR: %.2f\t", targPowerL, targPowerR);
+            printf("powerL: %.2f powerR: %.2f\n", powerL, powerR);
+            break;
+          }
       }
     }
-    delay(50);
+    delay(25);
   }
 }
