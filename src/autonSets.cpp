@@ -10,7 +10,6 @@ void skills(){
 }
 /** Autonomous routine for blue left spawn. */
 void BHR(){
-
   //Goal 1 - G
   setMech(127,127,70,0);
   baseMove(8.5);
@@ -175,23 +174,23 @@ void RMR(){
     //Goal 1 - G
     setMech(127,127,70,0);
     baseMove(8);
-    waitBase(420); //420
+    waitBase(1000); //420
     baseTurn(40); //face goal
-    waitBase(400);//400
+    waitBase(1000);//400
     setMech(0,0,70,0);
     baseMove(4.5); //allign
-    waitBase(500);//500
+    waitBase(1000);//500
     setMech(0,0,70,127,350);
 
     //Goal 2 - D
     baseMove(-19.5);//-19.5
-    waitBase(750);//750
+    waitBase(1000);//750
     baseTurn(0);
-    waitBase(600);//600
+    waitBase(1000);//600
     baseMove(-39);//38
-    waitBase(1100);//1200
+    waitBase(1000);//1200
     baseTurn(90);//face goal
-    waitBase(800);//700
+    waitBase(1000);//700
     baseMove(5.5);//6.8
     waitBase(600);//750 x
     setMech(0,0,127,127,600);

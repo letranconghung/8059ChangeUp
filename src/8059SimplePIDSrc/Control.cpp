@@ -15,12 +15,7 @@ double prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
 double powerL = 0, powerR = 0;
 double targPowerL = 0, targPowerR = 0;
 double kP = DEFAULT_KP, kD = DEFAULT_KD;
-
 bool turnMode = false, pauseBase = false;
-
-void baseSpeed(double dis, double kp){
-
-}
 void baseMove(double dis, double kp, double kd){
   printf("baseMove: %.1f\t", dis);
   turnMode = false;
@@ -33,7 +28,6 @@ void baseMove(double dis, double kp, double kd){
 void baseMove(double dis){
   baseMove(dis, DEFAULT_KP, DEFAULT_KD);
 }
-
 void baseTurn(double p_bearing, double kp, double kd){
   printf("baseTurn: %.1f\t", p_bearing);
   turnMode = true;
@@ -44,13 +38,11 @@ void baseTurn(double p_bearing, double kp, double kd){
 void baseTurn(double bearing){
   baseTurn(bearing, DEFAULT_TURN_KP, DEFAULT_TURN_KD);
 }
-
 void powerBase(double l, double r) {
   pauseBase = true;
   powerL = l;
   powerR = r;
 }
-
 void timerBase(double l, double r, double t) {
   pauseBase = true;
   powerL = l;
@@ -73,9 +65,8 @@ void waitBase(int cutoff){
   if(turnMode) {
     while(fabs(targBearing - bearing) > BEARING_LEEWAY && (millis()-start) < cutoff) delay(20);
   }else{
-    while((fabs(targEncdL - encdL) > DISTANCE_LEEWAY || fabs(targEncdR - encdR) > DISTANCE_LEEWAY) && (millis()-start) < cutoff) delay(20);
+    while((fabs(targEncdL - encdL) > DISTANCE_LEEWAY || fabs(targEncdR - encdR) > DISTANCE_LEEWAY) && (millis()-start) < cutoff && (targEncdL - encdL)*(targEncdR - encdR) >=0) delay(5);
   }
-
   targEncdL = encdL;
   targEncdR = encdR;
   errorEncdL = 0;
@@ -128,7 +119,7 @@ void Control(void * ignore){
         // adjustmentFactor = 0;
         double allowance = 0.005;
         if(fabs(lToR-1)<=allowance) adjustmentFactor = 0;
-        if(++count % 20 == 0) printf("adjustmentFactor: %.7f \n", adjustmentFactor);
+        // if(++count % 20 == 0) printf("adjustmentFactor: %.7f \n", adjustmentFactor);
         if(lToR >= 1){
           lToR += adjustmentFactor;
           targPowerL = setPower;
@@ -162,7 +153,6 @@ void Control(void * ignore){
     delay(5);
   }
 }
-
 void resetCoords(double x, double y){
   Motor FL (FLPort);
   Motor BL (BLPort);
