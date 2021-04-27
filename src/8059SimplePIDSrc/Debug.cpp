@@ -1,5 +1,5 @@
 #include "main.h"
-int DEBUG_MODE = 7;
+int DEBUG_MODE = 0;
 void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
   Imu imu (imuPort);
@@ -30,7 +30,7 @@ void Debug(void * ignore){
   while(true){
     printPosMaster();
     if(imu.is_calibrating()) {
-      printf("imu is calibrating...\n");
+      // printf("imu is calibrating...\n");
     }else {
       switch(DEBUG_MODE){
         case 1: printPosTerminal(); break;

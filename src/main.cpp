@@ -7,14 +7,14 @@
  */
 void initialize() {
 	/** declaration and initialization of motors, encoders and controller */
-	Motor FL (FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor BL (BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor BR (BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
-	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
-	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
-	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+	Motor FL (FLPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor BL (BLPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+	Motor FR (FRPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor BR (BRPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Controller master(E_CONTROLLER_MASTER);
 	Imu imu(imuPort);
 	ADIDigitalIn intakeColor(intakeColorPort);
@@ -22,6 +22,9 @@ void initialize() {
 	// ADIEncoder encoderL (encdL_port,encdL_port+1,false);
 	// ADIEncoder encoderR (encdR_port,encdR_port+1,true);
 	/** tare all motors and reset encoder counts */
+
+	Vision vis(visPort);
+
 	FL.tare_position();
 	FR.tare_position();
 	BL.tare_position();
@@ -32,10 +35,11 @@ void initialize() {
 	// encoderR.reset();
 	/** declaration and initialization of asynchronous Tasks */
 	//Task mechControlTask(mechControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task controlTask(Control, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task debugTask(Debug, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task odometryTask(Odometry, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task sensorsTask(Sensors, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
+	Task controlTask(Control);
+	Task debugTask(Debug);
+	Task odometryTask(Odometry);
+	Task sensorsTask(Sensors);
+	Task visSortTask(VisSort);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -105,9 +109,11 @@ void opcontrol() {
 	ADIAnalogIn intakeColor (intakeColorPort);
 	ADIAnalogIn shootColor (shootColorPort);
 	Controller master(E_CONTROLLER_MASTER);
+	Vision vis (visPort);
 	master.clear();
 	bool tankDrive = true;
 	bool autoIndex = true;
+	bool autoSort = true;
 	pauseBase = true;
 	pauseMech = true;
 	bool slowMode = false;
@@ -117,6 +123,9 @@ void opcontrol() {
 		if(autoIndex){
 			if(intakeColor.get_value() < intakeColorThreshold && shootColor.get_value() < shootColorThreshold) indexerMove = 0;
 			else indexerMove = 1;
+		}
+		if(autoSort){
+
 		}
 		if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
 		double baseMultiplier = (slowMode? 0.5: 1);
@@ -128,28 +137,33 @@ void opcontrol() {
 	  } else{
 	     int y = master.get_analog(ANALOG_LEFT_Y);
 	     int x = master.get_analog(ANALOG_RIGHT_X);
-			powerL = y+x;
-			powerR = y-x;
+			powerL = y+x; //y+x
+			powerR = y-x; //y-x
 	   }
 		powerL *= baseMultiplier;
 		powerR *= baseMultiplier;
-
-
 		// mech
 		double shootMultiplier = (slowMode? 0.5: 1);
 		double rollerMultiplier = (slowMode? 0.7: 1);
 		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
+		if(master.get_digital_new_press(DIGITAL_X)) autoSort = !autoSort;
+		if(autoSort){
+			if(!master.get_digital(DIGITAL_R1)) //set everything to zero
+		}else{
+			powerShooter =
+			powerIndxer = 0
+		}
 		lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier);
 		rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier);
 		if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R1)){
-			indexerMove = 1;
-			shooterMove = 1;
-		}else if(master.get_digital(DIGITAL_R2)){
 			indexerMove = -1;
 			shooterMove = -1;
+		}else if(master.get_digital(DIGITAL_R2)){
+			indexerMove = 1;
+			shooterMove = 1;
 		}
 		indexer.move(127*indexerMove);
 		shooter.move(127*shooterMove*shootMultiplier);
 		pros::delay(5);
-		}
+	}
 }
