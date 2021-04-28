@@ -1,4 +1,5 @@
 #include "main.h"
+extern bool redBall, redAlliance;
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -11,8 +12,8 @@ void initialize() {
 	Motor BL (BLPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 	Motor FR (FRPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 	Motor BR (BRPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
-	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+	Motor lRoller (lRollerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+	Motor rRoller (rRollerPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
 	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Controller master(E_CONTROLLER_MASTER);
@@ -24,7 +25,6 @@ void initialize() {
 	/** tare all motors and reset encoder counts */
 
 	Vision vis(visPort);
-
 	FL.tare_position();
 	FR.tare_position();
 	BL.tare_position();
@@ -107,53 +107,53 @@ void opcontrol() {
 	Motor rRoller (rRollerPort);
 	Motor indexer (indexerPort);
 	Motor shooter (shooterPort);
-	ADIAnalogIn intakeColor (intakeColorPort);
-	ADIAnalogIn shootColor (shootColorPort);
 	Controller master(E_CONTROLLER_MASTER);
 	Vision vis (visPort);
 	bool tankDrive = true;
-	bool autoIndex = true;
 	pauseBase = true;
-	mechMode = 0;
 	bool slowMode = false;
+	baseBraking = false;
 	while (true) {
 		int indexerMove = 0, shooterMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
-		// if(autoIndex){
-		// 	if(intakeColor.get_value() < intakeColorThreshold && shootColor.get_value() < shootColorThreshold) indexerMove = 0;
-		// 	else indexerMove = 1;
-		// }
 		double baseMultiplier = (slowMode? 0.5: 1);
 		if(tankDrive){
 	     int l = master.get_analog(ANALOG_LEFT_Y);
 	     int r = master.get_analog(ANALOG_RIGHT_Y);
 			powerL = l;
 			powerR = r;
-	  } else{
+	  }else{
 	     int y = master.get_analog(ANALOG_LEFT_Y);
 	     int x = master.get_analog(ANALOG_RIGHT_X);
-			powerL = y+x;
-			powerR = y-x;
-	   }
-		// mech
+			 powerL = y+x;
+			 powerR = y-x;
+	  }
+		if(powerL != 0) signPowerL = ((powerL > 0)? 1 : -1);
+		if(powerR != 0) signPowerR = ((powerR > 0)? 1 : -1);
 		double shootMultiplier = (slowMode? 0.5: 1);
 		double rollerMultiplier = (slowMode? 0.7: 1);
-		if(master.get_digital_new_press(DIGITAL_A)) mechMode = (mechMode + 1)%3;
-		if(master.get_digital_new_press(DIGITAL_B)) allianceRed = !allianceRed;
-		if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R1)){
+		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
+		if(master.get_digital_new_press(DIGITAL_B)) redAlliance = !redAlliance;
+		if(master.get_digital_new_press(DIGITAL_X)) baseBraking = !baseBraking;
+		if(autoIndex){
+			if(intakeColorValue< intakeColorThreshold && shootColorValue < shootColorThreshold) indexerMove = 0;
+			else indexerMove = 1;
+		}
+		if(master.get_digital(DIGITAL_R2)){
 			indexerMove = -1;
-			shooterMove = -1;
-		}else if(master.get_digital(DIGITAL_R2)){
-			indexerMove = 1;
-			shooterMove = 1;
-		}else if(master.get_digital(DIGITAL_RIGHT)){
-			shooterMove = -1;
+		}else if(master.get_digital(DIGITAL_R1)){
 			indexerMove = 1;
 		}
+		if(master.get_digital(DIGITAL_R1)){
+			if(master.get_digital(DIGITAL_L2)){
+				shooterMove = (redBall == redAlliance)? 1:-1;
+			}else shooterMove = 1;
+		}
+		if(master.get_digital(DIGITAL_R2)) shooterMove = -1;
 		powerL *= baseMultiplier;
 		powerR *= baseMultiplier;
-		powerRollers = (master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier;
+		powerRollers = (master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier;
 		powerIndexer = 127*indexerMove;
 		powerShooter = 127*shooterMove*shootMultiplier;
 		pros::delay(5);

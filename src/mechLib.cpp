@@ -8,9 +8,9 @@ int rMax = 127;
 int iLoad = 127;
 int intakeColorThreshold = 2850;
 int shootColorThreshold = 2830; // working 2830
-int mechMode = 0;
 double powerRollers = 0, powerIndexer = 0, powerShooter = 0;
-bool firstStageDone = false;
+bool autoIndex = true;
+bool visionSort = true;
 void setMech(int r, int i, int s){
   powerRollers = r;
   powerIndexer = i;
@@ -55,11 +55,6 @@ void MechControl(void * ignore){
   Motor indexer (indexerPort);
   Motor shooter (shooterPort);
   while(true){
-    if(mechMode == 1){
-      // vision sort
-    }else if(mechMode == 2){
-      // auto indexing
-    }
     lRoller.move(powerRollers);
     rRoller.move(powerRollers);
     indexer.move(powerIndexer);

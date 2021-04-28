@@ -14,8 +14,8 @@
 /** sensor ports */
 #define encdL_port 1
 #define encdR_port 4
-#define intakeColorPort 3
-#define shootColorPort 8
+#define intakeColorPort 2
+#define shootColorPort 1
 #define imuPort 20
 #define visPort 11
 #endif

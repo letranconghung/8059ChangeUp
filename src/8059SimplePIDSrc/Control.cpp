@@ -16,6 +16,8 @@ double powerL = 0, powerR = 0;
 double targPowerL = 0, targPowerR = 0;
 double kP = DEFAULT_KP, kD = DEFAULT_KD;
 bool turnMode = false, pauseBase = false;
+int signPowerL, signPowerR;
+bool baseBraking = false;
 void baseMove(double dis, double kp, double kd){
   printf("baseMove: %.1f\t", dis);
   turnMode = false;
@@ -150,6 +152,15 @@ void Control(void * ignore){
     BL.move(powerL);
     FR.move(powerR);
     BR.move(powerR);
+    if(baseBraking){
+        if(powerL == 0 && powerR == 0){
+            int brake = 5;
+            FL.move(-brake * signPowerL);
+            BL.move(-brake * signPowerL);
+            FR.move(-brake * signPowerR);
+            BR.move(-brake * signPowerR);
+          }
+        }
     delay(5);
   }
 }

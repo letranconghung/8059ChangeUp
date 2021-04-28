@@ -4,8 +4,8 @@
 /** refer to mech_lib.cpp for function documentation */
 /** traditional-style mech library */
 extern int intakeColorThreshold, shootColorThreshold;
-extern int mechMode;
 extern double powerRollers, powerIndexer, powerShooter;
+extern bool autoIndex, visionSort;
 void setMech(int r, int i, int s);
 void resetMech();
 void setMech(int r, int i, int s, int t);
