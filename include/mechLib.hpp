@@ -3,16 +3,17 @@
 #define _MECH_LIB_HPP_
 /** refer to mech_lib.cpp for function documentation */
 /** traditional-style mech library */
-extern int intakeColorValue, shootColorValue, intakeColorThreshold, shootColorThreshold;
-extern bool pauseMech;
-void setPauseMech(bool pm);
-void setMech(int l, int r, int i, int s);
+extern int intakeColorThreshold, shootColorThreshold;
+extern int mechMode;
+extern double powerRollers, powerIndexer, powerShooter;
+void setMech(int r, int i, int s);
 void resetMech();
-void setMech(int l, int r, int i, int s, int t);
+void setMech(int r, int i, int s, int t);
 void waitIntakeColor();
 void waitShootColor();
 void autoFrontIntake();
 void autoBackIntake();
 void autoLoad();
 void autoFrontIntakeLoad();
+void MechControl(void * ignore);
 #endif

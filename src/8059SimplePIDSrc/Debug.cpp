@@ -3,8 +3,13 @@ int DEBUG_MODE = 0;
 void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
   Imu imu (imuPort);
-  if(imu.is_calibrating()) master.print(2, 0, "Callibrate IMU");
-  else master.print(2, 0, "%.1f %.1f %.1f     ", X, Y, bearing);
+  // if(imu.is_calibrating()) master.print(2, 0, "Callibrate IMU");
+  // else{
+  //   master.print(2, 0, "%.1f %.1f %.1f     ", X, Y, bearing);
+  // }
+  std::string allianceName = allianceRed? "RED": "BLUE";
+  // master.print(1, 0, "LETS GO HANSON!");
+  master.print(2, 0, "%s mech: %d ", allianceName.c_str(), mechMode);
 }
 void printPosTerminal(){
   printf("x: %.2f y: %.2f bearing: %.2f\n", X, Y, bearing);
@@ -27,6 +32,8 @@ void printPowerTerminal(){
 void Debug(void * ignore){
   int count = 0;
   Imu imu (imuPort);
+  Controller master(E_CONTROLLER_MASTER);
+  master.clear();
   while(true){
     printPosMaster();
     if(imu.is_calibrating()) {

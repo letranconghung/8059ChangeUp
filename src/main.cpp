@@ -35,11 +35,12 @@ void initialize() {
 	// encoderR.reset();
 	/** declaration and initialization of asynchronous Tasks */
 	//Task mechControlTask(mechControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
-	Task controlTask(Control);
-	Task debugTask(Debug);
-	Task odometryTask(Odometry);
-	Task sensorsTask(Sensors);
-	Task visSortTask(VisSort);
+	Task ControlTask(Control);
+	Task DebugTask(Debug);
+	Task OdometryTask(Odometry);
+	Task SensorsTask(Sensors);
+	Task MechControlTask(MechControl);
+	// Task visSortTask(VisSort);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -110,24 +111,19 @@ void opcontrol() {
 	ADIAnalogIn shootColor (shootColorPort);
 	Controller master(E_CONTROLLER_MASTER);
 	Vision vis (visPort);
-	master.clear();
 	bool tankDrive = true;
 	bool autoIndex = true;
-	bool autoSort = true;
 	pauseBase = true;
-	pauseMech = true;
+	mechMode = 0;
 	bool slowMode = false;
 	while (true) {
 		int indexerMove = 0, shooterMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
-		if(autoIndex){
-			if(intakeColor.get_value() < intakeColorThreshold && shootColor.get_value() < shootColorThreshold) indexerMove = 0;
-			else indexerMove = 1;
-		}
-		if(autoSort){
-
-		}
 		if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
+		// if(autoIndex){
+		// 	if(intakeColor.get_value() < intakeColorThreshold && shootColor.get_value() < shootColorThreshold) indexerMove = 0;
+		// 	else indexerMove = 1;
+		// }
 		double baseMultiplier = (slowMode? 0.5: 1);
 		if(tankDrive){
 	     int l = master.get_analog(ANALOG_LEFT_Y);
@@ -137,33 +133,29 @@ void opcontrol() {
 	  } else{
 	     int y = master.get_analog(ANALOG_LEFT_Y);
 	     int x = master.get_analog(ANALOG_RIGHT_X);
-			powerL = y+x; //y+x
-			powerR = y-x; //y-x
+			powerL = y+x;
+			powerR = y-x;
 	   }
-		powerL *= baseMultiplier;
-		powerR *= baseMultiplier;
 		// mech
 		double shootMultiplier = (slowMode? 0.5: 1);
 		double rollerMultiplier = (slowMode? 0.7: 1);
-		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
-		if(master.get_digital_new_press(DIGITAL_X)) autoSort = !autoSort;
-		if(autoSort){
-			if(!master.get_digital(DIGITAL_R1)) //set everything to zero
-		}else{
-			powerShooter =
-			powerIndxer = 0
-		}
-		lRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier);
-		rRoller.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier);
+		if(master.get_digital_new_press(DIGITAL_A)) mechMode = (mechMode + 1)%3;
+		if(master.get_digital_new_press(DIGITAL_B)) allianceRed = !allianceRed;
 		if(master.get_digital(DIGITAL_L2) || master.get_digital(DIGITAL_R1)){
 			indexerMove = -1;
 			shooterMove = -1;
 		}else if(master.get_digital(DIGITAL_R2)){
 			indexerMove = 1;
 			shooterMove = 1;
+		}else if(master.get_digital(DIGITAL_RIGHT)){
+			shooterMove = -1;
+			indexerMove = 1;
 		}
-		indexer.move(127*indexerMove);
-		shooter.move(127*shooterMove*shootMultiplier);
+		powerL *= baseMultiplier;
+		powerR *= baseMultiplier;
+		powerRollers = (master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier;
+		powerIndexer = 127*indexerMove;
+		powerShooter = 127*shooterMove*shootMultiplier;
 		pros::delay(5);
 	}
 }
