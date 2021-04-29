@@ -114,7 +114,7 @@ void opcontrol() {
 	bool slowMode = false;
 	baseBraking = false;
 	while (true) {
-		int indexerMove = 0, shooterMove = 0;
+		double indexerMove = 0, shooterMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
 		double baseMultiplier = (slowMode? 0.5: 1);
@@ -147,7 +147,8 @@ void opcontrol() {
 		}
 		if(master.get_digital(DIGITAL_R1)){
 			if(master.get_digital(DIGITAL_L2)){
-				shooterMove = (redBall == redAlliance)? 1:-1;
+				shooterMove = ((redBall == redAlliance)? 1:-1);
+				if(shootColorValue < shootColorThreshold) indexerMove = (redBall == redAlliance)? 1: 0.5;
 			}else shooterMove = 1;
 		}
 		if(master.get_digital(DIGITAL_R2)) shooterMove = -1;
