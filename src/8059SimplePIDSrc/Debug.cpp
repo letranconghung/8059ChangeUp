@@ -1,15 +1,19 @@
 #include "main.h"
-int DEBUG_MODE = 0;
+int DEBUG_MODE = 1;
+bool odomView = true;
 void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
   Imu imu (imuPort);
-  // if(imu.is_calibrating()) master.print(2, 0, "calibrating");
-  // else{
-  //   master.print(2, 0, "%.1f %.1f %.1f     ", X, Y, bearing);
-  // }
-  std::string autoIndexUsed = autoIndex? "AUTO": "MAN";
-  std::string allianceName = redAlliance? "RED ": "BLUE";
-  master.print(2, 0, "    %.0f %s %s   ", battery::get_capacity(), autoIndexUsed.c_str(),  allianceName.c_str());
+  if(imu.is_calibrating()) master.print(2, 0, "calibrating");
+  else{
+    if(odomView){
+      master.print(2, 0, "b: %.0f %.1f %.1f %.1f     ",battery::get_capacity(), X, Y, bearing);
+    }else{
+      std::string autoIndexUsed = autoIndex? "AUTO": "MAN";
+      std::string allianceName = redAlliance? "RED ": "BLUE";
+      master.print(2, 0, "    %.0f %s %s   ", battery::get_capacity(), autoIndexUsed.c_str(),  allianceName.c_str());
+    }
+  }
 }
 void printPosTerminal(){
   printf("x: %.2f y: %.2f bearing: %.2f\n", X, Y, bearing);

@@ -47,7 +47,10 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() {
+	Controller master(E_CONTROLLER_MASTER);
+	if(master.get_digital_new_press(DIGITAL_RIGHT)) odomView = !odomView;
+}
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
  * Management System or the VEX Competition Switch. This is intended for
@@ -73,14 +76,13 @@ void autonomous() {
 	Imu imu (imuPort);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 4;
+	int autonNum = 0;
 	switch (autonNum){
-		case 0: skills(); break;
-		case 1: BHR(); break;
-		case 2: BMR(); break;
-		case 3: RHR(); break;
-		case 4: RMR(); break;
-		case 5: test(); break;
+		case 0: BHR(); break;
+		case 1: BMR(); break;
+		case 2: RHR(); break;
+		case 3: RMR(); break;
+		case 4: test(); break;
 	}
 }
 /**
@@ -129,8 +131,6 @@ void opcontrol() {
 			 powerL = y+x;
 			 powerR = y-x;
 	  }
-		if(powerL != 0) signPowerL = ((powerL > 0)? 1 : -1);
-		if(powerR != 0) signPowerR = ((powerR > 0)? 1 : -1);
 		double shootMultiplier = (slowMode? 0.5: 1);
 		double rollerMultiplier = (slowMode? 0.7: 1);
 		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;

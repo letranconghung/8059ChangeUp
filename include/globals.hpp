@@ -16,6 +16,6 @@
 #define encdR_port 4
 #define intakeColorPort 2
 #define shootColorPort 1
-#define imuPort 20
+#define imuPort 10
 #define visPort 11
 #endif
