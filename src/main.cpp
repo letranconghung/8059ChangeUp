@@ -47,10 +47,7 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {
-	Controller master(E_CONTROLLER_MASTER);
-	if(master.get_digital_new_press(DIGITAL_RIGHT)) odomView = !odomView;
-}
+void disabled() {}
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
  * Management System or the VEX Competition Switch. This is intended for
@@ -115,10 +112,12 @@ void opcontrol() {
 	pauseBase = true;
 	bool slowMode = false;
 	baseBraking = false;
+	driverView = true;
 	while (true) {
 		double indexerMove = 0, shooterMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
+		if(master.get_digital_new_press(DIGITAL_RIGHT)) driverView = !driverView;
 		double baseMultiplier = (slowMode? 0.5: 1);
 		if(tankDrive){
 	     int l = master.get_analog(ANALOG_LEFT_Y);

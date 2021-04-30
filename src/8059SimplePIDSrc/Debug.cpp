@@ -1,18 +1,16 @@
 #include "main.h"
 int DEBUG_MODE = 1;
-bool odomView = true;
+bool driverView = false;
 void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
   Imu imu (imuPort);
-  if(imu.is_calibrating()) master.print(2, 0, "calibrating");
+  if(imu.is_calibrating()) master.print(2, 0, "  calibrating IMU");
   else{
-    if(odomView){
-      master.print(2, 0, "%.0f %.1f %.1f %.1f     ",battery::get_capacity(), X, Y, bearing);
-    }else{
-      std::string autoIndexUsed = autoIndex? "AUTO": "MAN";
-      std::string allianceName = redAlliance? "RED ": "BLUE";
-      master.print(2, 0, "    %.0f %s %s   ", battery::get_capacity(), autoIndexUsed.c_str(),  allianceName.c_str());
-    }
+    std::string autoIndexUsed = autoIndex? "AUTO": "MAN";
+    std::string allianceName = redAlliance? "RED": "BLUE";
+    master.print(1, 0, "   %.0f %.1f %.1f %.1f",battery::get_capacity(), X, Y, bearing);
+    delay(50);
+    master.print(2, 0, "      %s %s        ", autoIndexUsed.c_str(),  allianceName.c_str());
   }
 }
 void printPosTerminal(){
@@ -37,9 +35,7 @@ void Debug(void * ignore){
   int count = 0;
   Imu imu (imuPort);
   Controller master(E_CONTROLLER_MASTER);
-  master.print(0, 0, "      8059BLANK");
-  delay(50);
-  master.print(1, 0, "  LETS GO HANSON!");
+  master.print(0, 0, "  LETS GO HANSON!");
   delay(50);
   while(true){
     printPosMaster();
