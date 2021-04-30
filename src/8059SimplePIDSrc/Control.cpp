@@ -164,7 +164,7 @@ void Control(void * ignore){
         powerL += deltaPowerL;
         powerR += deltaPowerR;
         // manual base compensation factor
-        double mod = 0.98; //>1 to make left faster, <1 to make right faster
+        double mod = 0.97; //>1 to make left faster, <1 to make right faster
         if(mod >= 1) powerR /= mod;
         else powerL *= mod;
         prevErrorEncdL = errorEncdL;

@@ -7,7 +7,7 @@ void printPosMaster(){
   if(imu.is_calibrating()) master.print(2, 0, "calibrating");
   else{
     if(odomView){
-      master.print(2, 0, "b: %.0f %.1f %.1f %.1f     ",battery::get_capacity(), X, Y, bearing);
+      master.print(2, 0, "%.0f %.1f %.1f %.1f     ",battery::get_capacity(), X, Y, bearing);
     }else{
       std::string autoIndexUsed = autoIndex? "AUTO": "MAN";
       std::string allianceName = redAlliance? "RED ": "BLUE";
