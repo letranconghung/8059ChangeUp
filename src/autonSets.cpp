@@ -29,7 +29,7 @@ void BHR(){
   setMech(0,80,0);
   baseTurn(90); //face goal
   waitBase(1000);
-  baseMove(10);
+  baseMove(11.3);
   waitBase(1000);
   setMech(0,127,127,400);
 

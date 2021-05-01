@@ -114,7 +114,7 @@ void opcontrol() {
 	baseBraking = false;
 	driverView = true;
 	while (true) {
-		double indexerMove = 0, shooterMove = 0;
+		double indexerMove = 0, shooterMove = 0, rollersMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
 		if(master.get_digital_new_press(DIGITAL_RIGHT)) driverView = !driverView;
@@ -135,6 +135,7 @@ void opcontrol() {
 		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
 		if(master.get_digital_new_press(DIGITAL_B)) redAlliance = !redAlliance;
 		if(master.get_digital_new_press(DIGITAL_X)) baseBraking = !baseBraking;
+		rollersMove = master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2);
 		if(autoIndex){
 			if(intakeColorValue< intakeColorThreshold && shootColorValue < shootColorThreshold) indexerMove = 0;
 			else indexerMove = 1;
@@ -146,14 +147,20 @@ void opcontrol() {
 		}
 		if(master.get_digital(DIGITAL_R1)){
 			if(master.get_digital(DIGITAL_L2)){
-				shooterMove = ((redBall == redAlliance)? 1:-1);
-				if(shootColorValue < shootColorThreshold) indexerMove = (redBall == redAlliance)? 1: 0.5;
+					rollersMove = 1;
+					shooterMove = ((redBall == redAlliance)? 1:-1);
+					if(shootColorValue < shootColorThreshold){
+						indexerMove = (redBall == redAlliance)? 1: 0.5;
+					}
+					if(intakeColorValue < intakeColorThreshold){
+						rollersMove = (redBall == redAlliance)? 1: 0;
+					}
 			}else shooterMove = 1;
 		}
 		if(master.get_digital(DIGITAL_R2)) shooterMove = -1;
 		powerL *= baseMultiplier;
 		powerR *= baseMultiplier;
-		powerRollers = (master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2))*127 *rollerMultiplier;
+		powerRollers = 127*rollersMove*rollerMultiplier;
 		powerIndexer = 127*indexerMove;
 		powerShooter = 127*shooterMove*shootMultiplier;
 		pros::delay(5);
