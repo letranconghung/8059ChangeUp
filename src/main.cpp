@@ -113,8 +113,7 @@ void opcontrol() {
 	bool slowMode = false;
 	pauseBase = true;
 	baseBraking = false;
-	bool L2waiting = false;
-	int lastL2Pressed = millis();
+	driverMode = true;
 	while (true) {
 		double indexerMove = 0, shooterMove = 0, rollersMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
@@ -133,47 +132,9 @@ void opcontrol() {
 	  }
 		powerL *= baseMultiplier;
 		powerR *= baseMultiplier;
-		// mechanical
-		double shootMultiplier = (slowMode? 0.5: 1);
-		double rollerMultiplier = (slowMode? 0.7: 1);
 		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
 		if(master.get_digital_new_press(DIGITAL_B)) alliance = 3 - alliance;
 		if(master.get_digital_new_press(DIGITAL_X)) baseBraking = !baseBraking;
-		// handle double L2 press
-		if(L2waiting){
-			if(millis() - lastL2Pressed > 300){
-				L2waiting = false;
-				startAutoCycle(1);
-			}
-		}
-		if(master.get_digital_new_press(DIGITAL_L2)){
-			if(L2waiting){
-				startAutoCycle(2);
-				printf("time interval: %d\n", millis() - lastL2Pressed);
-				L2waiting = false;
-			}else{
-				L2waiting = true;
-				lastL2Pressed = millis();
-			}
-		}
-		if(master.get_digital_new_press(DIGITAL_RIGHT)) stopAutoCycle();
-		if(!autoCycle){
-			rollersMove = master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2);
-			if(autoIndex){
-				if(intakeColorValue< intakeColorThreshold && shootColorValue < shootColorThreshold) indexerMove = 0;
-				else indexerMove = 1;
-			}
-			if(master.get_digital(DIGITAL_R2)){
-				indexerMove = -1;
-				shooterMove = -1;
-			}else if(master.get_digital(DIGITAL_R1)){
-				indexerMove = 1;
-				shooterMove = 1;
-			}
-			powerRollers = 127*rollersMove*rollerMultiplier;
-			powerIndexer = 127*indexerMove;
-			powerShooter = 127*shooterMove*shootMultiplier;
-		}
 		pros::delay(5);
 	}
 }
