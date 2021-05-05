@@ -1,13 +1,12 @@
 #include "main.h"
-int DEBUG_MODE = 1;
-bool driverView = false;
+int DEBUG_MODE = 0;
 void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
   Imu imu (imuPort);
   if(imu.is_calibrating()) master.print(2, 0, "  calibrating IMU");
   else{
     std::string autoIndexUsed = autoIndex? "AUTO": "MAN";
-    std::string allianceName = redAlliance? "RED": "BLUE";
+    std::string allianceName = (alliance == 1)? "RED": "BLUE";
     master.print(1, 0, "   %.0f %.1f %.1f %.1f",battery::get_capacity(), X, Y, bearing);
     delay(50);
     master.print(2, 0, "      %s %s        ", autoIndexUsed.c_str(),  allianceName.c_str());

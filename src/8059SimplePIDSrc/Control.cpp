@@ -176,7 +176,6 @@ void Control(void * ignore){
     FR.move(powerR);
     BR.move(powerR);
     if(baseBraking){
-      printf("base braking on \n");
         if(powerL == 0 && powerR == 0){
             int brake = 5;
             FL.move(-brake * sign(powerL));

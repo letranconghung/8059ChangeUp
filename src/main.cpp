@@ -1,5 +1,4 @@
 #include "main.h"
-extern bool redBall, redAlliance;
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -25,6 +24,8 @@ void initialize() {
 	/** tare all motors and reset encoder counts */
 
 	Vision vis(visPort);
+	Optical opt(optPort);
+	opt.set_led_pwm(100);
 	FL.tare_position();
 	FR.tare_position();
 	BL.tare_position();
@@ -109,15 +110,15 @@ void opcontrol() {
 	Controller master(E_CONTROLLER_MASTER);
 	Vision vis (visPort);
 	bool tankDrive = true;
-	pauseBase = true;
 	bool slowMode = false;
+	pauseBase = true;
 	baseBraking = false;
-	driverView = true;
+	bool L2waiting = false;
+	int lastL2Pressed = millis();
 	while (true) {
 		double indexerMove = 0, shooterMove = 0, rollersMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
 		if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
-		if(master.get_digital_new_press(DIGITAL_RIGHT)) driverView = !driverView;
 		double baseMultiplier = (slowMode? 0.5: 1);
 		if(tankDrive){
 	     int l = master.get_analog(ANALOG_LEFT_Y);
@@ -130,39 +131,49 @@ void opcontrol() {
 			 powerL = y+x;
 			 powerR = y-x;
 	  }
+		powerL *= baseMultiplier;
+		powerR *= baseMultiplier;
+		// mechanical
 		double shootMultiplier = (slowMode? 0.5: 1);
 		double rollerMultiplier = (slowMode? 0.7: 1);
 		if(master.get_digital_new_press(DIGITAL_A)) autoIndex = !autoIndex;
-		if(master.get_digital_new_press(DIGITAL_B)) redAlliance = !redAlliance;
+		if(master.get_digital_new_press(DIGITAL_B)) alliance = 3 - alliance;
 		if(master.get_digital_new_press(DIGITAL_X)) baseBraking = !baseBraking;
-		rollersMove = master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2);
-		if(autoIndex){
-			if(intakeColorValue< intakeColorThreshold && shootColorValue < shootColorThreshold) indexerMove = 0;
-			else indexerMove = 1;
+		// handle double L2 press
+		if(L2waiting){
+			if(millis() - lastL2Pressed > 300){
+				L2waiting = false;
+				startAutoCycle(1);
+			}
 		}
-		if(master.get_digital(DIGITAL_R2)){
-			indexerMove = -1;
-		}else if(master.get_digital(DIGITAL_R1)){
-			indexerMove = 1;
+		if(master.get_digital_new_press(DIGITAL_L2)){
+			if(L2waiting){
+				startAutoCycle(2);
+				printf("time interval: %d\n", millis() - lastL2Pressed);
+				L2waiting = false;
+			}else{
+				L2waiting = true;
+				lastL2Pressed = millis();
+			}
 		}
-		if(master.get_digital(DIGITAL_R1)){
-			if(master.get_digital(DIGITAL_L2)){
-					rollersMove = 1;
-					shooterMove = ((redBall == redAlliance)? 1:-1);
-					if(shootColorValue < shootColorThreshold){
-						indexerMove = (redBall == redAlliance)? 1: 0.5;
-					}
-					if(intakeColorValue < intakeColorThreshold){
-						rollersMove = (redBall == redAlliance)? 1: 0;
-					}
-			}else shooterMove = 1;
+		if(master.get_digital_new_press(DIGITAL_RIGHT)) stopAutoCycle();
+		if(!autoCycle){
+			rollersMove = master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2);
+			if(autoIndex){
+				if(intakeColorValue< intakeColorThreshold && shootColorValue < shootColorThreshold) indexerMove = 0;
+				else indexerMove = 1;
+			}
+			if(master.get_digital(DIGITAL_R2)){
+				indexerMove = -1;
+				shooterMove = -1;
+			}else if(master.get_digital(DIGITAL_R1)){
+				indexerMove = 1;
+				shooterMove = 1;
+			}
+			powerRollers = 127*rollersMove*rollerMultiplier;
+			powerIndexer = 127*indexerMove;
+			powerShooter = 127*shooterMove*shootMultiplier;
 		}
-		if(master.get_digital(DIGITAL_R2)) shooterMove = -1;
-		powerL *= baseMultiplier;
-		powerR *= baseMultiplier;
-		powerRollers = 127*rollersMove*rollerMultiplier;
-		powerIndexer = 127*indexerMove;
-		powerShooter = 127*shooterMove*shootMultiplier;
 		pros::delay(5);
 	}
 }

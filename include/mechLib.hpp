@@ -5,7 +5,7 @@
 /** traditional-style mech library */
 extern int intakeColorThreshold, shootColorThreshold;
 extern double powerRollers, powerIndexer, powerShooter;
-extern bool autoIndex, visionSort;
+extern bool autoIndex, autoCycle;
 void setMech(int r, int i, int s);
 void resetMech();
 void setMech(int r, int i, int s, int t);
@@ -15,5 +15,7 @@ void autoFrontIntake();
 void autoBackIntake();
 void autoLoad();
 void autoFrontIntakeLoad();
+void startAutoCycle(int n);
+void stopAutoCycle();
 void MechControl(void * ignore);
 #endif

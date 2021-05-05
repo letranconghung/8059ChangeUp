@@ -18,4 +18,5 @@
 #define shootColorPort 1
 #define imuPort 10
 #define visPort 11
+#define optPort 21
 #endif
