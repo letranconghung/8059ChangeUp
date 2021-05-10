@@ -19,10 +19,12 @@ void Sensors(void * ignore){
 	ADIAnalogIn intakeColor (intakeColorPort);
 	ADIAnalogIn shootColor (shootColorPort);
   Optical opt(optPort);
+  Rotation lRot(lRotPort);
+  Rotation rRot(rRotPort);
   while(true){
     if(!imu.is_calibrating()){
-      encdL = FL.get_position();
-      encdR = FR.get_position();
+      encdL = lRot.get_position();
+      encdR = rRot.get_position();
       bearing = imu.get_rotation();
       angle = halfPI - bearing * toRad;
     }

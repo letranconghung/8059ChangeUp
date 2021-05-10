@@ -1,7 +1,7 @@
 {
     "py/object": "pros.conductor.project.Project",
     "py/state": {
-        "project_name": "wex wurs",
+        "project_name": "WEX WURS",
         "target": "v5",
         "templates": {
             "kernel": {

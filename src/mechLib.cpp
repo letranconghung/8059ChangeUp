@@ -9,7 +9,7 @@ int iLoad = 127;
 int intakeColorThreshold = 2850;
 int shootColorThreshold = 2830; // working 2830
 double powerRollers = 0, powerIndexer = 0, powerShooter = 0;
-bool autoIndex = true;
+bool autoIndex = false;
 int stage = 0;
 int nOpp = 1;
 void setMech(int r, int i, int s){
@@ -50,7 +50,7 @@ void autoLoad(){
   waitShootColor();
   resetMech();
 }
-const int LONG_PRESS_CUTOFF = 120;
+const int LONG_PRESS_CUTOFF = 150;
 const int DOUBLE_TAP_INTERVAL = 250;
 bool driverMode = false;
 void MechControl(void * ignore){
@@ -63,6 +63,7 @@ void MechControl(void * ignore){
   int mode = 0, pressTimeStamp = millis(), releaseTimeStamp = millis();
   while(true){
     if(driverMode){
+      printf("mode: %d\n", mode);
       if(master.get_digital_new_press(DIGITAL_RIGHT)){
         stage = 0;
         mode = 0;
@@ -70,6 +71,8 @@ void MechControl(void * ignore){
       }
       if(mode == 0){
         rollersMove = master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2);
+        indexerMove = 0;
+        shooterMove = 0;
         if(autoIndex){
           if(intakeColorValue< intakeColorThreshold && shootColorValue < shootColorThreshold) indexerMove = 0;
           else indexerMove = 1;

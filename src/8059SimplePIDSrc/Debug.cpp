@@ -39,7 +39,7 @@ void Debug(void * ignore){
   while(true){
     printPosMaster();
     if(imu.is_calibrating()) {
-      // printf("imu is calibrating...\n");
+      printf("imu is calibrating...\n");
     }else {
       switch(DEBUG_MODE){
         case 1: printPosTerminal(); break;

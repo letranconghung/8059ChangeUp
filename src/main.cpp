@@ -19,29 +19,26 @@ void initialize() {
 	Imu imu(imuPort);
 	ADIDigitalIn intakeColor(intakeColorPort);
 	ADIDigitalIn shootColor(shootColorPort);
-	// ADIEncoder encoderL (encdL_port,encdL_port+1,false);
-	// ADIEncoder encoderR (encdR_port,encdR_port+1,true);
-	/** tare all motors and reset encoder counts */
-
+	Rotation lRot(lRotPort);
+	Rotation rRot(rRotPort);
 	Vision vis(visPort);
 	Optical opt(optPort);
+	/** taring */
 	opt.set_led_pwm(100);
 	FL.tare_position();
 	FR.tare_position();
 	BL.tare_position();
 	BR.tare_position();
 	imu.reset();
+	lRot.reset_position();
+	rRot.reset_position();
 	resetCoords(0, 0);
-	// encoderL.reset();
-	// encoderR.reset();
 	/** declaration and initialization of asynchronous Tasks */
-	//Task mechControlTask(mechControl, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT);
 	Task ControlTask(Control);
 	Task DebugTask(Debug);
 	Task OdometryTask(Odometry);
 	Task SensorsTask(Sensors);
 	Task MechControlTask(MechControl);
-	// Task visSortTask(VisSort);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -114,6 +111,7 @@ void opcontrol() {
 	pauseBase = true;
 	baseBraking = false;
 	driverMode = true;
+	autoIndex = true;
 	while (true) {
 		double indexerMove = 0, shooterMove = 0, rollersMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
