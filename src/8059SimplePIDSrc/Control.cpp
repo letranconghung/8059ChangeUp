@@ -1,10 +1,10 @@
 #include "main.h"
-#define DEFAULT_KP 0.33
+#define DEFAULT_KP 0.001275
 #define DEFAULT_KD 0
-#define DEFAULT_TURN_KP 1
-#define DEFAULT_TURN_KD 0
-#define RAMPING_POW 5
-#define DISTANCE_LEEWAY 3
+#define DEFAULT_TURN_KP 0.94
+#define DEFAULT_TURN_KD 0.01
+#define RAMPING_POW 2
+#define DISTANCE_LEEWAY 4000
 #define BEARING_LEEWAY 1
 
 const double MAX_POW = 100;
@@ -164,7 +164,7 @@ void Control(void * ignore){
         powerL += deltaPowerL;
         powerR += deltaPowerR;
         // manual base compensation factor
-        double mod = 0.97; //>1 to make left faster, <1 to make right faster
+        double mod = 0.985; //>1 to make left faster, <1 to make right faster
         if(mod >= 1) powerR /= mod;
         else powerL *= mod;
         prevErrorEncdL = errorEncdL;

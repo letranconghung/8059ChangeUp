@@ -15,12 +15,13 @@ void Sensors(void * ignore){
   Motor FR (FRPort);
   Motor BR (BRPort);
   Imu imu (imuPort);
+  Rotation lRot(lRotPort);
+  Rotation rRot(rRotPort);
   Vision vis (visPort);
 	ADIAnalogIn intakeColor (intakeColorPort);
 	ADIAnalogIn shootColor (shootColorPort);
   Optical opt(optPort);
-  Rotation lRot(lRotPort);
-  Rotation rRot(rRotPort);
+  int count = 0;
   while(true){
     if(!imu.is_calibrating()){
       encdL = lRot.get_position();
@@ -48,9 +49,9 @@ void Sensors(void * ignore){
     // optical code
     rgb = opt.get_rgb();
     proximity = opt.get_proximity();
-    // printf("prox: %d r: %.2f\t g: %.2f\t b: %.2f\n", proximity, rgb.red, rgb.blue, rgb.green);
     if(proximity > 200) optBall = ((rgb.red > rgb.blue? 1 : 2));
     else optBall = 0;
+    if(count++ %20 == 0) printf("prox: %d r: %.2f\t g: %.2f\t b: %.2f opt: %d\n", proximity, rgb.red, rgb.blue, rgb.green, optBall);
     delay(5);
   }
 }

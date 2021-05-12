@@ -25,14 +25,10 @@ void initialize() {
 	Optical opt(optPort);
 	/** taring */
 	opt.set_led_pwm(100);
-	FL.tare_position();
-	FR.tare_position();
-	BL.tare_position();
-	BR.tare_position();
-	imu.reset();
 	lRot.reset_position();
 	rRot.reset_position();
-	resetCoords(0, 0);
+	lRot.reverse();
+
 	/** declaration and initialization of asynchronous Tasks */
 	Task ControlTask(Control);
 	Task DebugTask(Debug);

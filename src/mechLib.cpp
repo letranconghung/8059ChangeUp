@@ -3,15 +3,11 @@
 #include "mechLib.hpp"
 /** declare motors and sensors */
 /** thresholds */
-int iMax = 127;
-int rMax = 127;
-int iLoad = 127;
-int intakeColorThreshold = 2850;
-int shootColorThreshold = 2830; // working 2830
+int iMax = 127, rMax = 127, sMax = 105;
+int intakeColorThreshold = 2850, shootColorThreshold = 2830; // working 2830
 double powerRollers = 0, powerIndexer = 0, powerShooter = 0;
 bool autoIndex = false;
-int stage = 0;
-int nOpp = 1;
+int stage = 0, mode = 0;
 void setMech(int r, int i, int s){
   powerRollers = r;
   powerIndexer = i;
@@ -46,9 +42,14 @@ void autoBackIntake(){
 /** can be used for backIntakeLoad */
 void autoLoad(){
   printf("auto load\n");
-  setMech(0, iLoad, 0);
+  setMech(0, iMax, 0);
   waitShootColor();
   resetMech();
+}
+void resetMode(){
+  // printf("Mode %d done. Resetting to 0\n", mode);
+  mode = 0;
+  stage = 0;
 }
 const int LONG_PRESS_CUTOFF = 150;
 const int DOUBLE_TAP_INTERVAL = 250;
@@ -60,14 +61,12 @@ void MechControl(void * ignore){
   Motor shooter (shooterPort);
   Controller master(E_CONTROLLER_MASTER);
   double indexerMove = 0, shooterMove = 0, rollersMove = 0;
-  int mode = 0, pressTimeStamp = millis(), releaseTimeStamp = millis();
+  int pressTimeStamp;
   while(true){
     if(driverMode){
-      printf("mode: %d\n", mode);
-      if(master.get_digital_new_press(DIGITAL_RIGHT)){
-        stage = 0;
-        mode = 0;
-        printf("reset mode: %d\n", mode);
+      // printf("mode: %d\n", mode);
+      if(master.get_digital(DIGITAL_R1) || master.get_digital(DIGITAL_R2) || master.get_digital(DIGITAL_L1)){
+        resetMode();
       }
       if(mode == 0){
         rollersMove = master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2);
@@ -80,45 +79,25 @@ void MechControl(void * ignore){
         if(master.get_digital(DIGITAL_R2)){
           indexerMove = -1;
           shooterMove = -1;
+        }else if(master.get_digital(DIGITAL_R1)){
+          indexerMove = 1;
+          shooterMove = 1;
         }
       }
-      if(master.get_digital_new_press(DIGITAL_R1) && mode == 0){
-        pressTimeStamp = millis();
-        mode = 1;
-      }
-      if(mode == 1){
-        if(millis() - pressTimeStamp > LONG_PRESS_CUTOFF){
-          mode = 2;
-        }
-        if(!master.get_digital(DIGITAL_R1)){
+      if(master.get_digital_new_press(DIGITAL_L2)){
+        if(mode == 0){
+          pressTimeStamp = millis();
+          mode = 1;
+        }else if (mode == 1 && millis() - pressTimeStamp){
+          printf("double tap\n");
           mode = 3;
-          releaseTimeStamp = millis();
         }
+      }
+      if(mode == 1 && millis() - pressTimeStamp > DOUBLE_TAP_INTERVAL){
+        printf("single tap\n");
+        mode = 2;
       }
       if(mode == 2){
-        // R1 is pressed
-        rollersMove = master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R2);
-        indexerMove = 1;
-        shooterMove = 1;
-        printf("long press\n");
-        if(!master.get_digital(DIGITAL_R1)){
-          mode = 0;
-          printf("long press released\n");
-          releaseTimeStamp = millis();
-        }
-      }
-      if(mode == 3){
-        if(millis() - releaseTimeStamp < DOUBLE_TAP_INTERVAL && master.get_digital(DIGITAL_R1)){
-          pressTimeStamp = millis();
-          printf("double tap\t %d\n", millis() - releaseTimeStamp);
-          mode = 5; // double tap
-        }
-        if(millis() - releaseTimeStamp > DOUBLE_TAP_INTERVAL){
-          printf("single tap\t %d\n", millis() - releaseTimeStamp);
-          mode = 4; // single tap
-        }
-      }
-      if(mode == 4){
         if(stage == 0){
           rollersMove = 1;
           indexerMove = 1;
@@ -128,12 +107,9 @@ void MechControl(void * ignore){
           rollersMove = 0;
           indexerMove = 1;
           shooterMove = 1;
-          if(ball == 3 - alliance){
-            stage = 0;
-            mode = 0;
-          }
+          if(ball == 3 - alliance) resetMode();
         }
-      }else if (mode == 5){
+      }else if (mode == 3){
         if(stage == 0){
           rollersMove = 1;
           indexerMove = 1;
@@ -148,15 +124,12 @@ void MechControl(void * ignore){
           rollersMove = 0;
           indexerMove = 1;
           shooterMove = 1;
-          if(ball == 3 - alliance){
-            stage = 0;
-            mode = 0;
-          }
+          if(ball == 3 - alliance) resetMode();
         }
       }
-      powerRollers = 127*rollersMove;
-      powerIndexer = 127*indexerMove;
-      powerShooter = 127*shooterMove;
+      powerRollers = rMax*rollersMove;
+      powerIndexer = iMax*indexerMove;
+      powerShooter = sMax*shooterMove;
     }
     lRoller.move(powerRollers);
     rRoller.move(powerRollers);

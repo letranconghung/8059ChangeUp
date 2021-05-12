@@ -2,7 +2,8 @@
 #include "main.h"
 /** programming skills run */
 void test(){
-  baseMove(48);
+  // baseMove(48, 0.001275, 0);
+  baseTurn(90, 0.93, 0);
   waitBase(3000);
 }
 /** Autonomous routine for blue left spawn. */
