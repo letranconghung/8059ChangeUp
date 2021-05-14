@@ -2,62 +2,129 @@
 #include "main.h"
 /** programming skills run */
 void test(){
-  // baseMove(48, 0.001275, 0);
-  baseTurn(90, 0.93, 0);
+  baseMove(48);
   waitBase(3000);
 }
-/** Autonomous routine for blue left spawn. */
+/** Autonomous routine for blue homerow. */
 void BHR(){
   //Goal C
-  setMech(127,80,0);
-  baseMove(6.5, 0.5, 0); //intake ball
+  asyncFrontIntake();
+  baseMove(5.8, 0.002,0); //intake ball
   waitBase(500);
   baseTurn(30, 1.7, 0);
   waitBase(500);
-  resetMech();
-  baseMove(8, 0.5, 0); //align
-  waitBase(500);
-  setMech(0, 127, 127, 350);
+  // baseMove(6,0.002,0); //align
+  // waitBase(500);
+  shoot(350);
+  asyncLoad();
 
   //Goal F
-  baseMove(-30, 0.4, 0);
-  waitBase(1500);
-  baseTurn(0, 1.5, 0);
+  baseMove(-15); //12.5
+  waitBase(1000);
+  baseTurn(0, 1.7, 0);
   waitBase(500);
   delay(500);
-  baseMove(-32.5); //move to goal
+  baseMove(-44); //move to goal -45
   waitBase(1500);
-  setMech(0,80,0);
   baseTurn(90); //face goal
   waitBase(1000);
-  baseMove(11.3);
+  baseMove(9); //11.3
   waitBase(1000);
-  setMech(0,127,127,400);
+  shoot(400);
 
   //Goal I
-  baseMove(-14, 0.4, 0);
+  baseMove(-10);//17
   waitBase(1000);
-  baseTurn(160, 1.2, 0); //face ball
-  waitBase(700);
-  setMech(127,100,0);
-  baseMove(53);
+  baseTurn(180);
+  waitBase(1000);
+  baseMove(50.5);
   waitBase(1500);
-  baseTurn(134, 1.5, 0); //face goal
-  waitBase(800);
-  setMech(0,80,0);
-  baseMove(11, 0.4, 0);
-  waitBase(800);
-  setMech(0,127,127);
+  baseTurn(135,1.7,0);
+  waitBase(1000);
+  asyncFrontIntakeLoad();
+  baseMove(15);
+  waitBase(1000);
+  delay(200);
+  shoot(400);
+
+  // //Goal E
+  // baseMove(-30);
+  // waitBase(1500);
+  // baseTurn(270); //face ball
+  // waitBase(1000);
+  // asyncFrontIntake();
+  // baseMove(29);
+  // waitBase(1500);
+  // baseMove(-30); //24
+  // waitBase(1000);
+  // baseTurn(220,1.7,0); //face goal
+  // waitBase(1000);
+  // baseMove(29);
+  // waitBase(1500);
+  // setMech(-1,-1,0,600);
+  // baseMove(-10);
+  // waitBase(500);
+
 }
 
-/** Autonomous routine for blue right spawn. */
-void BMR(){
+/** Autonomous routine for blue homerow + 2. */
+void BHR8(){
+  //Goal C
+  asyncFrontIntake();
+  baseMove(5.8, 0.002,0); //intake ball
+  waitBase(500);
+  baseTurn(30, 1.7, 0);
+  waitBase(500);
+  // baseMove(6,0.002,0); //align
+  // waitBase(500);
+  shoot(350);
+  asyncLoad();
+
+  //Goal F
+  baseMove(-15); //12.5
+  waitBase(1000);
+  baseTurn(0, 1.7, 0);
+  waitBase(500);
+  delay(500);
+  baseMove(-44); //move to goal -45
+  waitBase(1500);
+  baseTurn(90); //face goal
+  waitBase(1000);
+  baseMove(9); //11.3
+  waitBase(1000);
+  shoot(400);
+
+  //Goal I
+  baseMove(-10);//17
+  waitBase(1000);
+  baseTurn(180);
+  waitBase(1000);
+  baseMove(50.5);
+  waitBase(1500);
+  baseTurn(135,1.7,0);
+  waitBase(1000);
+  asyncFrontIntakeLoad();
+  baseMove(15);
+  waitBase(1000);
+  delay(200);
+  shoot(400);
 }
-/* Autonomous routine for red left spawn. */
+
+/*Autonomous routine for blue middle row. */
+void BMR() {
+
+}
+
+/* Autonomous routine for red homerow. */
 void RHR(){
 
 }
-/* Autonomous routine for red right spawn. */
-void RMR(){
+/* Autonomous routine for red homerow + 2. */
+void RHR8(){
+
+}
+
+/*Autonomous routine for red middle row. */
+void RMR() {
 
 }

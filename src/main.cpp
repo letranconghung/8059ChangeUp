@@ -24,10 +24,10 @@ void initialize() {
 	Vision vis(visPort);
 	Optical opt(optPort);
 	/** taring */
-	opt.set_led_pwm(100);
 	lRot.reset_position();
 	rRot.reset_position();
 	lRot.reverse();
+	imu.reset();
 
 	/** declaration and initialization of asynchronous Tasks */
 	Task ControlTask(Control);
@@ -65,15 +65,19 @@ void competition_initialize() {}
  */
 void autonomous() {
 	Imu imu (imuPort);
+	Optical opt(optPort);
+	opt.set_led_pwm(0);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
 	int autonNum = 0;
 	switch (autonNum){
 		case 0: BHR(); break;
-		case 1: BMR(); break;
-		case 2: RHR(); break;
-		case 3: RMR(); break;
-		case 4: test(); break;
+		case 1: BHR8(); break;
+		case 2: BMR(); break;
+		case 3: RHR(); break;
+		case 4: RHR8(); break;
+		case 5: RMR(); break;
+		case 6: test(); break;
 	}
 }
 /**
@@ -102,12 +106,15 @@ void opcontrol() {
 	Motor shooter (shooterPort);
 	Controller master(E_CONTROLLER_MASTER);
 	Vision vis (visPort);
+	Optical opt(optPort);
+	opt.set_led_pwm(100);
 	bool tankDrive = true;
 	bool slowMode = false;
 	pauseBase = true;
 	baseBraking = false;
 	driverMode = true;
 	autoIndex = true;
+	resetMode();
 	while (true) {
 		double indexerMove = 0, shooterMove = 0, rollersMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;

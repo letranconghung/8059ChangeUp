@@ -3,53 +3,42 @@
 #include "mechLib.hpp"
 /** declare motors and sensors */
 /** thresholds */
-int iMax = 127, rMax = 127, sMax = 105;
+int iMax = 127, rMax = 127, sMax = 127;
 int intakeColorThreshold = 2850, shootColorThreshold = 2830; // working 2830
-double powerRollers = 0, powerIndexer = 0, powerShooter = 0;
 bool autoIndex = false;
 int stage = 0, mode = 0;
-void setMech(int r, int i, int s){
-  powerRollers = r;
-  powerIndexer = i;
-  powerShooter = s;
+double indexerMove = 0, shooterMove = 0, rollersMove = 0;
+void setMech(double r, double i, double s){
+  rollersMove = r;
+  indexerMove = i;
+  shooterMove = s;
 }
-void resetMech(){
-  setMech(0, 0, 0);
-}
-void setMech(int r, int i, int s, int t){
+void setMech(double r, double i, double s, int t){
   setMech(r, i, s);
   delay(t);
   resetMech();
 }
-void waitIntakeColor(){
-  // printf("wait intake color \t value: %d\n", shootColorValue);
-  while(intakeColorValue>intakeColorThreshold) delay(5);
+void asyncFrontIntake(){
+  mode = 1;
 }
-void waitShootColor(){
-  // printf("wait Shoot color \t value: %d\n", shootColorValue);
-  while(shootColorValue>shootColorThreshold) delay(5);
+void asyncLoad(){
+  mode = 2;
 }
-void autoFrontIntake(){
-  setMech(rMax, iMax, 0);
-  waitIntakeColor();
-  resetMech();
+void asyncFrontIntakeLoad(){
+  mode = 3;
 }
-void autoBackIntake(){
-  setMech(0, iMax, 0);
-  waitIntakeColor();
-  resetMech();
-}
-/** can be used for backIntakeLoad */
-void autoLoad(){
-  printf("auto load\n");
-  setMech(0, iMax, 0);
-  waitShootColor();
+void shoot(double t){
+  mode = 0;
+  setMech(-1,1,1,t);
   resetMech();
 }
 void resetMode(){
-  // printf("Mode %d done. Resetting to 0\n", mode);
   mode = 0;
   stage = 0;
+}
+void resetMech(){
+  resetMode();
+  setMech(0, 0, 0);
 }
 const int LONG_PRESS_CUTOFF = 150;
 const int DOUBLE_TAP_INTERVAL = 250;
@@ -60,7 +49,6 @@ void MechControl(void * ignore){
   Motor indexer (indexerPort);
   Motor shooter (shooterPort);
   Controller master(E_CONTROLLER_MASTER);
-  double indexerMove = 0, shooterMove = 0, rollersMove = 0;
   int pressTimeStamp;
   while(true){
     if(driverMode){
@@ -127,14 +115,75 @@ void MechControl(void * ignore){
           if(ball == 3 - alliance) resetMode();
         }
       }
-      powerRollers = rMax*rollersMove;
-      powerIndexer = iMax*indexerMove;
-      powerShooter = sMax*shooterMove;
+    }else{
+      // async
+      switch(mode){
+        case 0: break;
+        case 1:{
+          // front intake
+          if(intakeColorValue > intakeColorThreshold) setMech(1, 1, 0);
+          else resetMech();
+          break;
+        }
+        case 2:{
+          // load
+          if(shootColorValue > shootColorThreshold) setMech(0, 1, 0);
+          else resetMech();
+          break;
+        }
+        case 3:{
+          // front intake load
+          if(stage == 0){
+            if(intakeColorValue > shootColorThreshold) setMech(1, 1, 0);
+            else stage = 1;
+          }
+          if(stage == 1){
+            if(shootColorValue > shootColorThreshold) setMech(0, 1, 0);
+            else{
+              resetMech();
+              break;
+            }
+          }
+        }
+      }
     }
-    lRoller.move(powerRollers);
-    rRoller.move(powerRollers);
-    indexer.move(powerIndexer);
-    shooter.move(powerShooter);
+    lRoller.move(rMax*rollersMove);
+    rRoller.move(rMax*rollersMove);
+    indexer.move(iMax*indexerMove);
+    shooter.move(sMax*shooterMove);
     delay(5);
   }
 }
+
+// void waitIntakeColor(){
+  //   // printf("wait intake color \t value: %d\n", shootColorValue);
+  //   while(intakeColorValue>intakeColorThreshold) delay(5);
+  // }
+  // void waitShootColor(){
+    //   // printf("wait Shoot color \t value: %d\n", shootColorValue);
+    //   while(shootColorValue>shootColorThreshold) delay(5);
+    // }
+    // void autoFrontIntake(){
+      //   setMech(1, 1, 0);
+      //   waitIntakeColor();
+      //   resetMech();
+      // }
+      // void autoBackIntake(){
+        //   setMech(0, 1, 0);
+        //   waitIntakeColor();
+        //   resetMech();
+        // }
+        // /** can be used for backIntakeLoad */
+        // void autoLoad(){
+          //   printf("auto load\n");
+          //   setMech(0, 1, 0);
+          //   waitShootColor();
+          //   resetMech();
+          // }
+          // void autoFrontIntakeLoad(){
+            //   setMech(1, 1, 0);
+            //   waitIntakeColor();
+            //   setMech(0, 1, 0);
+            //   waitShootColor();
+            //   resetMech();
+            // }

@@ -6,14 +6,19 @@
 extern int intakeColorThreshold, shootColorThreshold;
 extern double powerRollers, powerIndexer, powerShooter;
 extern bool autoIndex, driverMode;
-void setMech(int r, int i, int s);
+void setMech(double r, double i, double s);
+void setMech(double r, double i, double s, int t);
+void asyncFrontIntake();
+void asyncLoad();
+void asyncFrontIntakeLoad();
+void shoot(double t);
+void resetMode();
 void resetMech();
-void setMech(int r, int i, int s, int t);
-void waitIntakeColor();
-void waitShootColor();
-void autoFrontIntake();
-void autoBackIntake();
-void autoLoad();
-void autoFrontIntakeLoad();
 void MechControl(void * ignore);
+// void waitIntakeColor();
+// void waitShootColor();
+// void autoFrontIntake();
+// void autoBackIntake();
+// void autoLoad();
+// void autoFrontIntakeLoad();
 #endif

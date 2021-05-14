@@ -9,6 +9,11 @@ double boundDeg(double deg){
   if(res < 0) res += 360;
   return res;
 }
+double boundDegTurn(double deg){
+  double res = boundDeg(deg);
+  if(res>180) res -= 360;
+  return res;
+}
 double abscap(double x, double abscap){
   if(x > abscap) return abscap;
   else if(x < -abscap) return -abscap;

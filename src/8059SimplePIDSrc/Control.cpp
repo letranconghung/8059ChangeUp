@@ -1,7 +1,7 @@
 #include "main.h"
 #define DEFAULT_KP 0.001275
 #define DEFAULT_KD 0
-#define DEFAULT_TURN_KP 0.94
+#define DEFAULT_TURN_KP 1
 #define DEFAULT_TURN_KD 0.01
 #define RAMPING_POW 2
 #define DISTANCE_LEEWAY 4000
@@ -34,7 +34,8 @@ void baseTurn(double p_bearing, double kp, double kd){
   pauseBase = false;
   printf("baseTurn: %.1f\t", p_bearing);
   turnMode = true;
-  targBearing = p_bearing;
+  targBearing = bearing + boundDegTurn(p_bearing - bearing);
+  // targBearing = p_bearing;
 	kP = kp;
 	kD = kd;
 }
@@ -164,7 +165,7 @@ void Control(void * ignore){
         powerL += deltaPowerL;
         powerR += deltaPowerR;
         // manual base compensation factor
-        double mod = 0.985; //>1 to make left faster, <1 to make right faster
+        double mod = 0.99; //>1 to make left faster, <1 to make right faster
         if(mod >= 1) powerR /= mod;
         else powerL *= mod;
         prevErrorEncdL = errorEncdL;

@@ -51,7 +51,7 @@ void Sensors(void * ignore){
     proximity = opt.get_proximity();
     if(proximity > 200) optBall = ((rgb.red > rgb.blue? 1 : 2));
     else optBall = 0;
-    if(count++ %20 == 0) printf("prox: %d r: %.2f\t g: %.2f\t b: %.2f opt: %d\n", proximity, rgb.red, rgb.blue, rgb.green, optBall);
+    //if(count++ %20 == 0) printf("prox: %d r: %.2f\t g: %.2f\t b: %.2f opt: %d\n", proximity, rgb.red, rgb.blue, rgb.green, optBall);
     delay(5);
   }
 }
