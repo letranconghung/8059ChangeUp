@@ -1,31 +1,30 @@
 #include "main.h"
 const double inPerDeg = 0.000242;
-double X = 0, Y = 0, prevEncdL = 0, prevEncdR = 0;
-void setCoords(double x, double y){
+const double baseWidth = 9.11;
+double X = 0, Y = 0, bearing = 0, angle = halfPI, prevEncdL = 0, prevEncdR = 0;
+void setCoords(double x, double y, double b){
   X = x;
   Y = y;
+  bearing = b;
 }
 void Odometry(void * ignore){
   Imu imu (imuPort);
+  double changeX = 0, changeY = 0, changeBearing = 0;
   while(true){
-    if(imu.is_calibrating()){
-      resetCoords(0, 0);
-    }else {
-      double encdChangeL = encdL-prevEncdL;
-      double encdChangeR = encdR-prevEncdR;
+    double encdChangeL = encdL-prevEncdL;
+    double encdChangeR = encdR-prevEncdR;
 
-      double distance = (encdChangeL + encdChangeR)/2*inPerDeg;
-      X += distance*cos(angle);
-      Y += distance*sin(angle);
-      /** update prev variables */
-      prevEncdL = encdL;
-      prevEncdR = encdR;
-    }
+    double distance = (encdChangeL + encdChangeR)/2*inPerDeg;
+    changeBearing = (encdChangeL - encdChangeR)*inPerDeg/baseWidth;
+    changeX = distance * cos(angle);
+    changeY = distance * sin(angle);
+    /** update prev variables */
+    X += changeX;
+    Y += changeY;
+    bearing += changeBearing;
+    angle = halfPI - bearing;
+    prevEncdL = encdL;
+    prevEncdR = encdR;
     Task::delay(5);
   }
 }
-void resetPrevEncd() {
-  prevEncdL = 0;
-  prevEncdR = 0;
-}
-//8218.7,8229.78222

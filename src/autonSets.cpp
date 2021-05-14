@@ -2,8 +2,13 @@
 #include "main.h"
 /** programming skills run */
 void test(){
-  baseMove(48);
-  waitBase(3000);
+  baseMove(30);
+  waitBase(1000);
+  baseTurn(180, 0.89, 0);
+  waitBase(2000);
+  baseMove(30);
+  waitBase(1000);
+  // 0.95 for 90, 0.88 for 180
 }
 /** Autonomous routine for blue homerow. */
 void BHR(){

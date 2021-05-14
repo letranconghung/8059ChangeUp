@@ -1,13 +1,13 @@
 #include "main.h"
 #define DEFAULT_KP 0.001275
 #define DEFAULT_KD 0
-#define DEFAULT_TURN_KP 1
-#define DEFAULT_TURN_KD 0.01
+#define DEFAULT_TURN_KP 0.95
+#define DEFAULT_TURN_KD 0
 #define RAMPING_POW 2
 #define DISTANCE_LEEWAY 4000
-#define BEARING_LEEWAY 1
+#define BEARING_LEEWAY 0.4
 
-const double MAX_POW = 100;
+const double MAX_POW = 115;
 
 double targEncdL = 0, targEncdR = 0, targBearing = 0;
 double errorEncdL = 0, errorEncdR = 0, errorBearing = 0;
@@ -30,17 +30,16 @@ void baseMove(double dis, double kp, double kd){
 void baseMove(double dis){
   baseMove(dis, DEFAULT_KP, DEFAULT_KD);
 }
-void baseTurn(double p_bearing, double kp, double kd){
+void baseTurn(double b, double kp, double kd){
   pauseBase = false;
-  printf("baseTurn: %.1f\t", p_bearing);
+  printf("baseTurn: %.1f\t", b);
   turnMode = true;
-  targBearing = bearing + boundDegTurn(p_bearing - bearing);
-  // targBearing = p_bearing;
-	kP = kp;
-	kD = kd;
+  targBearing = bearing + boundRadTurn(b*toRad - bearing);
+	kP = kp*toDeg;
+	kD = kd*toDeg;
 }
-void baseTurn(double bearing){
-  baseTurn(bearing, DEFAULT_TURN_KP, DEFAULT_TURN_KD);
+void baseTurn(double b){
+  baseTurn(b, DEFAULT_TURN_KP, DEFAULT_TURN_KD);
 }
 void powerBase(double l, double r) {
   pauseBase = true;
@@ -55,19 +54,17 @@ void timerBase(double l, double r, double t) {
   powerL = 0;
   powerR = 0;
   pauseBase = false;
-  resetCoords(X, Y);
 }
 void unPauseBase() {
   powerL = 0;
   powerR = 0;
   pauseBase = false;
-  resetCoords(X, Y);
 }
 
 void waitBase(int cutoff){
 	int start = millis();
   if(turnMode) {
-    while(fabs(targBearing - bearing) > BEARING_LEEWAY && (millis()-start) < cutoff) delay(20);
+    while(fabs(targBearing - bearing)*toDeg > BEARING_LEEWAY && (millis()-start) < cutoff) delay(20);
   }else{
     while((fabs(targEncdL - encdL) > DISTANCE_LEEWAY || fabs(targEncdR - encdR) > DISTANCE_LEEWAY) && (millis()-start) < cutoff) delay(5);
   }
@@ -90,18 +87,18 @@ void Control(void * ignore){
   Motor BL (BLPort);
   Motor FR (FRPort);
   Motor BR (BRPort);
-  Imu imu (imuPort);
   int count = 0;
   prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
   while(true){
-    if(!imu.is_calibrating() && !pauseBase) {
+    if(!pauseBase) {
       if(turnMode){
         errorBearing = targBearing - bearing;
         double deltaErrorBearing = errorBearing - prevErrorBearing;
 
         targPowerL = errorBearing * kP + deltaErrorBearing * kD;
+        printf("err: %.1f\t kp: %.1f\n res: %.1f\n", errorBearing, kP, targPowerL);
         targPowerR = -targPowerL;
-
+        printf("targPowerL, R: %.1f \t%.1f\n", targPowerL, targPowerR);
         prevErrorBearing = errorBearing;
 
         double deltaPowerL = targPowerL - powerL;
@@ -111,6 +108,7 @@ void Control(void * ignore){
 
         powerL = abscap(powerL, MAX_POW);
         powerR = abscap(powerR, MAX_POW);
+        printf("powerL, R: %.1f \t%.1f\n", powerL, powerR);
       }else{
         errorEncdL = targEncdL - encdL;
         errorEncdR = targEncdR - encdR;
@@ -125,22 +123,6 @@ void Control(void * ignore){
         double setPower = std::min(pd_maxTargPower, MAX_POW);
         // printf("setPower: %.2f\n", setPower);
         double lToR = ((pd_targPowerR != 0)? (pd_targPowerL/pd_targPowerR) : 1);
-        // double avgErrorEncd = (errorEncdL + errorEncdR)/2;
-        // double adjustmentFactor = avgErrorEncd/10000;
-        // adjustmentFactor = 0;
-        // double allowance = 0.005;
-        // if(fabs(lToR-1)<=allowance) adjustmentFactor = 0;
-        // if(++count % 20 == 0) printf("adjustmentFactor: %.7f \n", adjustmentFactor);
-
-        // if(lToR >= 1){
-        //   lToR += adjustmentFactor;
-        //   targPowerL = setPower;
-        //   targPowerR = setPower/lToR;
-        // }else{
-        //   lToR -= adjustmentFactor;
-        //   targPowerL = setPower*lToR;
-        //   targPowerR = setPower;
-        // }
         if(lToR != 0){
           // printf("got inside here\n");
             if(fabs(lToR)>=1){
@@ -155,11 +137,6 @@ void Control(void * ignore){
         }
         double deltaPowerL = targPowerL - powerL;
         double deltaPowerR = targPowerR - powerR;
-        // if(deltaPowerL > RAMPING_POW || deltaPowerR > RAMPING_POW){
-        //   double deltaPowerMax = std::max(deltaPowerL, deltaPowerR);
-        //   deltaPowerL = RAMPING_POW/deltaPowerMax*deltaPowerL;
-        //   deltaPowerR = RAMPING_POW/deltaPowerMax*deltaPowerR;
-        // }
         deltaPowerL = abscap(deltaPowerL, RAMPING_POW);
         deltaPowerR = abscap(deltaPowerR, RAMPING_POW);
         powerL += deltaPowerL;
@@ -187,22 +164,4 @@ void Control(void * ignore){
         }
     delay(5);
   }
-}
-void resetCoords(double x, double y){
-  Motor FL (FLPort);
-  Motor BL (BLPort);
-  Motor FR (FRPort);
-  Motor BR (BRPort);
-
-  FL.tare_position();
-  FR.tare_position();
-  BL.tare_position();
-  BR.tare_position();
-  resetPrevEncd();
-
-  targBearing = bearing;
-  targEncdL = 0;
-  targEncdR = 0;
-
-  setCoords(x, y);
 }

@@ -16,7 +16,6 @@ void initialize() {
 	Motor shooter (shooterPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Motor indexer (indexerPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
 	Controller master(E_CONTROLLER_MASTER);
-	Imu imu(imuPort);
 	ADIDigitalIn intakeColor(intakeColorPort);
 	ADIDigitalIn shootColor(shootColorPort);
 	Rotation lRot(lRotPort);
@@ -27,7 +26,6 @@ void initialize() {
 	lRot.reset_position();
 	rRot.reset_position();
 	lRot.reverse();
-	imu.reset();
 
 	/** declaration and initialization of asynchronous Tasks */
 	Task ControlTask(Control);
@@ -64,12 +62,11 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	Imu imu (imuPort);
 	Optical opt(optPort);
 	opt.set_led_pwm(0);
-	// while(imu.is_calibrating()) delay(5);
+	setCoords(0, 0, 0);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 0;
+	int autonNum = 6;
 	switch (autonNum){
 		case 0: BHR(); break;
 		case 1: BHR8(); break;

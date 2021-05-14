@@ -14,6 +14,7 @@
 double boundRad(double rad);
 double boundDeg(double deg);
 double boundDegTurn(double deg);
+double boundRadTurn(double rad);
 double abscap(double x, double abscap);
 int sign(double x);
 #endif

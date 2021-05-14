@@ -1,12 +1,12 @@
 #include "main.h"
 #define SIG_RED 1
 #define SIG_BLUE 7
+const int wThreshold = 100, hThreshold = 100;
 bool allianceBall = true;
 int ball = 1, alliance = 1;
-double encdL = 0, encdR = 0, bearing = 0, angle = halfPI;
+double encdL = 0, encdR = 0;
 int intakeColorValue = 0, shootColorValue = 0;
 int proximity = 0, width = 0, height = 0;
-int wThreshold = 100, hThreshold = 100;
 c::optical_rgb_s_t rgb;
 int optBall = 0;
 void Sensors(void * ignore){
@@ -14,7 +14,6 @@ void Sensors(void * ignore){
   Motor BL (BLPort);
   Motor FR (FRPort);
   Motor BR (BRPort);
-  Imu imu (imuPort);
   Rotation lRot(lRotPort);
   Rotation rRot(rRotPort);
   Vision vis (visPort);
@@ -23,12 +22,8 @@ void Sensors(void * ignore){
   Optical opt(optPort);
   int count = 0;
   while(true){
-    if(!imu.is_calibrating()){
-      encdL = lRot.get_position();
-      encdR = rRot.get_position();
-      bearing = imu.get_rotation();
-      angle = halfPI - bearing * toRad;
-    }
+    encdL = lRot.get_position();
+    encdR = rRot.get_position();
     intakeColorValue = intakeColor.get_value();
     shootColorValue = shootColor.get_value();
     // vision code
