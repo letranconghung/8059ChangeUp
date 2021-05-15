@@ -61,7 +61,7 @@ void MechControl(void * ignore){
         indexerMove = 0;
         shooterMove = 0;
         if(autoIndex){
-          if(intakeColorValue< intakeColorThreshold && shootColorValue < shootColorThreshold) indexerMove = 0;
+          if(intakeColorValue < intakeColorThreshold && shootColorValue < shootColorThreshold) indexerMove = 0;
           else indexerMove = 1;
         }
         if(master.get_digital(DIGITAL_R2)){

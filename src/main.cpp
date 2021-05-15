@@ -66,10 +66,10 @@ void autonomous() {
 	opt.set_led_pwm(0);
 	setCoords(0, 0, 0);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 6;
+	int autonNum = 1;
 	switch (autonNum){
 		case 0: BHR(); break;
-		case 1: BHR8(); break;
+		case 1: BHR10(); break;
 		case 2: BMR(); break;
 		case 3: RHR(); break;
 		case 4: RHR8(); break;
@@ -108,6 +108,7 @@ void opcontrol() {
 	bool tankDrive = true;
 	bool slowMode = false;
 	pauseBase = true;
+	movementEnded = false;
 	baseBraking = false;
 	driverMode = true;
 	autoIndex = true;

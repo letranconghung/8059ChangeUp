@@ -16,7 +16,7 @@ double boundDegTurn(double deg){
 }
 double boundRadTurn(double rad){
   double res = boundRad(rad);
-  if(rad > PI) res -= twoPI;
+  if (res > PI) res -= twoPI;
   return res;
 }
 double abscap(double x, double abscap){

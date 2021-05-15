@@ -1,16 +1,16 @@
 #include "main.h"
-int DEBUG_MODE = 4;
+int DEBUG_MODE = 0;
 void printPosMaster(){
   Controller master(E_CONTROLLER_MASTER);
   Imu imu (imuPort);
   std::string autoIndexUsed = autoIndex? "AUTO": "MAN";
   std::string allianceName = (alliance == 1)? "RED": "BLUE";
-  master.print(1, 0, "%.2f %.2f %.2f", X, Y, bearing*toDeg);
+  master.print(1, 0, "%.2f %.2f %.6f", X, Y, bearing*toDeg);
   delay(50);
   master.print(2, 0, " %.0f  %s %s     ",battery::get_capacity(), autoIndexUsed.c_str(),  allianceName.c_str());
 }
 void printPosTerminal(){
-  printf("x: %.2f y: %.2f bearing: %.2f\n", X, Y, bearing*toDeg);
+  printf("x: %.4f y: %.4f bearing: %.4f\n", X, Y, bearing*toDeg);
 }
 void printEncdTerminal(){
   printf("encdL: %.2f encdR: %.2f\n", encdL, encdR);
