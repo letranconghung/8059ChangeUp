@@ -14,6 +14,11 @@ double boundDegTurn(double deg){
   if(res>180) res -= 360;
   return res;
 }
+double boundRadTurn(double rad){
+  double res = boundRad(rad);
+  if (res > PI) res -= twoPI;
+  return res;
+}
 double abscap(double x, double abscap){
   if(x > abscap) return abscap;
   else if(x < -abscap) return -abscap;
