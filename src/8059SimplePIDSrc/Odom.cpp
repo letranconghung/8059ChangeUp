@@ -9,7 +9,7 @@ void Odometry(void * ignore){
   Imu imu (imuPort);
   while(true){
     if(imu.is_calibrating()){
-      resetCoords(0, 0);
+      setCoords(0, 0);
     }else {
       double encdChangeL = encdL-prevEncdL;
       double encdChangeR = encdR-prevEncdR;
@@ -24,8 +24,3 @@ void Odometry(void * ignore){
     Task::delay(5);
   }
 }
-void resetPrevEncd() {
-  prevEncdL = 0;
-  prevEncdR = 0;
-}
-//8218.7,8229.78222

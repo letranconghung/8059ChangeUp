@@ -69,7 +69,7 @@ void autonomous() {
 	opt.set_led_pwm(0);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 1;
+	int autonNum = 6;
 	switch (autonNum){
 		case 0: BHR(); break;
 		case 1: BHR10(); break;
@@ -77,7 +77,9 @@ void autonomous() {
 		case 3: RHR(); break;
 		case 4: RHR10(); break;
 		case 5: RMR(); break;
-		case 6: test(); break;
+		case 6: BHR11(); break;
+		case 7: RHR11(); break;
+		case 8: test(); break;
 	}
 }
 /**
@@ -109,16 +111,16 @@ void opcontrol() {
 	Optical opt(optPort);
 	opt.set_led_pwm(100);
 	bool tankDrive = true;
-	bool slowMode = false;
 	pauseBase = true;
 	baseBraking = false;
 	driverMode = true;
 	autoIndex = true;
+	movementEnded = false;
 	resetMode();
 	while (true) {
 		double indexerMove = 0, shooterMove = 0, rollersMove = 0;
 		if(master.get_digital_new_press(DIGITAL_Y)) tankDrive = !tankDrive;
-		if(master.get_digital_new_press(DIGITAL_DOWN)) slowMode = !slowMode;
+		slowMode = (master.get_digital(DIGITAL_L2)? true: false);
 		double baseMultiplier = (slowMode? 0.5: 1);
 		if(tankDrive){
 	     int l = master.get_analog(ANALOG_LEFT_Y);

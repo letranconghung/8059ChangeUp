@@ -5,7 +5,7 @@
 /** traditional-style mech library */
 extern int intakeColorThreshold, shootColorThreshold;
 extern double powerRollers, powerIndexer, powerShooter;
-extern bool autoIndex, driverMode;
+extern bool autoIndex, driverMode, slowMode;
 void setMech(double r, double i, double s);
 void setMech(double r, double i, double s, int t);
 void asyncFrontIntake();

@@ -1,8 +1,7 @@
 #include "main.h"
 #define SIG_RED 1
 #define SIG_BLUE 7
-bool allianceBall = true;
-int ball = 1, alliance = 1;
+int ball = 1, alliance = 1, lastBall = 0;
 double encdL = 0, encdR = 0, bearing = 0, angle = halfPI;
 int intakeColorValue = 0, shootColorValue = 0;
 int proximity = 0, width = 0, height = 0;
@@ -35,23 +34,32 @@ void Sensors(void * ignore){
     vision_object_s_t size = vis.get_by_size(0);
     width = size.width;
     height = size.height;
-    if(width >= wThreshold && height >= hThreshold){
+    // if(width >= wThreshold && height >= hThreshold){
+    //   int sig = size.signature;
+    //   printf("sig: %d\n", sig);
+    //   if(sig == SIG_RED){
+    //     ball = 1;
+    //   }else if(sig == SIG_BLUE){
+    //     ball = 2;
+    //   }
+    // }else{
+    //   ball = 0;
+    // }
+    if(width>= wThreshold && height >= hThreshold){
       int sig = size.signature;
-      if(sig == SIG_RED){
-        ball = 1;
-      }else if(sig == SIG_BLUE){
-        ball = 2;
-      }
-    }else{
-      ball = 0;
+      // printf("sig: %d\n", sig);
+      if((sig == SIG_RED || sig == SIG_BLUE) && (sig != lastBall)) lastBall = ((sig == SIG_RED)? 1: 2);
     }
-    allianceBall = (ball == alliance);
+    if(shootColorValue < shootColorThreshold) ball = lastBall;
+    else ball = 0;
+    // printf("ball: %d\n", ball);
     // optical code
     rgb = opt.get_rgb();
     proximity = opt.get_proximity();
     if(proximity > 200) optBall = ((rgb.red > rgb.blue? 1 : 2));
     else optBall = 0;
     //if(count++ %20 == 0) printf("prox: %d r: %.2f\t g: %.2f\t b: %.2f opt: %d\n", proximity, rgb.red, rgb.blue, rgb.green, optBall);
+    // if(++count %20 == 0) printf("%d\n", ball);
     delay(5);
   }
 }

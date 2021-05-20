@@ -3,7 +3,6 @@
 extern double encdL, encdR, bearing, angle;
 extern int intakeColorValue, shootColorValue;
 extern int ball, alliance, optBall;
-extern bool allianceBall;
 void Sensors(void * ignore);
 void VisSort(void * ignore);
 #endif
