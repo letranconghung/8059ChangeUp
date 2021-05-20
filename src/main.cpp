@@ -69,7 +69,7 @@ void autonomous() {
 	opt.set_led_pwm(0);
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 6;
+	int autonNum = 1;
 	switch (autonNum){
 		case 0: BHR(); break;
 		case 1: BHR10(); break;

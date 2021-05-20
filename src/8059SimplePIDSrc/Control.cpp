@@ -3,8 +3,8 @@
 #define DEFAULT_KD 0
 #define DEFAULT_TURN_KP 0.95
 #define DEFAULT_TURN_KD 0
-#define RAMPING_POW 1
-#define DISTANCE_LEEWAY 1000
+#define RAMPING_POW 2.5
+#define DISTANCE_LEEWAY 2000
 #define BEARING_LEEWAY 1
 
 // #define DEFAULT_KP 0.001275
@@ -16,8 +16,7 @@
 // #define BEARING_LEEWAY 0.4
 
 // const double MAX_POW = 115;
-const double MAX_POW = 115;
-
+const double MAX_POW = 120;
 double targEncdL = 0, targEncdR = 0, targBearing = 0;
 double errorEncdL = 0, errorEncdR = 0, errorBearing = 0;
 double prevErrorEncdL = 0, prevErrorEncdR = 0, prevErrorBearing = 0;
@@ -56,16 +55,21 @@ void baseTurn(double b){
 }
 void powerBase(double l, double r) {
   pauseBase = true;
+  movementEnded = false;
   powerL = l;
   powerR = r;
 }
 void timerBase(double l, double r, double t) {
   pauseBase = true;
+  movementEnded = false;
   powerL = l;
   powerR = r;
   delay(t);
   powerL = 0;
   powerR = 0;
+  // pauseBase = false;
+  movementEnded = true;
+  delay(15);
   pauseBase = false;
 }
 void unPauseBase() {

@@ -1,7 +1,7 @@
 /** Autonomous routines */
 #include "main.h"
 /** programming skills run */
-int del = 50;
+int del = 10;
 void move(double d, double kp, double kd, double t){
   baseMove(d, kp, kd);
   waitBase(t);
@@ -24,56 +24,58 @@ void turn(double a, double t){
 }
 void test(){
   // move(48,2000);
-  turn(-30, 0.95, 0, 1000);
+  // turn(-30, 0.95, 0, 1000);
+  timerBase(60, 120, 500);
   // 0.95 for 90, 0.88 for 180
 }
 void BHR11(){
   // #define DEFAULT_KP 0.0012
+  // setMech(1, 0, 0);
+  // move(4, 0.004, 0, 500);
+  // resetMech();
+  // asyncLoad();
+  // turn(-35, 1.7, 0, 500);
+  // move(4.5, 0.0015, 0, 500);
   setMech(1, 0, 0);
-  move(4, 0.004, 0, 500);
+  timerBase(45, 127, 500);
+  setMech(-0.8, 0.7,1,600);
+  // setMech(-1, -1, 0,400);
+  setMech(-0.4, 0, 0);
+  move(-23, 1000);
   resetMech();
-  asyncLoad();
-  turn(-35, 1.6, 0, 500);
   // delay(200);
-  move(5, 0.002, 0, 500);
-  setMech(0, 0.7,1,500);
-  setMech(-1, -1, 0,500);
-  setMech(-0.5, 0, 0);
-  move(-20, 1000);
-  resetMech();
-  delay(200);
-  turn(90, 0.93, 0, 1000);
-  delay(200);
+  turn(90, 0.93, 0, 800);
+  // delay(200);
   asyncFrontIntakeLoad();
-  move(36.5, 2000);
+  move(37, 1400);
   // delay(1000);
-  move(-21,1000);
+  move(-21, 900);
   // delay(500);
-  turn(145,1.36,0,1000);
+  turn(145,1.42,0,700);
   delay(200);
   asyncFrontIntake();
-  delay(200);
-  move(31.5,1500);
+  // delay(200);
+  move(30,1200);
   // delay(1000);
-  move(-5.5,600);
+  move(-5.5,300);
   turn(92,1.4,0,500);
   setMech(1, 0, 0);
-  move(10,800);
-  // delay(1000);
-  move(-20, 1000);
-  turn(-120,0.9,0,1000);
+  move(10,500);
+  move(-20, 900);
+  turn(-120,0.9,0,800);
   delay(200);
-  move(33,1500);
-  shoot(500);
-  setMech(-1, -0.7, 0, 400);
-  setMech(-0., 1, 0);
-  move(-10, 1000);
+  move(30,1000);
+  setMech(-0.8, 0.7, 1, 400);
+  setMech(-0.5, 1, 0);
+  move(-10, 0.003, 0, 500);
   asyncLoad();
-  turn(180, 1.4, 0, 1000);
+  turn(180, 1.4, 0, 500);
   delay(200);
-  move(52,1500);
-  turn(-135, 1.42, 0, 700);
-  move(20,800);
+  move(48,1500);
+  // turn(-135, 1.42, 0, 500);
+  // move(20,500);
+  // setMech(0, 1, 1);
+  timerBase(120,80,700);
   setMech(0, 1, 1);
 }
 void RHR11(){
@@ -140,54 +142,45 @@ void BHR(){
   // waitBase(500);
 
 }
-
 /** Autonomous routine for blue homerow + 2. */
 void BHR10(){
   double initAngle = 30;
-
+  timerBase(-50,-50,400);
+  setMech(0, 1, 1);
+  timerBase(50,50,400);
   //Goal F
-  setMech(0,1,1,500);
-
   //Goal I
-  move(-30,1500);
-  turn(297-initAngle,0.95,0,1000); //face first ball
+  move(-22,1000); //-28
+  turn(293-initAngle,1.1,0,500); //face first ball // 1, 800
   // delay(2000); // -99
+  delay(300);
   asyncFrontIntakeLoad();
-  move(39.5,1500); //40
-  move(-19,1000); //20
-  turn(248-initAngle,1.2,0,800); //face second ball
-  // delay(2000); // -155
+  move(41,1300); //40
+  move(-19,800); //20
+  turn(244-initAngle,1.45,0,450); //face second ball //800
   asyncFrontIntake();
-  move(18,1000); //20
-
-  move(-23,1500);
-  turn(135-initAngle,0.88,0,800); //face goal // -259
+  move(19,800); //20
+  move(-23.5,900);
   // delay(200);
-  // delay(1000);
+  asyncLoad();
+  // turn(135-initAngle,1.08,0,500); //face goal // blue side
+  turn(137-initAngle,1.05,0,500); //red side 
+  delay(300);
   setMech(1,0,0);
-  move(46.5,1800);
-  setMech(0,1,1,400);
-  delay(5);
-  setMech(-1,0,0); //stuff ball
-  move(-10,0.001,0,500);
-  move(-10,1000);
+  move(46.5,1200);
+  setMech(-1,1,1,400);
+  setMech(-0.5,0,0); //stuff ball
+  move(-19, 900);
   resetMech();
 
   //Goal C
   asyncLoad();
-  turn(0-initAngle,0.85,0,2000);
-  delay(2000);
-  move(93,3000);
-  turn(45-initAngle,1.3,0,1000);
-  setMech(1, 0, 0);
-  move(26,1200);
-  setMech(0, 1, 1, 500);
-  delay(5);
-  setMech(-1, -1, 0,300);
-  setMech(-1, -1, 0);
-  move(-10,0.001,0,500);
-  move(-10,1000);
-  resetMech();
+  turn(0-initAngle,0.88,0,750);
+  delay(300);
+  move(93.5,2200);
+  turn(45-initAngle,1.8,0,600);
+  powerBase(80,80);
+  setMech(0, 1, 1);
 }
 
 /*Autonomous routine for blue middle row. */
