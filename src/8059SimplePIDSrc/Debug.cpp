@@ -7,7 +7,7 @@ void printPosMaster(){
   else{
     std::string autoIndexUsed = autoIndex? "AUTO": "MAN";
     std::string allianceName = (alliance == 1)? "RED": "BLUE";
-    master.print(1, 0, "   %.1f %.1f %.1f", X, Y, bearing);
+    master.print(1, 0, "   %.1f %.1f %.3f", X, Y, bearing);
     delay(50);
     master.print(2, 0, " %.0f  %s %s     ",battery::get_capacity(), autoIndexUsed.c_str(),  allianceName.c_str());
   }

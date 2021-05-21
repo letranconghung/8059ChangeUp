@@ -67,19 +67,19 @@ void autonomous() {
 	Imu imu (imuPort);
 	Optical opt(optPort);
 	opt.set_led_pwm(0);
+	pauseBase = false;
+	baseBraking = false;
+	driverMode = false;
+	autoIndex = false;
+	movementEnded = false;
+	resetMode();
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 1;
+	int autonNum = 2;
 	switch (autonNum){
-		case 0: BHR(); break;
 		case 1: BHR10(); break;
-		case 2: BMR(); break;
-		case 3: RHR(); break;
-		case 4: RHR10(); break;
-		case 5: RMR(); break;
-		case 6: BHR11(); break;
-		case 7: RHR11(); break;
-		case 8: test(); break;
+		case 2: RHR10(); break;
+		case 3: test(); break;
 	}
 }
 /**
