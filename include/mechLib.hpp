@@ -15,6 +15,7 @@ void shoot(double t);
 void resetMode();
 void resetMech();
 void MechControl(void * ignore);
+void shootTop();
 // void waitIntakeColor();
 // void waitShootColor();
 // void autoFrontIntake();

@@ -118,7 +118,7 @@ void RHR10(){
   powerBase(80,80);
   setMech(0, 1, 1);
 }
-void BHR(){
+void RHR(){
   //Goal C
   asyncFrontIntake();
   move(5,0.002,0,500);
@@ -145,4 +145,35 @@ void BHR(){
   // asyncFrontIntakeLoad();
   move(15, 1000);
   // shoot(400);
+}
+void RHR8(){
+  //Goal C
+  asyncFrontIntake();
+  move(5,0.002,0,500);
+  turn(38,1.5,0,800);
+  move(4,0.002,0,400);
+  setMech(0, 1, 0.8, 500);
+
+  //Goal F
+  move(-21, 900);
+  asyncLoad();
+  turn(0, 1.6, 0, 600);
+  delay(300);
+  move(-43, 1500);
+  turn(90, 600);
+  move(21, 1000);
+  setMech(0, 1, 1, 400);
+
+  //Goal I
+  move(-15,700); // -14.2
+  turn(-128, 1000); // -128
+  delay(200);
+  asyncFrontIntakeLoad();
+  move(44,1500);
+  move(-13,600);
+  turn(128,800);
+  delay(200);
+  resetMech();
+  move(50,1500);
+  setMech(0, 1, 0.8, 500);
 }

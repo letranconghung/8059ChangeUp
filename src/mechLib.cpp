@@ -130,7 +130,7 @@ void MechControl(void * ignore){
         }
         case 2:{
           // load
-          if(shootColorValue > shootColorThreshold) setMech(0, 1, 0);
+          if(shootColorValue > shootColorThreshold) setMech(0, 1, -0.5);
           else resetMech();
           break;
         }

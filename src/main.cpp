@@ -75,13 +75,14 @@ void autonomous() {
 	resetMode();
 	// while(imu.is_calibrating()) delay(5);
 	/** numerical choice of which autonomous set to run */
-	int autonNum = 5;
+	int autonNum = 6;
 	switch (autonNum){
 		case 1: BHR10(); break;
 		case 2: RHR10(); break;
 		case 3: test(); break;
 		case 4: cage(); break;
-		case 5: BHR(); break;
+		case 5: RHR(); break;
+		case 6: RHR8(); break;
 	}
 }
 /**
