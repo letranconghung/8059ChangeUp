@@ -4,4 +4,6 @@
 void test();
 void BHR10();
 void RHR10();
+void cage();
+void BHR();
 #endif
